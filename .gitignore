@@ -1,0 +1,7 @@
+# Ignore import metadata from game engines.
+*.import
+*.meta
+*.uid
+
+# System/tool specific ignores
+.DS_Store
