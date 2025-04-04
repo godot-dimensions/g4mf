@@ -1,0 +1,26 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.asset.schema.json",
+	"title": "G4MF Asset Header",
+	"type": "object",
+	"description": "The asset header of a G4MF file. This contains metadata that applies to the entire file, such as the dimension, the version, and what tool generated the file.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"dimension": {
+			"type": "integer",
+			"description": "The dimension of the G4MF file. This is the number of dimensions in the geometry represented by the file. All data in the file, such as mesh vertices and node transforms, MUST be in this dimension. For 4D files, this will be 4."
+		},
+		"generator": {
+			"type": "string",
+			"description": "The name of the tool that generated this G4MF file. This is intended for informational purposes. This SHOULD include the version of the tool."
+		},
+		"version": {
+			"type": "string",
+			"description": "The version of the G4MF file format. This is intended for informational purposes. When defined, it MUST be in the format `MAJOR.MINOR` or `MAJOR.MINOR.PATCH`."
+		},
+		"name": {},
+		"extensions": {},
+		"extras": {}
+	},
+	"required": ["dimension"]
+}

@@ -1,0 +1,24 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.schema.json",
+	"title": "G4MF Main Schema",
+	"type": "object",
+	"description": "The main top-level schema for G4MF files, defining the root JSON object and its properties.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"asset": {
+			"$ref": "g4mf.asset.schema.json"
+		},
+		"nodes": {
+			"type": "array",
+			"description": "An array of zero or more scene nodes. If present, the node at index 0 is the root node of the scene.",
+			"items": {
+				"$ref": "g4mf.node.schema.json"
+			}
+		},
+		"name": {},
+		"extensions": {},
+		"extras": {}
+	},
+	"required": ["asset"]
+}

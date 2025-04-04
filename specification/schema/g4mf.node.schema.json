@@ -1,0 +1,55 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.node.schema.json",
+	"title": "G4MF Scene Node",
+	"type": "object",
+	"description": "A node in the scene hierarchy, representing an object in the scene. Nodes may have children, a transform, and have other data attached to them to define the type of object they represent.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"children": {
+			"type": "array",
+			"description": "The indices of this node's children.",
+			"items": {
+				"$ref": "g4mf_id.schema.json"
+			},
+			"uniqueItems": true,
+			"minItems": 1
+		},
+		"basis": {
+			"type": "array",
+			"description": "A square matrix representing the basis of the node's local transform relative to its parent. The matrix is stored in column-major order. May not be used with `rotor` or `scale`.",
+			"items": {
+				"type": "number"
+			}
+		},
+		"rotor": {
+			"type": "array",
+			"description": "The node's rotation relative to its parent as a rotor. A rotor contains a scalar part and a bivector part. The scalar part is the first element at index 0, and the bivector part is the remaining elements. May not be used with `basis`.",
+			"items": {
+				"type": "number",
+				"minimum": -1.0,
+				"maximum": 1.0
+			}
+		},
+		"scale": {
+			"type": "array",
+			"description": "The node's scale relative to its own local rotation as a unitless multiplier. May be a single number for uniform scale, or an N-dimensional vector for non-uniform scale. May not be used with `basis`.",
+			"items": {
+				"type": "number"
+			}
+		},
+		"position": {
+			"type": "array",
+			"description": "The node's local position relative to its parent in meters.",
+			"items": {
+				"type": "number"
+			}
+		},
+		"name": {},
+		"extensions": {},
+		"extras": {}
+	},
+	"not": {
+		"anyOf": [{ "required": ["basis", "rotor"] }, { "required": ["basis", "scale"] }]
+	}
+}

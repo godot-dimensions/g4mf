@@ -1,0 +1,24 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf_item.schema.json",
+	"title": "G4MF Base Item Schema",
+	"description": "The base schema which all G4MF items should inherit from.",
+	"type": "object",
+	"properties": {
+		"extensions": {
+			"type": "object",
+			"description": "A dictionary of extension objects, each of which is a JSON object that conforms to the schema defined by the extension.",
+			"items": {
+				"type": "object"
+			}
+		},
+		"extras": {
+			"type": "object",
+			"description": "Application-specific data without a standardized extension schema."
+		},
+		"name": {
+			"type": "string",
+			"description": "The name of the item. This MUST be unique within the G4MF file."
+		}
+	}
+}
