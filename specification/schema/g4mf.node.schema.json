@@ -33,9 +33,10 @@
 		},
 		"scale": {
 			"type": "array",
-			"description": "The node's scale relative to its own local rotation as a unitless multiplier. May be a single number for uniform scale, or an N-dimensional vector for non-uniform scale. May not be used with `basis`.",
+			"description": "The node's scale relative to its own local rotation as a unitless multiplier. Must be positive. May be a single number for uniform scale, or an N-dimensional vector for non-uniform scale. May not be used with `basis`.",
 			"items": {
-				"type": "number"
+				"type": "number",
+				"exclusiveMinimum": 0.0
 			}
 		},
 		"position": {
@@ -44,6 +45,10 @@
 			"items": {
 				"type": "number"
 			}
+		},
+		"visible": {
+			"type": "boolean",
+			"description": "Whether the node is visible. If false, the node and its children are not rendered."
 		},
 		"name": {},
 		"extensions": {},
