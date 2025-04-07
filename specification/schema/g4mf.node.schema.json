@@ -17,14 +17,14 @@
 		},
 		"basis": {
 			"type": "array",
-			"description": "A square matrix representing the basis of the node's local transform relative to its parent. The matrix is stored in column-major order. May not be used with `rotor` or `scale`.",
+			"description": "A square matrix representing the basis of the node's local transform relative to its parent. The matrix is stored in column-major order. MUST NOT be used with `rotor` or `scale`.",
 			"items": {
 				"type": "number"
 			}
 		},
 		"rotor": {
 			"type": "array",
-			"description": "The node's rotation relative to its parent as a rotor. A rotor contains a scalar part and a bivector part. The scalar part is the first element at index 0, and the bivector part is the remaining elements. May not be used with `basis`.",
+			"description": "The node's rotation relative to its parent as a rotor. A rotor contains a scalar part and a bivector part. The scalar part is the first element at index 0, and the bivector part is the remaining elements. MUST NOT be used with `basis`.",
 			"items": {
 				"type": "number",
 				"minimum": -1.0,
@@ -33,7 +33,7 @@
 		},
 		"scale": {
 			"type": "array",
-			"description": "The node's scale relative to its own local rotation as a unitless multiplier. Must be positive. May be a single number for uniform scale, or an N-dimensional vector for non-uniform scale. May not be used with `basis`.",
+			"description": "The node's scale relative to its own local rotation as a unitless multiplier. Must be positive. May be a single number for uniform scale, or an N-dimensional vector for non-uniform scale. MUST NOT be used with `basis`.",
 			"items": {
 				"type": "number",
 				"exclusiveMinimum": 0.0

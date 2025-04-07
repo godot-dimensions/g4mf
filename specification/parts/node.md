@@ -52,11 +52,21 @@ The `"basis"` property is an array of numbers defining the basis of the node, re
 
 The basis is defined as an NxN matrix, stored as a linear array in column-major order, where N is the dimension of the model. If defined, the number of elements in the array MUST be equal to the square of the dimension of the model. For example, with `"dimension": 4`, the `"basis"` property MUST be an array of 16 numbers. If the number of elements is not equal to the square of the dimension, the file is not a valid G4MF file.
 
+When the `"basis"` property is not defined, a basis can be calculated from the `"rotor"` and `"scale"` properties. The `"rotor"` property defines the rotation of the local basis vectors relative to the identity, and the `"scale"` property defines the length of each local basis vector. The calculated basis represents the local basis relative to the parent node's basis. Similarly, if the `"basis"` property is orthogonal and has a positive determinant, the `"rotor"` and `"scale"` properties can be calculated from the basis.
+
 #### Rotor
 
 The `"rotor"` property is an array of numbers defining a geometric algebra rotor, encoding the rotation relative to the parent node. If not specified and `"basis"` is not specified, the node is unrotated.
 
-A rotor contains a scalar part and a bivector part. The scalar part is the first element at index 0, and the bivector part is the remaining elements. A 2D bivector has 1 number, a 3D bivector has 3 numbers, a 4D bivector has 6 numbers, and a 5D bivector has 10 numbers, and so on. Therefore, a 2D rotor has 2 numbers, a 3D rotor has 4 numbers, a 4D rotor has 7 numbers, and a 5D rotor has 11 numbers, and so on. A 3D rotor is the same as a quaternion.
+A rotor contains a scalar part and a bivector part. The scalar part is the first element at index 0, and the bivector part is the remaining elements. A 2D bivector has 1 number, a 3D bivector has 3 numbers, a 4D bivector has 6 numbers, and a 5D bivector has 10 numbers, and so on. Therefore, a 2D rotor has 2 numbers, a 3D rotor has 4 numbers, a 4D rotor has 7 numbers, and a 5D rotor has 11 numbers, and so on. A 3D rotor is the same as a quaternion, but the element order and rotation convention may be different from your software.
+
+The bivector components of `"rotor"` are stored in a dimensionally-increasing order. A 2D rotor is `[scalar, xy]`, a 3D rotor is `[scalar, xy, xz, yz]`, a 4D rotor is `[scalar, xy, xz, yz, xw, yw, zw]`, a 5D rotor is `[scalar, xy, xz, yz, xw, yw, zw, xv, yv, zv, wv]`, and so on. In terms of dimension indices, a 2D rotor is `[scalar, 01]`, a 3D rotor is `[scalar, 01, 02, 12]`, a 4D rotor is `[scalar, 01, 02, 12, 03, 13, 23]`, a 5D rotor is `[scalar, 01, 02, 12, 03, 13, 23, 04, 14, 24, 34]`, and so on.
+
+This order allows for easy casting between dimensions by adding or discarding the last elements, making it easy for G4MF to be a multi-dimensional format. For example, a 4D rotor can be cast to a 3D rotor by discarding the last 3 elements and normalizing, a 5D rotor can be cast to a 4D rotor by discarding the last 4 elements and normalizing, a 3D rotor can be upgraded to a 4D rotor by adding 3 zero elements, and a 4D rotor can be upgraded to a 5D rotor by adding 4 zero elements.
+
+Note that this may be different from other conventions, such as 3D quaternions (usually `[x, y, z, w]` meaning `[yz, zx, xy, scalar]`), or dimensional-specific lexicographic geometric algebra (4D `[scalar, xy, xz, xw, yz, yw, zw]`). By convention, "lexicographic" refers to the axis indices, not the letter labels placed on them. To convert between different ordering conventions, simply re-order the elements in the array.
+
+Note that each component is also dimensionally-increasing within itself, meaning `xy` is used instead of `yx`, `xz` is used instead of `zx`, and so on. 3D software typically uses the convention of `zx` to follow the right-hand rule, but this does not generalize to higher dimensions. To convert between the two conventions, negate the component: `xz == -zx` and `zx == -xz`.
 
 #### Scale
 
