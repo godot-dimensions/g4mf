@@ -18,7 +18,7 @@
 		},
 		"name": {
 			"type": "string",
-			"description": "The name of the item. This MUST be unique within the G4MF file."
+			"description": "The name of the item. If defined, this MUST be unique within the G4MF file."
 		}
 	}
 }

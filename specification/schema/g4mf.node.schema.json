@@ -24,7 +24,7 @@
 		},
 		"rotor": {
 			"type": "array",
-			"description": "The node's rotation relative to its parent as a rotor. A rotor contains a scalar part and a bivector part. The scalar part is the first element at index 0, and the bivector part is the remaining elements. MUST NOT be used with `basis`.",
+			"description": "The node's rotation relative to its parent as a rotor. A rotor starts with a scalar part, a bivector part, and may optionally be followed by the rest of the even subalgebra. The scalar part is the first element at index 0, and the bivector parts come next. MUST NOT be used with `basis`.",
 			"items": {
 				"type": "number",
 				"minimum": -1.0,
