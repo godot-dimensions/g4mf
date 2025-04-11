@@ -3,9 +3,16 @@
 	"$id": "g4mf.node.schema.json",
 	"title": "G4MF Scene Node",
 	"type": "object",
-	"description": "A node in the scene hierarchy, representing an object in the scene. Nodes may have children, a transform, and have other data attached to them to define the type of object they represent.",
+	"description": "A node in the scene hierarchy, representing an object in the scene. Nodes may have children, a transform, and have other data attached to them to define the type of object they represent. Nodes are highly recommended to have a name, and if defined, the name MUST be unique within the G4MF file.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
+		"basis": {
+			"type": "array",
+			"description": "A square matrix representing the basis of the node's local transform relative to its parent. The matrix is stored in column-major order. MUST NOT be used with `rotor` or `scale`.",
+			"items": {
+				"type": "number"
+			}
+		},
 		"children": {
 			"type": "array",
 			"description": "The indices of this node's children.",
@@ -15,9 +22,13 @@
 			"uniqueItems": true,
 			"minItems": 1
 		},
-		"basis": {
+		"mesh": {
+			"$ref": "g4mf_id.schema.json",
+			"description": "The index of the mesh that this node references. This is a reference to a mesh in the G4MF file."
+		},
+		"position": {
 			"type": "array",
-			"description": "A square matrix representing the basis of the node's local transform relative to its parent. The matrix is stored in column-major order. MUST NOT be used with `rotor` or `scale`.",
+			"description": "The node's local position relative to its parent in meters.",
 			"items": {
 				"type": "number"
 			}
@@ -37,13 +48,6 @@
 			"items": {
 				"type": "number",
 				"exclusiveMinimum": 0.0
-			}
-		},
-		"position": {
-			"type": "array",
-			"description": "The node's local position relative to its parent in meters.",
-			"items": {
-				"type": "number"
 			}
 		},
 		"visible": {

@@ -6,15 +6,53 @@
 	"description": "The main top-level schema for G4MF files, defining the root JSON object and its properties.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
+		"accessors": {
+			"type": "array",
+			"description": "An array of zero or more accessors, which provide a typed view of the data in a buffer view. Accessors are used by meshes and other items.",
+			"items": {
+				"$ref": "g4mf.accessor.schema.json"
+			},
+			"minItems": 0,
+			"uniqueItems": true
+		},
 		"asset": {
 			"$ref": "g4mf.asset.schema.json"
 		},
+		"buffers": {
+			"type": "array",
+			"description": "An array of zero or more buffers. Each buffer contains a blob of raw binary data. Buffers are used by buffer views.",
+			"items": {
+				"$ref": "g4mf.buffer.schema.json"
+			},
+			"minItems": 0,
+			"uniqueItems": true
+		},
+		"bufferViews": {
+			"type": "array",
+			"description": "An array of zero or more buffer views. Each buffer view is a slice of a buffer. Buffer views are used by accessors.",
+			"items": {
+				"$ref": "g4mf.bufferView.schema.json"
+			},
+			"minItems": 0,
+			"uniqueItems": true
+		},
+		"meshes": {
+			"type": "array",
+			"description": "An array of zero or more meshes. Each mesh is a collection of mesh surfaces that define the geometry of an object.",
+			"items": {
+				"$ref": "g4mf.mesh.schema.json"
+			},
+			"minItems": 0,
+			"uniqueItems": true
+		},
 		"nodes": {
 			"type": "array",
-			"description": "An array of zero or more scene nodes. If present, the node at index 0 is the root node of the scene.",
+			"description": "An array of zero or more scene nodes. If the array is defined and has at least one node, the node at index 0 is the root node of the scene.",
 			"items": {
 				"$ref": "g4mf.node.schema.json"
-			}
+			},
+			"minItems": 0,
+			"uniqueItems": true
 		},
 		"name": {},
 		"extensions": {},

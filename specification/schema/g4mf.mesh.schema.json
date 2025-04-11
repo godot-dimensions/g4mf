@@ -1,0 +1,23 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.mesh.schema.json",
+	"title": "G4MF Mesh",
+	"type": "object",
+	"description": "A mesh is a collection of mesh surfaces that define the geometry of an object. Each surface may have a material.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"surfaces": {
+			"type": "array",
+			"description": "An array of mesh surfaces that define the geometry of the mesh. Each surface may have a material.",
+			"items": {
+				"$ref": "g4mf.mesh.surface.schema.json"
+			},
+			"minItems": 1,
+			"uniqueItems": true
+		},
+		"name": {},
+		"extensions": {},
+		"extras": {}
+	},
+	"required": ["surfaces"]
+}

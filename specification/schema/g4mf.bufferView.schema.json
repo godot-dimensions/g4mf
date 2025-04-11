@@ -1,0 +1,29 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.bufferView.schema.json",
+	"title": "G4MF Buffer View",
+	"type": "object",
+	"description": "A buffer view is a slice of a buffer, defining a region of the buffer that stores data. As an analogy, if a buffer is a disk and an accessor is a file system, then a buffer view is a partition.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"buffer": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the buffer that contains the data for this buffer view. This is a reference to a buffer view in the G4MF file's document-level accessors array."
+		},
+		"byteLength": {
+			"type": "integer",
+			"description": "The length of the buffer view in bytes. The declared byte offset plus the declared byte length MUST NOT exceed the buffer's byte length. This property is required.",
+			"minimum": 0
+		},
+		"byteOffset": {
+			"type": "integer",
+			"description": "The start offset of the buffer view in bytes. This is relative to the start of the buffer. For example, if the byte offset is 100, then byte 0 of the buffer view is byte 100 of the buffer. The declared byte offset plus the declared byte length MUST NOT exceed the buffer's byte length. This property is optional and defaults to 0.",
+			"minimum": 0,
+			"default": 0
+		},
+		"name": {},
+		"extensions": {},
+		"extras": {}
+	},
+	"required": ["buffer", "byteLength"]
+}
