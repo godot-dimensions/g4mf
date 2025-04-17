@@ -3,7 +3,7 @@
 Good 4D Model Format, or G4MF for short, is a JSON-based 4D-focused multi-dimensional model format inspired by Khronos's [glTF™](https://github.com/KhronosGroup/glTF), allowing for transmission, interchange, and interoperability of higher dimensional content between applications.
 
 G4MF files can come in the following types:
-- `.g4tf` stands for "Good 4D model Text File". It includes the JSON data in a purely text-based UTF-8 format, with binary blobs encoded as Base64 inside of a string. Valid G4TF files do not contain BOMs or carriage returns.
+- `.g4tf` stands for "Good 4D model Text File". It includes the JSON data in a purely text-based UTF-8 format, with binary blobs encoded as Base64 inside of a string, or stored as external files. Valid G4TF files do not contain BOMs or carriage returns.
 - `.g4b` stands for "Good 4D model Binary". It densely packs the binary data for size efficiency, at the cost of making it harder to inspect in a text editor.
 
 Read the specification here: [Good 4D Model Format (G4MF) Specification](specification/specification.md).

@@ -1,5 +1,26 @@
 # Good 4D Model Format (G4MF) Specification
 
+## Summary
+
+Good 4D Model Format, or G4MF for short, is a JSON-based 4D-focused multi-dimensional model format inspired by Khronos's [glTF™](https://github.com/KhronosGroup/glTF), allowing for transmission, interchange, and interoperability of higher dimensional content between applications.
+
+## Properties
+
+The top-level G4MF document defines the following properties:
+
+| Property        | Type       | Description                                                                     | Default               |
+| --------------- | ---------- | ------------------------------------------------------------------------------- | --------------------- |
+| **asset**       | `object`   | The asset header, which contains metadata about the file.                       | Required, no default. |
+| **accessors**   | `object[]` | An array of accessors, which provide a typed view of the data in a buffer view. | `[]` (empty array)    |
+| **buffers**     | `object[]` | An array of buffers, which contain raw binary data.                             | `[]` (empty array)    |
+| **bufferViews** | `object[]` | An array of buffer views, which define slices of buffers.                       | `[]` (empty array)    |
+| **meshes**      | `object[]` | An array of meshes, which define the geometry of objects.                       | `[]` (empty array)    |
+| **nodes**       | `object[]` | An array of nodes, which define the hierarchy of the scene.                     | `[]` (empty array)    |
+
+The details of how these properties work are described in the below sections.
+
+## Asset Header
+
 At a minimum, the G4MF JSON data MUST contain `"asset"` with `"dimension"` defining the dimension of the model. This example defines an empty 4D G4MF file:
 
 ```json
@@ -11,6 +32,8 @@ At a minimum, the G4MF JSON data MUST contain `"asset"` with `"dimension"` defin
 ```
 
 If `"dimension"` is not defined or is not an integer, the file is not a valid G4MF file. The G4MF format is designed to be extensible as an N-dimensional format, but most of the use cases and documentation will focus on 4D files. Implementations MAY only support any subset of dimensions, such as only 4D, only 5D, or even only 3D. Implementations MAY choose to entirely ignore files with unsupported dimensions, or read them discarding the unsupported dimensions.
+
+For convenience, the details of the asset header are in a separate file: [G4MF Asset](parts/asset.md).
 
 ## Scene Hierarchy
 

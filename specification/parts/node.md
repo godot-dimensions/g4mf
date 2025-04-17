@@ -4,9 +4,9 @@
 
 Nodes are the core building block of a G4MF file. Each node defines an object in the scene with a transform, defines child nodes that are attached to it, and have other data attached to them to define the type of object they represent.
 
-The node at index 0 is the root node. All other nodes in the file are either descendants of the root node, or are not used. Nodes not used in the core scene hierarchy MAY be used by extensions. G4MF files may also contain zero nodes, in which case the file is not a scene, but a collection of data, such as a 4D mesh. The root node at index 0 MUST NOT have a transform defined, or any transform properties must be set to their default values.
-
 Each node defines a transform, which is a combination of a position, and a basis or rotor+scale. The basis is a set of usually orthogonal vectors that define the local rotation, scale, and shear of the object, giving full control over the object's transform. The the rotor+scale representation allows defining the rotation and scale separately, which is useful for human readability and animations that change these properties independently. The scale is defined within the node's own local space, including the node's own rotation, while all other transform properties are defined relative to the parent node's space.
+
+The node at index 0 is the root node. All other nodes in the file are either descendants of the root node, or are not used. Nodes not used in the core scene hierarchy MAY be used by extensions. G4MF files may also contain zero nodes, in which case the file is not a scene, but a collection of data, such as a 4D mesh. The root node at index 0 MUST be untransformed, meaning its transform properties either MUST NOT be set or MUST be set to their default values.
 
 ## Example
 
@@ -32,13 +32,14 @@ The following example defines a 4-dimensional G4MF file with a root node at inde
 
 ## Properties
 
-| Property     | Type     | Description                                                | Default         |
-| ------------ | -------- | ---------------------------------------------------------- | --------------- |
-| **position** | number[] | The position of the node, relative to its parent node.     | Zero vector     |
-| **basis**    | number[] | The basis of the node, relative to its parent node.        | Identity matrix |
-| **rotor**    | number[] | The rotation of the node, relative to its parent node.     | Identity rotor  |
-| **scale**    | number[] | The scale of the node, relative to its own local rotation. | Scale of 1      |
-| **visible**  | boolean  | Whether the node is visible or not (affects rendering).    | `true`          |
+| Property     | Type       | Description                                                | Default         |
+| ------------ | ---------- | ---------------------------------------------------------- | --------------- |
+| **position** | `number[]` | The position of the node, relative to its parent node.     | Zero vector     |
+| **basis**    | `number[]` | The basis of the node, relative to its parent node.        | Identity matrix |
+| **rotor**    | `number[]` | The rotation of the node, relative to its parent node.     | Identity rotor  |
+| **scale**    | `number[]` | The scale of the node, relative to its own local rotation. | Scale of 1      |
+| **mesh**     | `integer`  | The index of the mesh that this node uses.                 | `-1` (no mesh)  |
+| **visible**  | `boolean`  | Whether the node is visible or not (affects rendering).    | `true`          |
 
 ### Position
 
@@ -77,6 +78,14 @@ The `"scale"` property is an array of numbers defining the scale of the node, re
 The scale may either be an array of one number, which defines a uniform scale, or an array of N numbers, which defines a non-uniform scale. The number of elements in the array MUST either be 1 or equal to the dimension of the model. For example, with `"dimension": 4`, the `"scale"` property MUST be either an array of 1 number, or an array of 4 numbers. If the number of elements is not equal to 1 or the dimension, the file is not a valid G4MF file.
 
 The scale MUST consist of only positive numbers as values. The values MUST NOT be zero, and MUST NOT be negative. This requirement is because standards for negative scale are tricky across dimensions. An even number of negative scales is equivalent to a positive scale with a rotation, so a 4D node would need either 1 or 3 of the scale numbers to be negative for a negative scale to result in a flip. The choice of which scale numbers to be negative when decomposing from a transformation matrix is arbitrary and may vary between implementations. In order to represent a flip, a `"basis"` with a negative determinant can be used instead, which is a more explicit representation of the transformation.
+
+### Mesh
+
+The `"mesh"` property is an integer index of a G4MF mesh. If not specified, the default value is `-1`, meaning the node is not a mesh.
+
+Meshes are the most common way to provide visible geometry for a node. A mesh may be used by multiple nodes, or a mesh may be not used by any nodes. This is a reference to a mesh in the G4MF file's document-level `"meshes"` array. When defined, it MUST be a valid index in the array.
+
+See [G4MF Mesh](mesh.md) for more information about meshes.
 
 ### Visible
 
