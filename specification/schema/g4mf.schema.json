@@ -42,8 +42,7 @@
 			"items": {
 				"$ref": "g4mf.mesh.schema.json"
 			},
-			"minItems": 0,
-			"uniqueItems": true
+			"minItems": 0
 		},
 		"nodes": {
 			"type": "array",
@@ -51,12 +50,8 @@
 			"items": {
 				"$ref": "g4mf.node.schema.json"
 			},
-			"minItems": 0,
-			"uniqueItems": true
-		},
-		"name": {},
-		"extensions": {},
-		"extras": {}
+			"minItems": 0
+		}
 	},
 	"required": ["asset"]
 }

@@ -8,7 +8,7 @@
 		"extensions": {
 			"type": "object",
 			"description": "A dictionary of extension objects, each of which is a JSON object that conforms to the schema defined by the extension.",
-			"items": {
+			"additionalProperties": {
 				"type": "object"
 			}
 		},

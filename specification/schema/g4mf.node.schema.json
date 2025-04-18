@@ -53,10 +53,7 @@
 		"visible": {
 			"type": "boolean",
 			"description": "Whether the node is visible. If false, the node and its children are not rendered."
-		},
-		"name": {},
-		"extensions": {},
-		"extras": {}
+		}
 	},
 	"not": {
 		"anyOf": [{ "required": ["basis", "rotor"] }, { "required": ["basis", "scale"] }]

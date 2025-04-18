@@ -7,15 +7,15 @@
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
 		"cells": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"$ref": "g4mf_id.schema.json",
 			"description": "The index of the accessor that contains the cell indices for this surface. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array. If not defined, the surface does not have explicit cells, and may be a wireframe-only surface."
 		},
 		"cellNormals": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"$ref": "g4mf_id.schema.json",
 			"description": "The index of the accessor that contains the per-cell normal data for this surface. If not defined, the surface does not have explicitly defined normals. If defined, the amount of cell normals MUST match the amount of cells."
 		},
 		"edges": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"$ref": "g4mf_id.schema.json",
 			"description": "The index of the accessor that contains the edge indices for this surface. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed."
 		},
 		"polytopeCells": {
@@ -24,12 +24,9 @@
 			"default": false
 		},
 		"vertices": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"$ref": "g4mf_id.schema.json",
 			"description": "The index of the accessor that contains the vertex data for this surface. This property is required."
-		},
-		"name": {},
-		"extensions": {},
-		"extras": {}
+		}
 	},
 	"dependentRequired": {
 		"cellNormals": ["cells"],

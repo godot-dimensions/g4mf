@@ -17,10 +17,7 @@
 		"version": {
 			"type": "string",
 			"description": "The version of the G4MF file format. This is intended for informational purposes. When defined, it MUST be in the format `MAJOR.MINOR` or `MAJOR.MINOR.PATCH`."
-		},
-		"name": {},
-		"extensions": {},
-		"extras": {}
+		}
 	},
 	"required": ["dimension"]
 }

@@ -14,10 +14,7 @@
 		"uri": {
 			"type": "string",
 			"description": "The URI of the buffer. This may either be a relative URI to an external file, or a base64-encoded string with the prefix `data:mimetype;base64,` where mimetype is the MIME type of the data, usually `application/octet-stream`, so the header would be `data:application/octet-stream;base64,` followed by the base64-encoded data. For a binary G4MF file, the buffer at index 0 MUST NOT have a URI."
-		},
-		"name": {},
-		"extensions": {},
-		"extras": {}
+		}
 	},
 	"required": ["byteLength"]
 }

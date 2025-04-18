@@ -7,7 +7,7 @@
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
 		"bufferView": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"$ref": "g4mf_id.schema.json",
 			"description": "The index of the buffer view that contains the data for this accessor. This is a reference to a buffer view in the G4MF file."
 		},
 		"primitiveType": {
@@ -75,7 +75,8 @@
 					"description": "128-bit or 16-byte unsigned integer."
 				},
 				{
-					"type": "string"
+					"type": "string",
+					"description": "An extension-defined primitive type."
 				}
 			]
 		},
@@ -84,10 +85,7 @@
 			"description": "The number of primitives in each element of the accessor. For scalars this is 1, for 2D vectors this is 2, for 3D vectors this is 3, for 4D vectors this is 4, and so on. Matrices can be encoded as many-dimensional vectors, such as a 4x4 matrix with this property set to 16. This number MUST be a positive integer. If not specified, the default is 1, which means each primitive is a scalar element.",
 			"minimum": 1,
 			"default": 1
-		},
-		"name": {},
-		"extensions": {},
-		"extras": {}
+		}
 	},
 	"required": ["bufferView", "primitiveType"]
 }

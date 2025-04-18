@@ -14,10 +14,7 @@
 			},
 			"minItems": 1,
 			"uniqueItems": true
-		},
-		"name": {},
-		"extensions": {},
-		"extras": {}
+		}
 	},
 	"required": ["surfaces"]
 }

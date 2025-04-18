@@ -7,7 +7,7 @@
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
 		"buffer": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"$ref": "g4mf_id.schema.json",
 			"description": "The index of the buffer that contains the data for this buffer view. This is a reference to a buffer view in the G4MF file's document-level accessors array."
 		},
 		"byteLength": {
@@ -20,10 +20,7 @@
 			"description": "The start offset of the buffer view in bytes. This is relative to the start of the buffer. For example, if the byte offset is 100, then byte 0 of the buffer view is byte 100 of the buffer. The declared byte offset plus the declared byte length MUST NOT exceed the buffer's byte length. This property is optional and defaults to 0.",
 			"minimum": 0,
 			"default": 0
-		},
-		"name": {},
-		"extensions": {},
-		"extras": {}
+		}
 	},
 	"required": ["buffer", "byteLength"]
 }
