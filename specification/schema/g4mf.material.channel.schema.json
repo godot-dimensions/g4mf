@@ -1,0 +1,37 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.material.channel.schema.json",
+	"title": "G4MF Material Channel",
+	"type": "object",
+	"description": "A material channel defines a specific property of a material, such as its base color, normal map, emission properties, etc. All properties are optional; an empty JSON object is a valid material channel, but prefer omitting the channel if unused.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"color": {
+			"type": "array",
+			"description": "The RGB(A) color value for the channel. If used together with other properties, this acts as a modulate which is per-component multiplied with the other properties. The color is represented as an array of usually three or four numbers, each usually in the range 0.0 to 1.0, but may go above 1.0 for overbright colors.",
+			"items": {
+				"type": "number"
+			}
+		},
+		"cellColors": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the per-cell color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-cell colors. If defined, the amount of cell colors MUST match or exceed the amount of cells in all surfaces that use this channel."
+		},
+		"edgeColors": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the per-edge color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-edge colors. If defined, the amount of edge colors MUST match or exceed the amount of edges in all surfaces that use this channel."
+		},
+		"vertexColors": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the per-vertex color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-vertex colors. If defined, the amount of vertex colors MUST match or exceed the amount of vertices in all surfaces that use this channel."
+		},
+		"cellTextureMap": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the per-cell texture map data for this channel. A texture map, also known as a UV map or UVW map, is a mapping from the indices of the cell vertices to the texture coordinates. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space, which may be `cellTexture` or defined by an extension. The amount of vector elements in the accessor MUST match or exceed the amount of primitive numbers in the cells array of all surfaces that use this channel. If not defined, the channel does not have per-cell texture maps."
+		},
+		"cellTexture": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the texture used by the texture map. This references a texture defined in the G4MF document-level `textures` array. If not defined, the channel does not have a texture, but a texture map may still be defined and used by extensions."
+		}
+	}
+}

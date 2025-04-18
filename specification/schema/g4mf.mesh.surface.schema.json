@@ -18,6 +18,10 @@
 			"$ref": "g4mf_id.schema.json",
 			"description": "The index of the accessor that contains the edge indices for this surface. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed."
 		},
+		"material": {
+			"$ref": "g4mf_id.schema.json",
+			"description": "The index of the material used by this surface. This references a material defined in the G4MF document-level `materials` array. If not defined, the surface should use a default material."
+		},
 		"polytopeCells": {
 			"type": "boolean",
 			"description": "If true, allow importing the cells as complex polytopes instead of simplexes. Each polytope is defined by a set of consecutive cells that share the same starting vertex. If not specified, the default is false.",

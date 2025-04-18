@@ -1,0 +1,26 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.material.schema.json",
+	"title": "G4MF Material",
+	"type": "object",
+	"description": "A material defines the appearance of a mesh surface.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"baseColor": {
+			"$ref": "g4mf.material.channel.schema.json",
+			"description": "The base color channel of the material, also known as the albedo color channel. If not defined, the material's base color is white."
+		},
+		"emissive": {
+			"$ref": "g4mf.material.channel.schema.json",
+			"description": "The emissive channel of the material. If not defined, the material does not have an emissive channel."
+		},
+		"normal": {
+			"$ref": "g4mf.material.channel.schema.json",
+			"description": "The normal channel of the material. If not defined, the material does not have a normal channel."
+		},
+		"orm": {
+			"$ref": "g4mf.material.channel.schema.json",
+			"description": "The occlusion, roughness, and metallic channel of the material. Red is used for ambient occlusion, green is used for roughness, and blue is used for metallic. If not defined, the material does not have an occlusion, roughness, and metallic channel."
+		}
+	}
+}

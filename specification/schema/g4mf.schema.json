@@ -36,6 +36,15 @@
 			"minItems": 0,
 			"uniqueItems": true
 		},
+		"materials": {
+			"type": "array",
+			"description": "An array of zero or more materials. Each material defines the appearance of a mesh surface.",
+			"items": {
+				"$ref": "g4mf.material.schema.json"
+			},
+			"minItems": 0,
+			"uniqueItems": true
+		},
 		"meshes": {
 			"type": "array",
 			"description": "An array of zero or more meshes. Each mesh is a collection of mesh surfaces that define the geometry of an object.",
@@ -49,6 +58,14 @@
 			"description": "An array of zero or more scene nodes. If the array is defined and has at least one node, the node at index 0 is the root node of the scene.",
 			"items": {
 				"$ref": "g4mf.node.schema.json"
+			},
+			"minItems": 0
+		},
+		"textures": {
+			"type": "array",
+			"description": "An array of zero or more textures.",
+			"items": {
+				"$ref": "g4mf.texture.schema.json"
 			},
 			"minItems": 0
 		}

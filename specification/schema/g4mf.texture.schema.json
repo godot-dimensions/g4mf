@@ -1,0 +1,9 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.texture.schema.json",
+	"title": "G4MF Texture",
+	"type": "object",
+	"description": "A texture is an image that can be applied to a material. TODO: Generalize textures for N-dimensions.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {}
+}

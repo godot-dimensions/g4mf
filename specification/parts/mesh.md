@@ -21,6 +21,7 @@ The following example defines.
 | **cells**         | `integer` | The index of the accessor that contains the cell indices for this surface.         | No cells.             |
 | **cellNormals**   | `integer` | The index of the accessor that contains the per-cell normal data for this surface. | No cell normals.      |
 | **edges**         | `integer` | The index of the accessor that contains the edge indices for this surface.         | No edges.             |
+| **material**      | `integer` | The index of the material to use for this surface.                                 | No material.          |
 | **polytopeCells** | `boolean` | If `true`, allow importing the cells as complex polytopes instead of simplexes.    | `false`               |
 | **vertices**      | `integer` | The index of the accessor that contains the vertex data for this surface.          | Required, no default. |
 
@@ -41,6 +42,14 @@ These are per-cell normals, which may be used for backface culling and flat shad
 The `"edges"` property is an integer index that references an accessor containing the edge indices for this surface. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed.
 
 This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer primitive type, and MUST have the `"vectorSize"` property set to 2. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array. Every two primitive numbers in the array form an edge, so the array MUST have an even number of primitives.
+
+### Material
+
+The `"material"` property is an integer index that references a material in the document-level `"materials"` array. If not defined, the surface does not have a material.
+
+This is a reference to a material in the G4MF file's document-level `"materials"` array. The material MUST be defined in the array, and the index MUST NOT exceed the bounds of the materials array. If not defined, the surface does not have a material, and should be rendered with a default material.
+
+See [G4MF Material](material.md) for more information about materials.
 
 ### Polytope Cells
 
