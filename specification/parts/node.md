@@ -8,6 +8,8 @@ Each node defines a transform, which is a combination of a position, and a basis
 
 The node at index 0 is the root node. All other nodes in the file are either descendants of the root node, or are not used. Nodes not used in the core scene hierarchy MAY be used by extensions. G4MF files may also contain zero nodes, in which case the file is not a scene, but a collection of data, such as a 4D mesh. The root node at index 0 MUST be untransformed, meaning its transform properties either MUST NOT be set or MUST be set to their default values.
 
+G4MF nodes may be empty nodes, or at most "one thing". For example, a single node MUST NOT be both a camera and a mesh instance at the same time.
+
 ## Example
 
 The following example defines a 4-dimensional G4MF file with a root node at index 0 and a child node at index 1 with a position of (1, 2, 3, 4).
@@ -32,22 +34,26 @@ The following example defines a 4-dimensional G4MF file with a root node at inde
 
 ## Properties
 
-| Property     | Type       | Description                                                | Default         |
-| ------------ | ---------- | ---------------------------------------------------------- | --------------- |
-| **position** | `number[]` | The position of the node, relative to its parent node.     | Zero vector     |
-| **basis**    | `number[]` | The basis of the node, relative to its parent node.        | Identity matrix |
-| **rotor**    | `number[]` | The rotation of the node, relative to its parent node.     | Identity rotor  |
-| **scale**    | `number[]` | The scale of the node, relative to its own local rotation. | Scale of 1      |
-| **mesh**     | `integer`  | The index of the mesh that this node uses.                 | `-1` (no mesh)  |
-| **visible**  | `boolean`  | Whether the node is visible or not (affects rendering).    | `true`          |
+| Property     | Type        | Description                                                | Default            |
+| ------------ | ----------- | ---------------------------------------------------------- | ------------------ |
+| **position** | `number[]`  | The position of the node, relative to its parent node.     | Zero vector        |
+| **basis**    | `number[]`  | The basis of the node, relative to its parent node.        | Identity matrix    |
+| **rotor**    | `number[]`  | The rotation of the node, relative to its parent node.     | Identity rotor     |
+| **scale**    | `number[]`  | The scale of the node, relative to its own local rotation. | Scale of 1         |
+| **children** | `integer[]` | The indices of the child nodes of this node.               | `[]` (empty array) |
+| **camera**   | `object`    | If this node is a camera, the camera properties.           | `null`             |
+| **mesh**     | `integer`   | If this node is a mesh instance, the index of the mesh.    | `-1` (no mesh)     |
+| **visible**  | `boolean`   | Whether the node is visible or not (affects rendering).    | `true`             |
 
-### Position
+### Transform Properties
+
+#### Position
 
 The `"position"` property is an array of numbers defining the position of the node, relative to its parent node. The default value is a zero vector, meaning the node is at the origin of its parent node.
 
 If defined, the number of elements in the array MUST be equal to the dimension of the model. For example, with `"dimension": 4`, the `"position"` property MUST be an array of 4 numbers. If the number of elements is not equal to the dimension, the file is not a valid G4MF file.
 
-### Basis
+#### Basis
 
 The `"basis"` property is an array of numbers defining the basis of the node, relative to its parent node. If not specified, use `"rotor"` and `"scale"` instead, or the node's local basis is the identity matrix.
 
@@ -55,7 +61,7 @@ The basis is defined as an NxN matrix, stored as a linear array in column-major 
 
 When the `"basis"` property is not defined, a basis can be calculated from the `"rotor"` and `"scale"` properties. The `"rotor"` property defines the rotation of the local basis vectors relative to the identity, and the `"scale"` property defines the length of each local basis vector. The calculated basis represents the local basis relative to the parent node's basis. Similarly, if the `"basis"` property is orthogonal and has a positive determinant, the `"rotor"` and `"scale"` properties can be calculated from the basis.
 
-### Rotor
+#### Rotor
 
 The `"rotor"` property is an array of numbers defining a geometric algebra rotor, encoding the rotation relative to the parent node. If not specified and `"basis"` is not specified, the node is unrotated.
 
@@ -71,7 +77,7 @@ Note that this may be different from other conventions, such as 3D quaternions (
 
 Note that each component is also dimensionally-increasing within itself, meaning `xy` is used instead of `yx`, `xz` is used instead of `zx`, and so on. 3D software typically uses the convention of `zx` to follow the right-hand rule, but this does not generalize to higher dimensions. To convert between the two bivector conventions, negate the component: `xz == -zx` and `zx == -xz`. For the ordering of 4-vector, 6-vector, etc, the sign flips whenever an odd number of neighboring indices are swapped: `xyzw == -xywz == xwyz == -wxyz`.
 
-### Scale
+#### Scale
 
 The `"scale"` property is an array of numbers defining the scale of the node, relative to its own local space. If not specified and `"basis"` is not specified, the node is unscaled.
 
@@ -79,11 +85,27 @@ The scale may either be an array of one number, which defines a uniform scale, o
 
 The scale MUST consist of only positive numbers as values. The values MUST NOT be zero, and MUST NOT be negative. This requirement is because standards for negative scale are tricky across dimensions. An even number of negative scales is equivalent to a positive scale with a rotation, so a 4D node would need either 1 or 3 of the scale numbers to be negative for a negative scale to result in a flip. The choice of which scale numbers to be negative when decomposing from a transformation matrix is arbitrary and may vary between implementations. In order to represent a flip, a `"basis"` with a negative determinant can be used instead, which is a more explicit representation of the transformation.
 
+### Children
+
+The `"children"` property is an array of integers that defines the indices of the child nodes of this node. If not specified, the default value is an empty array, meaning the node has no children.
+
+The indices in the array MUST be valid indices in the G4MF file's document-level `"nodes"` array. The order of the indices in the array is significant, as it affects the order of the nodes in the scene tree. A node may only be a child at most once, meaning that each node may only have at most one parent. The node at index 0 is the root node, it has no parent in the G4MF file, and no other node may use it as a child.
+
+### Camera
+
+The `"camera"` property is an object that defines the camera properties for this node. If not specified, the default value is `null`, meaning the node is not a camera.
+
+The `"camera"` property MUST NOT be used together with the `"mesh"` property.
+
+See [G4MF Camera](camera.md) for more information about cameras.
+
 ### Mesh
 
 The `"mesh"` property is an integer index of a G4MF mesh. If not specified, the default value is `-1`, meaning the node is not a mesh.
 
 Meshes are the most common way to provide visible geometry for a node. A mesh may be used by multiple nodes, or a mesh may be not used by any nodes. This is a reference to a mesh in the G4MF file's document-level `"meshes"` array. When defined, it MUST be a valid index in the array.
+
+The `"mesh"` property MUST NOT be used together with the `"camera"` property.
 
 See [G4MF Mesh](mesh.md) for more information about meshes.
 

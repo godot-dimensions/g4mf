@@ -1,0 +1,43 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.camera.schema.json",
+	"title": "G4MF Camera",
+	"type": "object",
+	"description": "A camera provides a view from a location in the scene.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"clipFar": {
+			"type": "number",
+			"description": "The distance to the far clipping plane. If not defined, the camera does not have an explictly defined far clipping plane."
+		},
+		"clipNear": {
+			"type": "number",
+			"description": "The distance to the near clipping plane. If not defined, the camera does not have an explictly defined near clipping plane."
+		},
+		"fov": {
+			"type": "number",
+			"description": "The field of view of the camera in degrees. Only used for perspective cameras. If defined, must be greater than 0 and no more than 3.1415925 radians.",
+			"exclusiveMinimum": 0,
+			"maximum": 3.1415925,
+			"default": 1.5707963267948966
+		},
+		"keepAspect": {
+			"type": "integer",
+			"description": "The screen space dimension index that the `fov` and `size` correspond to. 0 refers to the screen width, 1 refers to the screen height, 2 or more refer to additional dimensions. If not defined, the default is 1, referring to the screen height.",
+			"minimum": 0,
+			"default": 1
+		},
+		"size": {
+			"type": "number",
+			"description": "The size in meters of the camera. Only used for orthographic cameras. If not defined, the camera has a size of 1 meter.",
+			"exclusiveMinimum": 0.0,
+			"default": 1.0
+		},
+		"type": {
+			"type": "string",
+			"description": "The type of camera. The camera type determines how the camera is projected into the scene.",
+			"enum": ["orthographic", "perspective"],
+			"default": "perspective"
+		}
+	}
+}

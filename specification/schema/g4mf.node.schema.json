@@ -13,6 +13,9 @@
 				"type": "number"
 			}
 		},
+		"camera": {
+			"$ref": "g4mf.node.camera.schema.json"
+		},
 		"children": {
 			"type": "array",
 			"description": "The indices of this node's children.",
@@ -20,7 +23,8 @@
 				"$ref": "g4mf_id.schema.json"
 			},
 			"uniqueItems": true,
-			"minItems": 1
+			"minItems": 1,
+			"minimum": 1
 		},
 		"mesh": {
 			"$ref": "g4mf_id.schema.json",
@@ -56,6 +60,10 @@
 		}
 	},
 	"not": {
-		"anyOf": [{ "required": ["basis", "rotor"] }, { "required": ["basis", "scale"] }]
+		"anyOf": [
+			{ "required": ["basis", "rotor"] },
+			{ "required": ["basis", "scale"] },
+			{ "required": ["camera", "mesh"] }
+		]
 	}
 }
