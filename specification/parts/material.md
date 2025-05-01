@@ -31,6 +31,10 @@ The `"emissive"` property is an object that defines the emissive color channel o
 
 The `"normal"` property is an object that defines the normal map channel of the material. If not defined, the default is a flat normal map with no texture, which means the surface has flat shading and only uses the cell normals for light angle calculations.
 
+Note that the properties in the material channel include "color" in the names to reflect the common use case, however, the properties may be used to store data that is not a typical RGB(A) color. The colors in normal maps are not visual colors, but instead encode vectors. For example, a 4D material may use three or four numbers in a color, RGB(A), to encode a 4D normal vector's XYZ(W) components, similar to how a 3D material may use two or three numbers in a color, RG(B), to encode a 3D normal vector's XY(Z) components. Generalizing further, a 5D, 6D, 7D, etc material may use four, five, six, seven, etc numbers in a color to encode a 5D, 6D, 7D, etc normal vector's XYZW(VUT) components, at which point the data is no longer interpretable as an RGB(A) color, but still uses a material channel and therefore its property names.
+
+An object with smooth shading may be represented by having the normal channel's vertex colors set to the average of the polytope cell normals connected to the vertex, which sets the vertex normals to the average of the polytope cell normals.
+
 ### ORM
 
 The `"orm"` property is an object that defines the occlusion, roughness, and metallic channel of the material. If not defined, the default is a rough material with no texture.
@@ -58,19 +62,19 @@ If used together with other properties, this acts as a modulate which is per-com
 
 The `"cellColors"` property is an integer index that references an accessor containing the per-cell color data for this channel. If not defined, the channel does not have per-cell colors.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of cell colors MUST match or exceed the amount of cells in all surfaces that use this channel.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of cell colors MUST match or exceed the amount of cells in all mesh surfaces that use this channel.
 
 ### Edge Colors
 
 The `"edgeColors"` property is an integer index that references an accessor containing the per-edge color data for this channel. If not defined, the channel does not have per-edge colors.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of edge colors MUST match or exceed the amount of edges in all surfaces that use this channel.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of edge colors MUST match or exceed the amount of edges in all mesh surfaces that use this channel.
 
 ### Vertex Colors
 
 The `"vertexColors"` property is an integer index that references an accessor containing the per-vertex color data for this channel. If not defined, the channel does not have per-vertex colors.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of vertex colors MUST match or exceed the amount of vertices in all surfaces that use this channel.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of vertex colors MUST match or exceed the amount of vertices in all mesh surfaces that use this channel.
 
 ### Cell Texture Map
 
@@ -78,12 +82,14 @@ The `"cellTextureMap"` property is an integer index that references an accessor 
 
 A texture map, also known as a UV map, UVW map, or texture coordinate map, is a mapping from the indices of the cell vertices to the texture coordinates. The texture coordinates are usually on a range of 0.0 to 1.0. For 3D meshes, the texture coordinates usually refer to a 2D texture. For 4D meshes, the texture coordinates usually refer to a 3D texture. However, any dimension of texture coordinates is allowed. A 4D mesh may use a 2D texture, though this is not very useful because it will look untextured from certain angles, or a 4D texture, mapping the 4D vertices in the same dimension as the texture coordinates. This property is intended to be used together with the `"cellTexture"` property, but may be used without it, such as when defining a texture map for an untextured surface.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type. The accessor MUST have its vector size set to the dimension of the texture space, which may be `cellTexture` or defined by an extension. The amount of vector elements in the accessor MUST match or exceed the amount of primitive numbers in the cells array of all surfaces that use this channel.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type. The accessor MUST have its vector size set to the dimension of the texture space, which may be `cellTexture` or defined by an extension. The amount of vector elements in the accessor MUST match or exceed the amount of primitive numbers in the cells array of all mesh surfaces that use this channel.
 
 ### Cell Texture
 
 The `"cellTexture"` property is an integer index that references a texture used by the texture map. If not defined, the channel does not have a cell texture.
 
-Usually, a texture's dimension is 1 dimension less than the dimension of the mesh. For 3D meshes, the texture is usually a 2D texture. For 4D meshes, the texture is usually a 3D texture. However, any dimension of texture is allowed. A 4D mesh may use a 2D texture, though this is not very useful because it will look untextured from certain angles, or a 4D texture, mapping the 4D vertices in the same dimension as the texture coordinates. This property is intended to be used together with the `"cellTextureMap"` property, but may be used without it, such as when using a 4D texture on a 4D mesh and the local vertex positions are directly used as texture coordinates.
+Usually, a texture's dimension is 1 dimension less than the dimension of the mesh. For 3D meshes, the texture is usually a 2D texture. For 4D meshes, the texture is usually a 3D texture. However, any dimension of texture is allowed. A 4D mesh may use a 2D texture, though this is not very useful because it will look untextured from certain angles. Alternatively, a 4D mesh may use a 4D texture, mapping the 4D vertices in the same dimension as the texture coordinates.
+
+This property is intended to be used together with the `"cellTextureMap"` property, but may be used without it. In the case of using a 4D texture on a 4D mesh, the mesh's local vertex positions are directly used as texture coordinates, and the `"cellTextureMap"` property is not required.
 
 This is a reference to a texture defined in the G4MF document-level `"textures"` array. The texture MUST be defined in the same file as the material. If not defined, the channel does not have a texture, but a texture map may still be defined and used by extensions.
