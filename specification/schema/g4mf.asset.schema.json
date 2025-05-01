@@ -10,6 +10,20 @@
 			"type": "integer",
 			"description": "The dimension of the G4MF file. This is the number of dimensions in the geometry represented by the file. All data in the file, such as mesh vertices and node transforms, MUST be in this dimension. For 4D files, this will be 4."
 		},
+		"extensionsRequired": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"description": "An array of all extensions required to load this G4MF file. If an extension is required and an implementation does not support that extension, the implementation MUST NOT load this file, and instead SHOULD return an error. If an extension is required, it MUST also be listed in the `'extensionsUsed'` array."
+		},
+		"extensionsUsed": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"description": "An array of all extensions used in this G4MF file. If an extension is used in `'extensions'` anywhere in the file, or in `'extensionsRequired'`, it MUST be listed here."
+		},
 		"generator": {
 			"type": "string",
 			"description": "The name of the tool that generated this G4MF file. This is intended for informational purposes. This SHOULD include the version of the tool."
@@ -18,6 +32,9 @@
 			"type": "string",
 			"description": "The version of the G4MF file format. This is intended for informational purposes. When defined, it MUST be in the format `MAJOR.MINOR` or `MAJOR.MINOR.PATCH`."
 		}
+	},
+	"dependentRequired": {
+		"extensionsRequired": ["extensionsUsed"]
 	},
 	"required": ["dimension"]
 }

@@ -23,6 +23,7 @@ Major differences:
 Additionally, there are many fine-detail differences between G4MF and glTF™:
 
 - G4MF adds a new required integer key `"dimension"` to `"asset"`, which MUST be defined or the file is invalid. This means that 4D models MUST have `{ "asset": { "dimension": 4 } }` in their JSON data.
+- G4MF asset header contains the `"extensionsUsed"` and `"extensionsRequired"` arrays. In glTF™, these are defined in the top-level JSON object.
 - G4MF node transforms use a combination of `"position"` and either `"basis"` or `"rotor"`+`"scale"`, while glTF™ uses `"translation"`+`"rotation"`+`"scale"` or a 4x4 `"matrix"`. Both formats only allow a linear transform, meaning the glTF™ `"matrix"` property always has (0, 0, 0, 1) values in the last row. This is useful for sending the data to the GPU, but is useless data for interchange, therefore it is not present in G4MF.
 - G4MF node `"scale"` does not allow for negative scales, while glTF™ does. G4MF requires that `"basis"` is used for flips/reflections, if needed.
 - G4MF node `"scale"` allows for a single value representing a uniform scale, useful for compactness especially with very high dimensions. glTF™ `"scale"` is always a 3D vector.
