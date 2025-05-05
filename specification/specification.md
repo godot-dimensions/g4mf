@@ -14,10 +14,14 @@ The top-level G4MF document defines the following properties:
 | **accessors**   | `object[]` | An array of accessors, which provide a typed view of the data in a buffer view. | `[]` (empty array)    |
 | **buffers**     | `object[]` | An array of buffers, which contain raw binary data.                             | `[]` (empty array)    |
 | **bufferViews** | `object[]` | An array of buffer views, which define slices of buffers.                       | `[]` (empty array)    |
+| **materials**   | `object[]` | An array of materials, which define the appearance of surfaces.                 | `[]` (empty array)    |
 | **meshes**      | `object[]` | An array of meshes, which define the geometry of objects.                       | `[]` (empty array)    |
 | **nodes**       | `object[]` | An array of nodes, which define the hierarchy of the scene.                     | `[]` (empty array)    |
+| **textures**    | `object[]` | An array of textures, which provide visual data for materials.                  | `[]` (empty array)    |
 
 The details of how these properties work are described in the below sections.
+
+In addition to these properties, all G4MF objects, including the top-level G4MF document, MAY contain `"extensions"`, `"extras"`, and `"name"` properties.
 
 ## Asset Header
 
@@ -82,15 +86,16 @@ G4MF uses materials to define the appearance of surfaces. Each material is made 
 
 For convenience, the details of how materials work are described in a separate file: [G4MF Material](parts/material.md).
 
+## Extensions
+
+G4MF is designed to be extensible. All G4MF JSON objects inherit the `g4mf_item.schema.json` schema, which allows for `"extensions"`, `"extras"`, and `"name"` properties.
+
+- The `"extensions"` property is an object, where each key is the name of an extension, and the value is a JSON object containing the extension data. Extensions are used when a formal specification exists, and the data inside conforms to a well-defined schema outside of the core G4MF specification.
+  - Each extension name MUST be in the form of a registered prefix assigned to a group or organization, followed by an underscore, followed by the name of the extension. This ensures that extension names are unique, and avoids conflicts with other extensions.
+- The `"extras"` property is an object, where each key may be any string, and each value may be any JSON value. Extras are used when a formal specification does not exist, such as for custom application-specific data. Users may use any keys and values they want, with no restrictions, and no guarantees of data consistency, interoperability, or conflict avoidance.
+
 ## Binary Format
 
 G4MF files may be stored in a JSON-based text format (`.g4tf`) or a binary format (`.g4b`). With the text format, binary blobs of data may either be base64-encoded within the JSON, or referenced as external files. The binary format is a more compact representation of the same data, which appends binary blobs of data to the end of the JSON.
 
-The binary format begins with a 16-byte header, which contains the following fields:
-
-- A 4-byte magic number, which MUST be equal to the byte sequence `0x47 0x34 0x4D 0x46`, or ASCII string "G4MF".
-  - Interpreting as a little-endian unsigned 32-bit integer, this is `0x464D3447`.
-- A 4-byte version number, which MUST be equal to the byte sequence `0x00 0x00 0x00 0x00`, or zero.
-  - This value is only 0 for the draft version of the specification. The final version will have a different value.
-- A 8-byte size number, which MUST be equal to the total size in bytes of the entire file, including the header, all chunks, all JSON data, and all binary blobs of data.
-  - This value is a little-endian unsigned 64-bit integer, meaning the maximum file size of a binary G4MF file is 2^64 - 1 bytes.
+For convenience, the details of how the binary format works are described in a separate file: [G4MF Binary Format](parts/binary_format.md).

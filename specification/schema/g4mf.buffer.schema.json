@@ -8,7 +8,7 @@
 	"properties": {
 		"byteLength": {
 			"type": "integer",
-			"description": "The length of the buffer in bytes. MUST NOT be negative. The actual size of the buffer data MAY be a few bytes larger than the declared length, in which case the extra bytes are unused, but MUST NOT be smaller. This property is required.",
+			"description": "The length of the buffer in bytes. MUST NOT be negative. The actual size of the buffer data MAY be a few bytes larger than the declared length, in which case the extra bytes are unused, but MUST NOT be smaller. If the source data is compressed, this refers to the uncompressed size. This property is required.",
 			"minimum": 0
 		},
 		"uri": {
