@@ -22,7 +22,10 @@ After the file header, the file consists of a series of one or more chunks. Each
   - Implementations MAY define additional chunk types, but this is usually not needed. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value.
 - A 4-byte chunk compression format indicator. In the base specification, this MUST be one of the following:
   - The byte sequence `0x00 0x00 0x00 0x00`, or zero. This indicates the chunk is not compressed.
-  - Implementations MAY define additional compression formats. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value. This does not need to match the magic number used by the compression format itself.
+  - The byte sequence `0x5A 0x73 0x74 0x64`, the ASCII string "Zstd". This indicates the chunk is compressed using the Zstandard compression format.
+    - When interpreted as a little-endian unsigned 32-bit integer, this is `0x6474735A`.
+    - The chunk data MUST also include Zstd's own magic number `0x28 0xB5 0x2F 0xFD` at the start of the data, it cannot be omitted.
+  - Implementations MAY define additional compression formats. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value. Note: This does not need to match the magic number used by the compression format itself.
 - A 8-byte chunk data size number, which MUST be equal to the size in bytes of the chunk data, excluding the chunk header, and excluding any padding after the chunk data.
   - This value is a little-endian unsigned 64-bit integer. The maximum chunk data size is 2^64 - 33 bytes (an additional 32 bytes are subtracted for the file and chunk headers).
   - If the chunk is compressed, this value is the size of the compressed data, not the uncompressed data. However, the `"byteLength"` field in the JSON data refers to the uncompressed size of the data.
