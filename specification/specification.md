@@ -17,6 +17,7 @@ The top-level G4MF document defines the following properties:
 | **materials**   | `object[]` | An array of materials, which define the appearance of surfaces.                 | `[]` (empty array)    |
 | **meshes**      | `object[]` | An array of meshes, which define the geometry of objects.                       | `[]` (empty array)    |
 | **nodes**       | `object[]` | An array of nodes, which define the hierarchy of the scene.                     | `[]` (empty array)    |
+| **shapes**      | `object[]` | An array of shapes, which define mathematical shapes used for physics.          | `[]` (empty array)    |
 | **textures**    | `object[]` | An array of textures, which provide visual data for materials.                  | `[]` (empty array)    |
 
 The details of how these properties work are described in the below sections.
@@ -85,6 +86,12 @@ For convenience, the details of how meshes work are described in a separate file
 G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate color, texture, and more. Materials are referenced by mesh surfaces, which are contained in meshes. Material channels may have per-cell colors, per-edge colors, per-vertex colors, and/or texture mapping, each of which points to an accessor that encodes the data.
 
 For convenience, the details of how materials work are described in a separate file: [G4MF Material](parts/material.md).
+
+### Shapes
+
+G4MF shapes define mathematical shapes used for physics and other use cases. Each shape has a type and many size parameters which define the bounds of the shape. Most shapes are implicit surfaces, meaning that they are defined by a mathematical function and have a well-defined inside and outside. Shapes may be referenced on nodes to be used as physics colliders. If shapes are not referenced by node physics or by an extension, they are not used and may be ignored.
+
+For convenience, the details of how shapes work are described in a separate file: [G4MF Shape](parts/physics/shape.md).
 
 ## Extensions
 

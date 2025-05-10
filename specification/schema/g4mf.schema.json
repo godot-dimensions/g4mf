@@ -61,6 +61,14 @@
 			},
 			"minItems": 0
 		},
+		"shapes": {
+			"type": "array",
+			"description": "An array of zero or more shapes. Shapes are pure geometric objects defined by an enumerated type and a set of size parameters.",
+			"items": {
+				"$ref": "physics/g4mf.shape.schema.json"
+			},
+			"minItems": 0
+		},
 		"textures": {
 			"type": "array",
 			"description": "An array of zero or more textures.",

@@ -1,0 +1,32 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.shape.curve.taper.schema.json",
+	"title": "G4MF Shape Curve Taper",
+	"type": "object",
+	"description": "A shape curve taper defines a tapering position of a shape curve.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"radii": {
+			"type": "array",
+			"description": "The radii of the curve in meters at this taper point.",
+			"items": {
+				"type": "number"
+			},
+			"minItems": 2
+		},
+		"exponent": {
+			"type": "number",
+			"description": "The exponent of the curve at this taper point.",
+			"exclusiveMinimum": 0.0,
+			"default": 2.0
+		},
+		"position": {
+			"type": "array",
+			"description": "The position of the taper in meters.",
+			"items": {
+				"type": "number"
+			},
+			"minItems": 2
+		}
+	}
+}

@@ -1,0 +1,70 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.shape.schema.json",
+	"title": "G4MF Shape",
+	"type": "object",
+	"description": "A shape in G4MF is a pure geometric object defined by an enumerated type and a set of size parameters. Shapes are useful for things like physics calculations, but are not expected to be directly used for rendering.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"curves": {
+			"type": "array",
+			"description": "An array of curves of the shape, if any.",
+			"items": {
+				"$ref": "g4mf.shape.curve.schema.json"
+			}
+		},
+		"heights": {
+			"$ref": "g4mf_id.schema.json",
+			"description": "The index of the accessor storing the heightmap data, if any."
+		},
+		"length": {
+			"type": "number",
+			"description": "The length of the ray shape in meters, if the shape is a ray.",
+			"minimum": 0.0,
+			"default": 1.0
+		},
+		"mesh": {
+			"$ref": "g4mf_id.schema.json",
+			"description": "The index of the mesh to use for a mesh-based shape."
+		},
+		"size": {
+			"type": "array",
+			"items": {
+				"type": "number"
+			},
+			"minItems": 1,
+			"description": "The base size of the shape in meters."
+		},
+		"type": {
+			"type": "string",
+			"description": "The type of the shape. The default value is `general`, meaning the shape is a general shape with a size and optional curves, which can be used for boxes, spheres, capsules, cylinders, etc.",
+			"anyOf": [
+				{
+					"const": "general",
+					"description": "A general shape with a size and optional curves. It can be used for boxes, spheres, capsules, cylinders, etc. The center of the shape is at the origin of the local coordinate system."
+				},
+				{
+					"const": "concave",
+					"description": "A concave mesh shape, defined by a mesh. The mesh exists relative to the local coordinate system."
+				},
+				{
+					"const": "convex",
+					"description": "A convex hull mesh shape, defined by a mesh. The mesh exists relative to the local coordinate system."
+				},
+				{
+					"const": "heightmap",
+					"description": "A heightmap shape, defined by an array of height values, with the size property defining the dimensions of the data in the heights accessor."
+				},
+				{
+					"const": "plane",
+					"description": "A plane shape, defining an infinite boundary. The plane points up in the local +Y direction from the local origin."
+				},
+				{
+					"const": "ray",
+					"description": "A ray shape, defining a one-way line segment. The ray points in the local -Y direction from the local origin."
+				}
+			],
+			"default": "general"
+		}
+	}
+}
