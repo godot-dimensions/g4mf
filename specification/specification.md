@@ -94,8 +94,8 @@ G4MF is designed to be extensible. All G4MF JSON objects inherit the `g4mf_item.
   - Each extension name MUST be in the form of a registered prefix assigned to a group or organization, followed by an underscore, followed by the name of the extension. This ensures that extension names are unique, and avoids conflicts with other extensions.
 - The `"extras"` property is an object, where each key may be any string, and each value may be any JSON value. Extras are used when a formal specification does not exist, such as for custom application-specific data. Users may use any keys and values they want, with no restrictions, and no guarantees of data consistency, interoperability, or conflict avoidance.
 
-## Binary Format
+## Binary File Format
 
 G4MF files may be stored in a JSON-based text format (`.g4tf`) or a binary format (`.g4b`). With the text format, binary blobs of data may either be base64-encoded within the JSON, or referenced as external files. The binary format is a more compact representation of the same data, which appends binary blobs of data to the end of the JSON.
 
-For convenience, the details of how the binary format works are described in a separate file: [G4MF Binary Format](parts/binary_format.md).
+For convenience, the details of how the binary format works are described in a separate file: [G4MF Binary File Format](parts/binary_file_format.md).
