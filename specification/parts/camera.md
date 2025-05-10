@@ -99,3 +99,7 @@ $$
 $$
 
 These formulas assume the sensor size is of unit length and has the same unit of measurement as the focal length. For example, with a sensor size of 1 meter, a focal length of 1 meter would give a field of view of 90 degrees. If you need a different sensor size, you may rescale the focal length as needed. Also, the trigonometric functions in these formulas use radians.
+
+## JSON Schema
+
+See [g4mf.node.camera.schema.json](../schema/g4mf.node.camera.schema.json) for the camera properties JSON schema.

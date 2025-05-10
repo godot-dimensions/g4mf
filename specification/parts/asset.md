@@ -57,3 +57,7 @@ This property is highly recommended to be set to a human-readable name of the ap
 The `"version"` property is a string that defines the version of the G4MF specification used to generate the file.
 
 Since the specification is still a draft and in active development, this property may be omitted. In the future, this will be a required property.
+
+## JSON Schema
+
+See [g4mf.asset.schema.json](../schema/g4mf.asset.schema.json) for the asset properties JSON schema.

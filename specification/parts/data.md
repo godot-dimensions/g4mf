@@ -114,3 +114,11 @@ For scalars this is 1, for 2D vectors this is 2, for 3D vectors this is 3, for 4
 The buffer view's byte length MUST be a multiple of the size of each element, which is the size of the primitive type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's byte length divided by the size of each element.
 
 For example, if encoding an array of 32-bit floating-point Vector3s, the primitive type would be `"float32"` and the vector size would be `3`. Each of those accessor elements then takes up 12 bytes. The buffer view's byte length then MUST be a multiple of 12, such as 120 bytes encoding 10 elements.
+
+## JSON Schema
+
+See these files for the JSON schema of the data properties:
+
+- Buffers: [g4mf.buffer.schema.json](../schema/g4mf.buffer.schema.json)
+- Buffer Views: [g4mf.bufferView.schema.json](../schema/g4mf.bufferView.schema.json)
+- Accessors: [g4mf.accessor.schema.json](../schema/g4mf.accessor.schema.json)

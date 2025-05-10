@@ -116,3 +116,7 @@ The `"visible"` property is a boolean value that defines whether the node is vis
 The visibility of a node in a tree is determined by its own visibility and the visibility of all its ancestors. If a node is has `"visible"` set to false, it and all its descendants are not visible in the tree. If a node is visible in the tree, that may only occur when it and all its ancestors are visible.
 
 The `"visible"` property is not a generic way to disable nodes in the scene. It only defines the ability of a node and its descendants to be rendered. Physics objects, such as bodies and collision shapes, are not affected by the visibility of a node.
+
+## JSON Schema
+
+See [g4mf.node.schema.json](../schema/g4mf.node.schema.json) for the node properties JSON schema.

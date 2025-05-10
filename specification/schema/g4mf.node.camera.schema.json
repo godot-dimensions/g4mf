@@ -17,7 +17,7 @@
 		"fov": {
 			"type": "number",
 			"description": "The field of view of the camera in degrees. Only used for perspective cameras. If defined, must be greater than 0 and no more than 3.1415925 radians.",
-			"exclusiveMinimum": 0,
+			"exclusiveMinimum": 0.0,
 			"maximum": 3.1415925,
 			"default": 1.5707963267948966
 		},

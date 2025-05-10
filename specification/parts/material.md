@@ -93,3 +93,7 @@ Usually, a texture's dimension is 1 dimension less than the dimension of the mes
 This property is intended to be used together with the `"cellTextureMap"` property, but may be used without it. In the case of using a 4D texture on a 4D mesh, the mesh's local vertex positions are directly used as texture coordinates, and the `"cellTextureMap"` property is not required.
 
 This is a reference to a texture defined in the G4MF document-level `"textures"` array. The texture MUST be defined in the same file as the material. If not defined, the channel does not have a texture, but a texture map may still be defined and used by extensions.
+
+## JSON Schema
+
+See [g4mf.material.schema.json](../schema/g4mf.material.schema.json) for the material properties JSON schema, and [g4mf.material.channel.schema.json](../schema/g4mf.material.channel.schema.json) for the material channel properties JSON schema.

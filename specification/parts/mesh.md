@@ -69,3 +69,7 @@ To generalize this to 4D, we need three vectors, from vertex 0 to vertex 1, from
 To calculate the perpendicular vector, you may use the functions defined in the [Calculating Perpendicular Vectors section of the G4MF Math specification](math.md#calculating-perpendicular-vectors).
 
 It is recommended to pre-compute the cell normals before rendering and store them in memory, since calculating them can be expensive, especially for higher dimensions. However, since this information is recoverable from the cells, it would be redundant to store in G4MF.
+
+## JSON Schema
+
+See [g4mf.mesh.schema.json](../schema/g4mf.mesh.schema.json) for the mesh properties JSON schema, and [g4mf.mesh.surface.schema.json](../schema/g4mf.mesh.surface.schema.json) for the mesh surface properties JSON schema.
