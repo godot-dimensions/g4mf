@@ -1,6 +1,6 @@
-# G4MF Binary Format
+# G4MF Binary File Format
 
-G4MF files may be stored in a JSON-based text format (`.g4tf`) or a binary format (`.g4b`). With the text format, binary blobs of data may either be base64-encoded within the JSON, or referenced as external files. The binary format is a more compact representation of the same data, which appends binary blobs of data to the end of the JSON.
+G4MF files may be stored in a JSON-based text format (`.g4tf`) or a binary format (`.g4b`, "G4MF Binary"). With the text format, binary blobs of data may either be base64-encoded within the JSON, or referenced as external files. The binary format is a more compact representation of the same data within a self-contained file, which appends binary blobs of data after the end of the JSON.
 
 The binary format begins with a 16-byte file header, which contains the following fields:
 
@@ -19,12 +19,13 @@ After the file header, the file consists of a series of one or more chunks. Each
     - JSON chunks MUST be UTF-8 encoded without a BOM, MUST NOT contain control characters `0x7F` or `0x00` through `0x1F` except for optionally tab `0x09` and line feed `0x0A`, and MUST be a valid JSON object. These requirements also apply to the text format.
   - The byte sequence `0x42 0x4C 0x4F 0x42`, the ASCII string "BLOB". This indicates the chunk contains binary blob data, usually the data of a buffer.
     - When interpreted as a little-endian unsigned 32-bit integer, this is `0x424F4C42`.
-  - Implementations MAY define additional chunk types, but this is usually not needed. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value.
+  - Implementations MAY define additional chunk types, but this is usually not needed. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value. Note: This does not need to match the magic number used by the data format itself, if any.
 - A 4-byte chunk compression format indicator. In the base specification, this MUST be one of the following:
   - The byte sequence `0x00 0x00 0x00 0x00`, or zero. This indicates the chunk is not compressed.
   - The byte sequence `0x5A 0x73 0x74 0x64`, the ASCII string "Zstd". This indicates the chunk is compressed using the Zstandard compression format.
     - When interpreted as a little-endian unsigned 32-bit integer, this is `0x6474735A`.
     - The chunk data MUST also include Zstd's own magic number `0x28 0xB5 0x2F 0xFD` at the start of the data, it cannot be omitted.
+  - Implementations MUST support the uncompressed format. Implementations MAY choose to implement none of the other compression formats, refusing to load such files.
   - Implementations MAY define additional compression formats. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value. Note: This does not need to match the magic number used by the compression format itself.
 - A 8-byte chunk data size number, which MUST be equal to the size in bytes of the chunk data, excluding the chunk header, and excluding any padding after the chunk data.
   - This value is a little-endian unsigned 64-bit integer. The maximum chunk data size is 2^64 - 33 bytes (an additional 32 bytes are subtracted for the file and chunk headers).

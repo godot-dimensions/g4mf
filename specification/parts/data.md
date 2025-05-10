@@ -14,14 +14,14 @@ Buffers are the top-level data storage unit in G4MF. They are used to store many
 
 For text-based G4MF, this often takes the form of a `.bin` file next to the `.g4tf` file, or embedded base64-encoded data. For binary G4MF, this is usually the binary chunk of data at the end of the file, but this may also be a separate file. Most files only need one buffer for all the binary blob data in the file, but multiple buffers are allowed if the file is needed to be split into multiple files, such as if there is a file size limit.
 
-For binary `.g4b` G4MF files, the buffer at index 0 is special. It represents the binary blob data chunk at the end of the file, after the G4MF JSON.
+For binary `.g4b` G4MF files, buffers usually have their data stored in binary blob chunks at the end of the file, after the G4MF JSON. For such buffers, the `"uri"` property is not used and should be omitted. The `"byteLength"` property is the uncompressed size of the data in bytes, while the chunk's data size includes any compression, if the chunk is compressed. See [G4MF Binary File Format](binary_file_format.md) for more details.
 
 ### Properties
 
-| Property       | Type    | Description                                                       | Default                       |
-| -------------- | ------- | ----------------------------------------------------------------- | ----------------------------- |
-| **byteLength** | integer | The length of the buffer in bytes.                                | Required, no default.         |
-| **uri**        | string  | The relative URI to an external file, or a base64-encoded string. | Required except G4B buffer 0. |
+| Property       | Type    | Description                                                       | Default                                          |
+| -------------- | ------- | ----------------------------------------------------------------- | ------------------------------------------------ |
+| **byteLength** | integer | The length of the buffer in bytes.                                | Required, no default.                            |
+| **uri**        | string  | The relative URI to an external file, or a base64-encoded string. | Required except G4B buffers with data in chunks. |
 
 #### Byte Length
 
