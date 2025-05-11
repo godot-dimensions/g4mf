@@ -87,6 +87,12 @@ G4MF uses materials to define the appearance of surfaces. Each material is made 
 
 For convenience, the details of how materials work are described in a separate file: [G4MF Material](parts/material.md).
 
+## Physics
+
+G4MF physics defines the physical properties of objects in the scene. It allows using shapes to define solid colliders or non-solid triggers, and allows defining the motion properties of objects, including mass, inertia, and more. Physics properties are not needed for loading the mesh geometry of the scene, and may be ignored if the file is only used for visual purposes, or if loading into an application that does not support physics and only needs the mesh geometry.
+
+For convenience, the details of how physics work are described in a separate file: [G4MF Physics](parts/physics/physics.md).
+
 ### Shapes
 
 G4MF shapes define mathematical shapes used for physics and other use cases. Each shape has a type and many size parameters which define the bounds of the shape. Most shapes are implicit surfaces, meaning that they are defined by a mathematical function and have a well-defined inside and outside. Shapes may be referenced on nodes to be used as physics colliders. If shapes are not referenced by node physics or by an extension, they are not used and may be ignored.

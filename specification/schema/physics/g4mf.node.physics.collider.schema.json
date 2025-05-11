@@ -1,0 +1,16 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.node.physics.collider.schema.json",
+	"title": "G4MF Node Physics Collider",
+	"type": "object",
+	"description": "Parameters describing the geometric shape used for collisions.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"shape": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The id of the shape referenced by this node.",
+			"default": -1
+		}
+	},
+	"required": ["shape"]
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.node.physics.schema.json",
+	"title": "G4MF Node Physics",
+	"type": "object",
+	"description": "Physics properties for a G4MF node.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"motion": {
+			"$ref": "g4mf.node.physics.motion.schema.json"
+		},
+		"collider": {
+			"$ref": "g4mf.node.physics.collider.schema.json"
+		},
+		"trigger": {
+			"$ref": "g4mf.node.physics.trigger.schema.json"
+		}
+	}
+}

@@ -1,0 +1,49 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.node.physics.motion.schema.json",
+	"title": "G4MF Node Physics Motion",
+	"type": "object",
+	"description": "Parameters describing how a node's transform should be driven by physics simulation.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"type": {
+			"type": "string",
+			"description": "The motion type of this physics body as a string.",
+			"enum": ["static", "kinematic", "dynamic"]
+		},
+		"mass": {
+			"type": "number",
+			"description": "The mass of this physics body in kilograms. The center of mass is at the origin of the node's local coordinate system.",
+			"default": 1.0
+		},
+		"inertiaDiagonal": {
+			"type": "array",
+			"description": "The inertia in the principle rotation planes in kilogram meter squared. This value is a bivector, meaning that in 4D, it has 6 numbers for the XY, XZ, YZ, XW, YW, and ZW rotation planes, in that order (dimensionally-increasing order). If zero or not specified, the inertia should be calculated automatically."
+		},
+		"inertiaOrientation": {
+			"type": "array",
+			"description": "The inertia principle rotation plane orientation relative to the node's local coordinate system. A rotor starts with a scalar part, a bivector part, and may optionally be followed by the rest of the even subalgebra. The scalar part is the first element at index 0, and the bivector parts come next. If not specified, the inertia principle rotation planes are not rotated relative to the node's local coordinate system.",
+			"items": {
+				"type": "number",
+				"minimum": -1.0,
+				"maximum": 1.0
+			}
+		},
+		"linearVelocity": {
+			"type": "array",
+			"description": "The initial linear velocity of the body in meters per second. If not specified, the linear velocity is zero."
+		},
+		"angularVelocity": {
+			"type": "array",
+			"description": "The initial angular velocity of the body in radians per second. This value is a bivector, meaning that in 4D, it has 6 numbers for the XY, XZ, YZ, XW, YW, and ZW rotation planes, in that order (dimensionally-increasing order). If not specified, the angular velocity is zero."
+		},
+		"gravityFactor": {
+			"type": "number",
+			"description": "A multiplier applied to the global acceleration due to gravity.",
+			"default": 1.0
+		},
+		"extensions": {},
+		"extras": {}
+	},
+	"required": ["type"]
+}
