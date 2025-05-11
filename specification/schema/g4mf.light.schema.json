@@ -1,0 +1,66 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.light.schema.json",
+	"title": "G4MF Light",
+	"type": "object",
+	"description": "A material channel defines a specific property of a material, such as its base color, normal map, emission properties, etc. All properties are optional; an empty JSON object is a valid material channel, but prefer omitting the channel if unused.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"type": {
+			"type": "string",
+			"description": "The type of light as a string-based enum.",
+			"anyOf": [
+				{
+					"const": "directional",
+					"description": "A directional light is like sunlight, it emits light in the node's local -Z direction."
+				},
+				{
+					"const": "point",
+					"description": "A point light emits light in all directions from a single point in space, the node's local origin."
+				},
+				{
+					"const": "spot",
+					"description": "A spot light emits light in a cone shape from a single point in space, the node's local origin, in the node's local -Z direction."
+				}
+			],
+			"default": "point"
+		},
+		"color": {
+			"type": "array",
+			"description": "The RGB color value for the light in linear color space. The color is represented as an array of exactly three numbers, each usually in the range 0.0 to 1.0, but may go above 1.0 for overbright colors. If not specified, the color is plain white (1.0, 1.0, 1.0).",
+			"items": {
+				"type": "number",
+				"minimum": 0.0
+			},
+			"minItems": 3,
+			"maxItems": 3,
+			"default": [1.0, 1.0, 1.0]
+		},
+		"coneInnerAngle": {
+			"type": "number",
+			"description": "The inner angle radius of the light cone in radians, inside which the intensity of the light is maximal. This property is only used for spot lights. If not specified, the inner angle is 0.0, meaning that the cone is only maximally intense at the center of the cone.",
+			"minimum": 0.0,
+			"maximum": 3.1415926535897932,
+			"default": 0.0
+		},
+		"coneOuterAngle": {
+			"type": "number",
+			"description": "The outer angle radius of the light cone in radians, beyond which the intensity of the light is zero. This property is only used for spot lights. If not specified, the outer angle has a radius of an eighth turn (0.7853981633974483 radians or 45 degrees)",
+			"minimum": 0.0,
+			"maximum": 3.1415926535897932,
+			"default": 0.7853981633974483
+		},
+		"intensity": {
+			"type": "number",
+			"description": "The intensity of the light. Point and spot lights use lumens per radial unit (radian for 2D models, steradian for 3D models, choradian for 4D models, etc), while directional lights use lumens per surface unit (meter for 2D models, square meter for 3D models, cubic meter for 4D models, etc). The intensity scales up with the scale of the node the light is attached to. If not specified, the intensity is one thousand.",
+			"minimum": 0.0,
+			"default": 1000.0
+		},
+		"range": {
+			"type": "number",
+			"description": "The range of the light in meters. This is the distance from the light source where the light intensity becomes zero. This property is only used for point and spot lights. If not specified, the range is infinite, like a physical light.",
+			"minimum": 0.0
+		}
+	},
+	"required": ["type"]
+}

@@ -14,6 +14,7 @@ The top-level G4MF document defines the following properties:
 | **accessors**   | `object[]` | An array of accessors, which provide a typed view of the data in a buffer view. | `[]` (empty array)    |
 | **buffers**     | `object[]` | An array of buffers, which contain raw binary data.                             | `[]` (empty array)    |
 | **bufferViews** | `object[]` | An array of buffer views, which define slices of buffers.                       | `[]` (empty array)    |
+| **lights**      | `object[]` | An array of lights, which can be attached to nodes to add lights to the model.  | `[]` (empty array)    |
 | **materials**   | `object[]` | An array of materials, which define the appearance of surfaces.                 | `[]` (empty array)    |
 | **meshes**      | `object[]` | An array of meshes, which define the geometry of objects.                       | `[]` (empty array)    |
 | **nodes**       | `object[]` | An array of nodes, which define the hierarchy of the scene.                     | `[]` (empty array)    |
@@ -66,7 +67,7 @@ Additionally, all units are SI metric units whenever possible:
 - All time is in seconds.
 - All mass is in kilograms.
 - All angles are in radians.
-- All lights are in lumen-based units like candelas or lux.
+- All lights are in lumen-based units.
 - All derived units are based on these, such as velocity in meters per second.
 
 ## Data Storage
@@ -74,6 +75,12 @@ Additionally, all units are SI metric units whenever possible:
 G4MF stores data with a combination of buffers, buffer views, and accessors. As an analogy with computer storage drives, a buffer is a disk, a buffer view is a partition, and an accessor is a file system.
 
 For convenience, the details of how these work are described in a separate file: [G4MF Data](parts/data.md).
+
+## Lights
+
+G4MF lights define the light sources in the scene. Each light object defines the properties of a light, such as the type, color, intensity, and other properties. Lights may be referenced by nodes to instance them in the scene.
+
+For convenience, the details of how lights work are described in a separate file: [G4MF Light](parts/light.md).
 
 ## Meshes
 

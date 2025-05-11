@@ -34,16 +34,17 @@ The following example defines a 4-dimensional G4MF file with a root node at inde
 
 ## Properties
 
-| Property     | Type        | Description                                                | Default            |
-| ------------ | ----------- | ---------------------------------------------------------- | ------------------ |
-| **position** | `number[]`  | The position of the node, relative to its parent node.     | Zero vector        |
-| **basis**    | `number[]`  | The basis of the node, relative to its parent node.        | Identity matrix    |
-| **rotor**    | `number[]`  | The rotation of the node, relative to its parent node.     | Identity rotor     |
-| **scale**    | `number[]`  | The scale of the node, relative to its own local rotation. | Scale of 1         |
-| **children** | `integer[]` | The indices of the child nodes of this node.               | `[]` (empty array) |
-| **camera**   | `object`    | If this node is a camera, the camera properties.           | `null`             |
-| **mesh**     | `integer`   | If this node is a mesh instance, the index of the mesh.    | `-1` (no mesh)     |
-| **visible**  | `boolean`   | Whether the node is visible or not (affects rendering).    | `true`             |
+| Property     | Type        | Description                                                 | Default            |
+| ------------ | ----------- | ----------------------------------------------------------- | ------------------ |
+| **position** | `number[]`  | The position of the node, relative to its parent node.      | Zero vector        |
+| **basis**    | `number[]`  | The basis of the node, relative to its parent node.         | Identity matrix    |
+| **rotor**    | `number[]`  | The rotation of the node, relative to its parent node.      | Identity rotor     |
+| **scale**    | `number[]`  | The scale of the node, relative to its own local rotation.  | Scale of 1         |
+| **children** | `integer[]` | The indices of the child nodes of this node.                | `[]` (empty array) |
+| **camera**   | `object`    | If this node is a camera, the camera properties.            | `null`             |
+| **light**    | `integer`   | If this node is a light, the index of the light properties. | `-1` (no light)    |
+| **mesh**     | `integer`   | If this node is a mesh instance, the index of the mesh.     | `-1` (no mesh)     |
+| **visible**  | `boolean`   | Whether the node is visible or not (affects rendering).     | `true`             |
 
 ### Transform Properties
 
@@ -95,9 +96,17 @@ The indices in the array MUST be valid indices in the G4MF file's document-level
 
 The `"camera"` property is an object that defines the camera properties for this node. If not specified, the default value is `null`, meaning the node is not a camera.
 
-The `"camera"` property MUST NOT be used together with the `"mesh"` property.
+The `"camera"` property MUST NOT be used together with the `"light"` or `"mesh"` properties.
 
 See [G4MF Camera](camera.md) for more information about cameras.
+
+### Light
+
+The `"light"` property is an integer index of a G4MF light. If not specified, the default value is `-1`, meaning the node is not a light.
+
+The `"light"` property MUST NOT be used together with the `"camera"` or `"mesh"` properties.
+
+See [G4MF Light](light.md) for more information about lights.
 
 ### Mesh
 
@@ -105,7 +114,7 @@ The `"mesh"` property is an integer index of a G4MF mesh. If not specified, the 
 
 Meshes are the most common way to provide visible geometry for a node. A mesh may be used by multiple nodes, or a mesh may be not used by any nodes. This is a reference to a mesh in the G4MF file's document-level `"meshes"` array. When defined, it MUST be a valid index in the array.
 
-The `"mesh"` property MUST NOT be used together with the `"camera"` property.
+The `"mesh"` property MUST NOT be used together with the `"camera"` or `"light"` properties.
 
 See [G4MF Mesh](mesh.md) for more information about meshes.
 

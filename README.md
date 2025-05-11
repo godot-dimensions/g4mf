@@ -33,6 +33,8 @@ Additionally, there are many fine-detail differences between G4MF and glTF™:
 - G4MF mesh surfaces explicitly define vertices, edges, and cells on the surface. glTF™ mesh primitives define these inside of `"attributes"` and `"mode"`.
 - G4MF mesh surfaces may have a `"polytopeCells"` boolean, providing the glTF™ extension `FB_ngon_encoding` in the base specification. https://github.com/KhronosGroup/glTF/pull/1620
 - G4MF materials have channels that generalize the glTF™ concept of separate material properties. For example, glTF™ base color uses `"baseColorFactor"` and `"baseColorTexture"`, the latter of which has a textureInfo which defines a texture `"index"` and a `"texCoord"` index. G4MF materials have channels like `"baseColor"` with these properties unified under it.
+- G4MF lights are in the base specification, while glTF™ lights are in the `KHR_lights_punctual` extension.
+- G4MF lights require taking into account the scale of the node they are attached to, while glTF™ lights require ignoring the scale of the node they are attached to.
 - G4MF accessors have a `"primitiveType"` string that holds values like `"uint8"`, `"int16"`, `"float32"`, etc. glTF™ accessors have a `"componentType"` property whose values are OpenGL™-specific enumerations like `5121`, `5122`, `5126`, etc. G4MF's approach is more human-readable and extensible, while glTF™'s approach requires humans to reference a table of enumerations to understand the values.
 - G4MF accessors have a `"vectorSize"` integer, generalizing the glTF™ accessor concept of `"SCALAR"`, `"VEC2"`, `"VEC3"`, and `"VEC4"` to any size.
 - G4MF accessors do not have `"count"` like glTF™ accessors, instead the count is determined by the size of the buffer view.
