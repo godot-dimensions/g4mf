@@ -16,7 +16,7 @@ Major differences:
 
 - G4MF is a multi-dimensional 4D-focused format, while glTF™ is a 3D format. (obviously, but stated for clarity)
 - glTF™ is designed to be a GPU-ready last-mile format, with data stored in a way that is ready to be loaded into OpenGL™ or Vulkan™. Since graphics APIs do not support 4D, 5D, 6D, etc models, that goal does not make sense for G4MF. Instead, G4MF is designed primarily as a human-readable interchange format.
-- G4MF mesh vertices are stored in a typically de-duplicated way, and referenced by edges and cells. glTF™ stores each triangle with unique vertices, which is easier for directly loading to the GPU, but leading to confusion about vertices being duplicated. https://blender.stackexchange.com/questions/167372/gltf-export-has-twice-the-vertices-it-should/167383#167383
+- G4MF mesh vertices are stored in a typically de-duplicated way, and referenced by edges and cells. glTF™ stores each triangle with unique vertices, which is easier for directly loading to the GPU, but leads to confusion about vertices being duplicated. https://blender.stackexchange.com/questions/167372/gltf-export-has-twice-the-vertices-it-should/167383#167383
 - G4MF only allows one scene per file with one root node, while glTF™ allows multiple scenes and multiple root nodes. https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Vendor/GODOT_single_root
 - G4MF binary uses a 64-bit unsigned integer for the size of `.g4b` files and chunks, instead of a 32-bit unsigned integer like `.glb`, allowing for files larger than 4 GiB. https://github.com/KhronosGroup/glTF/issues/2114
 - G4MF is a brand new format, while glTF™ is a mature industry standard format. Therefore, we recommend using glTF™ for 3D models, not 3D G4MF files.

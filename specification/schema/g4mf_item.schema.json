@@ -5,6 +5,10 @@
 	"description": "The base schema which all G4MF items should inherit from.",
 	"type": "object",
 	"properties": {
+		"comment": {
+			"type": "string",
+			"description": "A comment or description of the item. This MUST NOT be used for any functional purpose by software that processes G4MF files, it is only allowed to be used for the purpose of annotating an example G4MF file with additional information when reading the raw text of the file manually, like a comment in a programming language."
+		},
 		"extensions": {
 			"type": "object",
 			"description": "A dictionary of extension objects, each of which is a JSON object that conforms to the schema defined by the extension.",
