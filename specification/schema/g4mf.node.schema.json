@@ -30,6 +30,9 @@
 			"$ref": "g4mf_id.schema.json",
 			"description": "The index of the mesh that this node references. This is a reference to a mesh in the G4MF file."
 		},
+		"physics": {
+			"$ref": "physics/g4mf.node.physics.schema.json"
+		},
 		"position": {
 			"type": "array",
 			"description": "The node's local position relative to its parent in meters.",
@@ -39,7 +42,7 @@
 		},
 		"rotor": {
 			"type": "array",
-			"description": "The node's rotation relative to its parent as a rotor. A rotor starts with a scalar part, a bivector part, and may optionally be followed by the rest of the even subalgebra. The scalar part is the first element at index 0, and the bivector parts come next. MUST NOT be used with `basis`.",
+			"description": "The node's rotation relative to its parent as a rotor. A rotor starts with a scalar part, a bivector part, and may optionally be followed by the rest of the even subalgebra. The scalar part is the first element at index 0, and the bivector parts come next. Within each part, elements are stored in a dimensionally-increasing order. MUST NOT be used with `basis`.",
 			"items": {
 				"type": "number",
 				"minimum": -1.0,
@@ -63,7 +66,12 @@
 		"anyOf": [
 			{ "required": ["basis", "rotor"] },
 			{ "required": ["basis", "scale"] },
-			{ "required": ["camera", "mesh"] }
+			{ "required": ["camera", "light"] },
+			{ "required": ["camera", "mesh"] },
+			{ "required": ["camera", "physics"] },
+			{ "required": ["light", "mesh"] },
+			{ "required": ["light", "physics"] },
+			{ "required": ["mesh", "physics"] }
 		]
 	}
 }
