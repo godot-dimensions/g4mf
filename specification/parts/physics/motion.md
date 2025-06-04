@@ -6,6 +6,8 @@ If a node has a `"physics"` property with the `"motion"` property defined, its t
 - If a descendant node has its own motion property, that node should be treated as an independent body during simulation. There is no implicit requirement that a node with `"motion"` follows an ancestor in the tree with `"motion"`.
 - If a node's transform is animated by animations in the file, those animations should take priority over the physics simulation.
 
+See [G4MF Node Physics](node_physics.md) for more details on how physics properties are defined on nodes.
+
 ## Example
 
 This example defines a single G4MF node with a `"motion"` property defining `"dynamic"` motion with a mass of `5.0` kilograms.

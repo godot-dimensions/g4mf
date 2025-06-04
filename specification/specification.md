@@ -98,7 +98,7 @@ For convenience, the details of how materials work are described in a separate f
 
 G4MF physics defines the physical properties of objects in the scene. It allows using shapes to define solid colliders or non-solid triggers, and allows defining the motion properties of objects, including mass, inertia, and more. Physics properties are not needed for loading the mesh geometry of the scene, and may be ignored if the file is only used for visual purposes, or if loading into an application that does not support physics and only needs the mesh geometry.
 
-For convenience, the details of how physics work are described in a separate file: [G4MF Physics](parts/physics/physics.md).
+For convenience, the details of how physics work are described in a separate file: [G4MF Node Physics](parts/physics/node_physics.md).
 
 ### Shapes
 
