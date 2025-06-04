@@ -6,7 +6,7 @@ Nodes are the core building block of a G4MF file. Each node defines an object in
 
 Each node defines a transform, which is a combination of a position, and a basis or rotor+scale. The basis is a set of usually orthogonal vectors that define the local rotation, scale, and shear of the object, giving full control over the object's transform. The the rotor+scale representation allows defining the rotation and scale separately, which is useful for human readability and animations that change these properties independently. The scale is defined within the node's own local space, including the node's own rotation, while all other transform properties are defined relative to the parent node's space.
 
-The node at index 0 is the root node. All other nodes in the file are either descendants of the root node, or are not used. Nodes not used in the core scene hierarchy MAY be used by extensions. G4MF files may also contain zero nodes, in which case the file is not a scene, but a collection of data, such as a 4D mesh. The root node at index 0 MUST be untransformed, meaning its transform properties either MUST NOT be set or MUST be set to their default values.
+The node at index 0 is the root node. All other nodes in the file are either descendants of the root node, or are not used. Nodes not used in the core scene hierarchy MAY be used by extensions. G4MF files may also contain zero nodes, in which case the file is not a scene, but a collection of data, such as a 4D mesh. The root node at index 0 MUST NOT have any transform properties defined, since it represents the origin of the file itself.
 
 G4MF nodes may be empty nodes, or at most "one thing". For example, a single node MUST NOT be both a camera and a mesh instance at the same time.
 
@@ -47,6 +47,8 @@ The following example defines a 4-dimensional G4MF file with a root node at inde
 | **visible**  | `boolean`   | Whether the node is visible or not (affects rendering).     | `true`             |
 
 ### Transform Properties
+
+Nodes with indices greater than 0 may have a transform composed of several properties that define the node's position, rotation, and scale in the scene. All of these properties are relative to the parent node's space. The root node at index 0 MUST NOT have any transform properties defined, since it represents the origin of the file itself.
 
 #### Position
 
