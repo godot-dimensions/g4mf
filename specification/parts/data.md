@@ -59,7 +59,7 @@ The `"byteLength"` property is an integer number defining the length of the buff
 
 The `"byteOffset"` property is an integer number defining the start offset of the buffer view in bytes. This property is optional and defaults to 0.
 
-The byte offset is relative to the start of the buffer. For example, if the byte offset is 100, then byte 0 of the buffer view is byte 100 of the buffer. The declared byte offset plus the declared byte length MUST NOT exceed the buffer's byte length.
+The byte offset is relative to the start of the buffer. For example, if the byte offset is 100, then byte 0 of the buffer view is byte 100 of the buffer. The declared byte offset plus the declared byte length MUST NOT exceed the buffer's `"byteLength"`.
 
 ## Accessors
 
@@ -77,7 +77,7 @@ Accessors provide a typed interpretation of the data in a buffer view. Accessors
 
 The `"bufferView"` property is an integer index that references a buffer view in the G4MF file that contains the data for this accessor. This property is required.
 
-The buffer view's byte length MUST be a multiple of the size of each element, which is the size of the primitive type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's byte length divided by the size of each element.
+The buffer view's `"byteLength"` MUST be a multiple of the size of each element, which is the size of the primitive type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element. Additionally, the buffer view's `"byteOffset"` MUST be a multiple of the size of the primitive type, to ensure that the start of the data is aligned correctly.
 
 #### Primitive Type
 
@@ -105,15 +105,17 @@ Support for reading `"float32"`, `"int32"`, and `"uint32"` is REQUIRED, due to h
 
 Implementations MAY truncate or round types to fit into a supported type. For example, it is allowed to read `"float64` primitives which get converted to `"float32"` at import time, rounding the values to fit into the smaller type.
 
+Inside of the buffer view the accessor refers to, the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of the size of the primitive type, to ensure that the start of the data is aligned correctly, and ensure there are a whole number of primitives available in the accessor. For example, if the primitive type is `"float32"`, which requires 4 bytes each, then the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of 4, and the number of primitives in the accessor is equal to the buffer view's `"byteLength"` divided by 4. For accessors with a `"vectorSize"` greater than 1, there are additional requirements for `"byteLength"` aligning to a whole number of elements, which is a superset of this requirement.
+
 #### Vector Size
 
-The `"vectorSize"` property is an integer number defining the number of primitives in each element of the accessor. This property is optional and defaults to 1.
+The `"vectorSize"` property is a positive integer number defining the number of primitives in each element of the accessor. This property is optional and defaults to 1.
 
 For scalars this is 1, for 2D vectors this is 2, for 3D vectors this is 3, for 4D vectors this is 4, and so on. Matrices can be encoded as many-dimensional vectors, such as a 4x4 matrix with this property set to 16. Note that this is the number of primitives, not the number of bytes. This number MUST be a positive integer. If not specified, the vector size is 1, meaning each primitive is its own scalar element.
 
-The buffer view's byte length MUST be a multiple of the size of each element, which is the size of the primitive type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's byte length divided by the size of each element.
+Inside of the buffer view the accessor refers to, the `"byteLength"` property MUST be a multiple of the size of each element, which is the size of the primitive type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element.
 
-For example, if encoding an array of 32-bit floating-point Vector3s, the primitive type would be `"float32"` and the vector size would be `3`. Each of those accessor elements then takes up 12 bytes. The buffer view's byte length then MUST be a multiple of 12, such as 120 bytes encoding 10 elements.
+For example, if encoding an array of Vector3 structs made of 32-bit floating-point numbers, the primitive type would be `"float32"` and the vector size would be `3`. Each of those accessor elements then takes up 12 bytes. The buffer view's `"byteLength"` then MUST be a multiple of 12, such as 120 bytes encoding 10 elements. Additionally, the buffer view's `"byteOffset"` MUST be a multiple of 4, since the primitive type has a size of 4 bytes, as described above.
 
 ## JSON Schema
 
