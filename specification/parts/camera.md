@@ -16,7 +16,7 @@ This example defines a single G4MF node with a camera. This example defines no c
 }
 ```
 
-Additionally, here is a G4MF node with a camera where all properties are set to a value. The properties do not need to be specified if they are equal to the default value.
+Additionally, here is a G4MF node with a camera where all properties are set to a value. The properties do not need to be specified if they are equal to the default value. The size property is unused because this is a perspective camera.
 
 ```json
 {

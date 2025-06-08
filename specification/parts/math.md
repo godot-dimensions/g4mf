@@ -1,5 +1,7 @@
 # G4MF Math
 
+## Overview
+
 Most online documentation, math literature, and code libraries focus on 2D and 3D math. A lot of this easily translates into 4D math, but a lot of it does not.
 
 This section of the G4MF specification does not actually specify requirements for storing valid G4MF data. Instead, it provides guidance for implementations on how to actually compute the math needed to work with G4MF data.

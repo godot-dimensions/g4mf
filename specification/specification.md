@@ -51,24 +51,9 @@ For convenience, the details of how nodes work are described in a separate file:
 
 ## Coordinate System
 
-G4MF defines the following coordinate system, relative to an unrotated camera:
+Generally speaking, G4MF defines a coordinate system that is a superset of the right-handed 3D coordinate system found in OpenGL™, glTF™, and other 3D software and formats. The +X axis points to the right, the +Y axis points up, the +Z axis points out of the screen towards the viewer and is used for depth, and any additional axes are perpendicular to these. Distance is measured in meters, angles are measured in radians, and all units are SI metric units whenever possible.
 
-- The axis at index 0, the "X axis", points to the right on the screen.
-- The axis at index 1, the "Y axis", points up on the screen.
-- The axis at index 2, the "Z axis", points towards the viewer, and is used for depth.
-- The axis at index 3, the "W axis", is perpendicular to the first three axes.
-  - The W axis does not change the projected position on the screen unless the object or camera is rotated in the additional dimensions.
-  - The same applies to any other additional dimensions at index 4 (the "V axis"), index 5 (the "U axis"), etc.
-- This defines a coordinate system that is a superset of the right-handed 3D coordinate system found in OpenGL™, glTF™, and other 3D software and formats.
-
-Additionally, all units are SI metric units whenever possible:
-
-- All length is in meters.
-- All time is in seconds.
-- All mass is in kilograms.
-- All angles are in radians.
-- All lights are in lumen-based units.
-- All derived units are based on these, such as velocity in meters per second.
+For convenience, the details of how the coordinate system works are described in a separate file: [G4MF Coordinate System](parts/coordinate_system.md).
 
 ## Data Storage
 
