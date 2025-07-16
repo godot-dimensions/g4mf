@@ -26,9 +26,13 @@
 			"minItems": 1,
 			"minimum": 1
 		},
+		"light": {
+			"$ref": "g4mf_id.schema.json",
+			"description": "The index of the light that this node references. This is a reference to a light in the G4MF file's lights array. If not defined, this node is not a light source."
+		},
 		"mesh": {
 			"$ref": "g4mf_id.schema.json",
-			"description": "The index of the mesh that this node references. This is a reference to a mesh in the G4MF file."
+			"description": "The index of the mesh that this node references. This is a reference to a mesh in the G4MF file's meshes array. If not defined, this node is not a mesh node."
 		},
 		"physics": {
 			"$ref": "physics/g4mf.node.physics.schema.json"

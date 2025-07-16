@@ -38,6 +38,7 @@
 		}
 	},
 	"dependentRequired": {
+		"geometry": ["edges"],
 		"polytopeCells": ["cells"]
 	},
 	"required": ["vertices"]

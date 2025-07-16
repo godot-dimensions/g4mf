@@ -37,7 +37,7 @@ This property is not used to represent general hierarchical geometry. For exampl
 
 ### Edges
 
-The `"edges"` property is an integer index that references an accessor containing the edge indices for this surface. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed.
+The `"edges"` property is an integer index that references an accessor containing the edge indices for this surface. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed for visibility.
 
 This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer primitive type, and MUST have the `"vectorSize"` property set to 2. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array. Every two primitive numbers in the array form an edge, so the array MUST have an even number of primitives.
 
@@ -57,6 +57,8 @@ If defined, the array SHOULD have an amount of entries equivalent to the dimensi
 This property allows preserving geometric information about polytopes and the connections between their parts. This is useful for DCC applications, and allows them to use G4MF as a save format. For example, Blender stores how faces connect to edges, therefore also storing how the faces connect to each other, preserving the topology of the mesh. Such information is useful for high-level operations like subdivision, smoothing, defining seams, and other operations that require knowledge of how the mesh topology is structured.
 
 This property is not needed to render a cellular mesh if the `"cells"` property is defined, since the `"cells"` property contains ready-to-use simplex cells. If the `"cells"` property is not present, the simplex cells can be computed from the geometry data, however this may be computationally expensive, especially for higher dimensions. When exporting a model to a final destination such as a game engine or other runtime, it is recommended to define the `"cells"` property, and the `"geometry"` property may be omitted to reduce file size.
+
+Since the geometry accessor 0 refers to edges, the `"edges"` property MUST be defined and set to a valid value if the `"geometry"` property is defined and non-empty. If `"edges"` is not defined, and edges are calculated from the cells, this calculated data CANNOT be used as the edges referenced by the `"geometry"` property.
 
 ### Material
 
