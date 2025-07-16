@@ -12,6 +12,8 @@ Note that G4MF requires that all named items in the file have unique names. This
 
 ## Properties
 
+These properties are the same as defined for all [G4MF File References](core.md#file-references), but are listed here for clarity and to elaborate on the descriptions.
+
 | Property       | Type      | Description                                                         | Default               |
 | -------------- | --------- | ------------------------------------------------------------------- | --------------------- |
 | **bufferView** | `integer` | The index of the buffer view that contains the data for this model. | `-1` (no buffer view) |
@@ -68,5 +70,5 @@ For more information, see the list of IANA media types: https://www.iana.org/ass
 
 ## JSON Schema
 
-- See [g4mf.model.schema.json](../schema/g4mf.model.schema.json) for the model properties JSON schema.
+- See [g4mf_file_ref.schema.json](../schema/g4mf_file_ref.schema.json) for the file reference properties JSON schema.
 - See [g4mf.node.schema.json](../schema/g4mf.node.schema.json) for how models are used on nodes.

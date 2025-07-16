@@ -1,0 +1,23 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf_file_ref.schema.json",
+	"title": "G4MF File Reference",
+	"type": "object",
+	"description": "A reference to a self-contained file, such as an image or model. The file's data may be embedded in the G4MF file or referenced externally.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"bufferView": {
+			"$ref": "g4mf_id.schema.json",
+			"description": "The index of the buffer view that contains the file data. This is a reference to a buffer view in the G4MF file's buffer views array."
+		},
+		"mimeType": {
+			"type": "string",
+			"description": "The MIME type, or media type, of the file, which defines the format of the file. This is required and has no default value."
+		},
+		"uri": {
+			"type": "string",
+			"description": "The relative URI to the file. This URI is relative to the G4MF file's location."
+		}
+	},
+	"oneOf": [{ "required": ["mimeType", "uri"] }, { "required": ["bufferView", "mimeType"] }]
+}
