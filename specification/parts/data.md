@@ -33,7 +33,9 @@ This property MUST NOT be negative. The actual size of the buffer data MAY be a 
 
 The `"uri"` property is a string that may either be a relative URI to an external file, or a base64-encoded string. This property is required, except for buffer index 0 in binary G4MF files, which refers to the binary blob data chunk at the end of the file.
 
-For binary G4MF, `"uri"` MUST NOT be defined for the buffer at index 0, which is special and always refers to the binary blob data chunk at the end of the file. For all other buffers in a binary G4MF, `"uri"` SHOULD NOT contain base64-encoded data, since that would be less efficient than just storing the same data in the binary blob data chunk in buffer 0.
+If using a base64-encoded string, it MUST be a data URI, which starts with the MIME type data prefix `data:application/octet-stream;base64,` and is followed by the base64-encoded data.
+
+For binary `.g4b` G4MF files, `"uri"` MUST NOT be defined for the buffer at index 0, which is special and always refers to the binary blob data chunk at the end of the file. For all other buffers in a binary G4MF, `"uri"` SHOULD NOT contain base64-encoded data, since that would be less efficient than just storing the same data in the binary blob data chunk in buffer 0.
 
 ## Buffer Views
 
