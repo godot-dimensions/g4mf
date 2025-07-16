@@ -16,13 +16,14 @@ The following example defines.
 
 ## Mesh Surface Properties
 
-| Property          | Type      | Description                                                                        | Default               |
-| ----------------- | --------- | ---------------------------------------------------------------------------------- | --------------------- |
-| **cells**         | `integer` | The index of the accessor that contains the cell indices for this surface.         | No cells.             |
-| **edges**         | `integer` | The index of the accessor that contains the edge indices for this surface.         | No edges.             |
-| **material**      | `integer` | The index of the material to use for this surface.                                 | No material.          |
-| **polytopeCells** | `boolean` | If `true`, allow importing the cells as complex polytopes instead of simplexes.    | `false`               |
-| **vertices**      | `integer` | The index of the accessor that contains the vertex data for this surface.          | Required, no default. |
+| Property          | Type        | Description                                                                        | Default               |
+| ----------------- | ----------- | ---------------------------------------------------------------------------------- | --------------------- |
+| **cells**         | `integer`   | The index of the accessor that contains the cell indices for this surface.         | No cells.             |
+| **edges**         | `integer`   | The index of the accessor that contains the edge indices for this surface.         | No edges.             |
+| **geometry**      | `integer[]` | Optional extended hierarchical geometry data for this surface.                     | `[]` (empty array)    |
+| **material**      | `integer`   | The index of the material to use for this surface.                                 | No material.          |
+| **polytopeCells** | `boolean`   | If `true`, allow importing the cells as complex polytopes instead of simplexes.    | `false`               |
+| **vertices**      | `integer`   | The index of the accessor that contains the vertex data for this surface.          | Required, no default. |
 
 ### Cells
 
@@ -30,11 +31,32 @@ The `"cells"` property is an integer index that references an accessor containin
 
 This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer primitive type, and MUST have the `"vectorSize"` property set to the number of vertices in a cell as determined by the dimension of the model: 3D models have triangular cells (3 vertices per cell), 4D models have tetrahedral cells (4 vertices per cell), and so on. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array.
 
+This property defines only ready-to-render simplex cells. Each primitive number in the array refers to a vertex in the vertices array of the surface. The number of vertices per cell is determined by the dimension of the model: 3D models have triangular cells (3 vertices per cell), 4D models have tetrahedral cells (4 vertices per cell), and so on. Optionally, multiple simplex cells may be combined into larger star-shaped polytopes by setting the `"polytopeCells"` property to `true`, enabling applications to treat these cells as part of the same polytope if needed without adding additional data.
+
+This property is not used to represent general hierarchical geometry. For example, in a 4D model, if two 3D cells share a 2D face, this array of cells does not contain information about this sharing, making it difficult to perform operations that require knowledge of the topological structure of the mesh, such as subdivision or smoothing. Such information could be reconstructed from these cells, but it would be computationally expensive to do so, and potentially lossy. For the purposes of interchange between DCC applications, consider defining the `"geometry"` property in addition to the `"cells"` property, which allows for more complex hierarchical geometry data to be defined. See [G4MF Mesh Geometry](#geometry) for more information.
+
 ### Edges
 
 The `"edges"` property is an integer index that references an accessor containing the edge indices for this surface. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed.
 
 This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer primitive type, and MUST have the `"vectorSize"` property set to 2. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array. Every two primitive numbers in the array form an edge, so the array MUST have an even number of primitives.
+
+### Geometry
+
+The `"geometry"` property is an array of integers, each of which is an index that references an accessor containing complex hierarchical geometry data for this surface. If not defined, the surface does not have any complex hierarchical geometry data.
+
+Hierarchical geometry data means that polytopes of successive dimensions are defined as combinations of polytopes from the previous dimension, providing structured topological data. This is similar to the data found within the [OFF file format](https://en.wikipedia.org/wiki/OFF_%28file_format%29), except that the first tier references edges, not points.
+
+- The accessor at index 0 contains 2D faces. The first number is the amount of 1D edges on the boundary of the face, followed by the indices of the edges in the accessor referred to by the `"edges"` property. The next number after that is the amount of edges on the boundary of the second face, and so on.
+- The accessor at index 1 contains 3D volumes. The first number is the amount of 2D faces on the boundary of the volume, followed by the indices of the faces just defined in the previous step. The next number after that is the amount of faces on the boundary of the second volume, and so on.
+- The accessor at index 2 contains 4D hypervolumes. The first number is the amount of 3D volumes on the boundary of the hypervolume, followed by the indices of the volumes just defined in the previous step. The next number after that is the amount of volumes on the boundary of the second hypervolume, and so on.
+- The accessor at index 3 contains 5D hypervolumes, which refer to 4D hypervolumes, and so on for 6D, 7D, and higher dimensional hypervolumes.
+
+If defined, the array SHOULD have an amount of entries equivalent to the dimension of the model minus two, if defining only boundary geometry, or minus one, if filling the shape. For example, a 3D model may have geometry with index 0 for 2D faces, which define the boundary of the shape, in an array length of 1. Optionally, index 1 may be included, which would fill the shape solid using an array of length 2. For example, a 4D model may have geometry with index 0 for 2D faces and index 1 for 3D volumes, collectively defining the boundary of the shape, in an array length of 2. Optionally, index 2 may be included, which would fill the shape solid using an array of length 3.
+
+This property allows preserving geometric information about polytopes and the connections between their parts. This is useful for DCC applications, and allows them to use G4MF as a save format. For example, Blender stores how faces connect to edges, therefore also storing how the faces connect to each other, preserving the topology of the mesh. Such information is useful for high-level operations like subdivision, smoothing, defining seams, and other operations that require knowledge of how the mesh topology is structured.
+
+This property is not needed to render a cellular mesh if the `"cells"` property is defined, since the `"cells"` property contains ready-to-use simplex cells. If the `"cells"` property is not present, the simplex cells can be computed from the geometry data, however this may be computationally expensive, especially for higher dimensions. When exporting a model to a final destination such as a game engine or other runtime, it is recommended to define the `"cells"` property, and the `"geometry"` property may be omitted to reduce file size.
 
 ### Material
 
