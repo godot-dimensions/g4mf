@@ -34,6 +34,10 @@
 			"$ref": "g4mf_id.schema.json",
 			"description": "The index of the mesh that this node references. This is a reference to a mesh in the G4MF file's meshes array. If not defined, this node is not a mesh node."
 		},
+		"model": {
+			"$ref": "g4mf_id.schema.json",
+			"description": "The index of the model that this node references. This is a reference to a model in the G4MF file's models array. If not defined, this node is not a model node."
+		},
 		"physics": {
 			"$ref": "physics/g4mf.node.physics.schema.json"
 		},
@@ -72,10 +76,14 @@
 			{ "required": ["basis", "scale"] },
 			{ "required": ["camera", "light"] },
 			{ "required": ["camera", "mesh"] },
+			{ "required": ["camera", "model"] },
 			{ "required": ["camera", "physics"] },
 			{ "required": ["light", "mesh"] },
+			{ "required": ["light", "model"] },
 			{ "required": ["light", "physics"] },
-			{ "required": ["mesh", "physics"] }
+			{ "required": ["mesh", "model"] },
+			{ "required": ["mesh", "physics"] },
+			{ "required": ["model", "physics"] }
 		]
 	}
 }

@@ -62,6 +62,15 @@
 			},
 			"minItems": 0
 		},
+		"models": {
+			"type": "array",
+			"description": "An array of zero or more models. Each model is a reference to self-contained data, such as another G4MF file, an OFF file, a glTF file, an OCIF file, or any other format.",
+			"items": {
+				"$ref": "g4mf.model.schema.json"
+			},
+			"minItems": 0,
+			"uniqueItems": true
+		},
 		"nodes": {
 			"type": "array",
 			"description": "An array of zero or more scene nodes. If the array is defined and has at least one node, the node at index 0 is the root node of the scene.",
