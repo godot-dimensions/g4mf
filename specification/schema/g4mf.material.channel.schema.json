@@ -6,22 +6,22 @@
 	"description": "A material channel defines a specific property of a material, such as its base color, normal map, emission properties, etc. All properties are optional; an empty JSON object is a valid material channel, but prefer omitting the channel if unused.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
-		"color": {
+		"factor": {
 			"type": "array",
-			"description": "The RGB(A) color value for the channel. If used together with other properties, this acts as a modulate which is per-component multiplied with the other properties. The color is represented as an array of usually three or four numbers, each usually in the range 0.0 to 1.0, but may go above 1.0 for overbright colors.",
+			"description": "The modulate factor, also known as the value or single base color. For `baseColor`, this is the RGB(A) color value for the channel in linear color space. If used together with other properties, this acts as a modulate which is per-component multiplied with the other properties. The color is represented as an array of usually three or four numbers, each usually in the range 0.0 to 1.0, but may go above 1.0 for overbright colors.",
 			"items": {
 				"type": "number"
 			}
 		},
-		"cellColors": {
+		"perCell": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the per-cell color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-cell colors. If defined, the amount of cell colors MUST match or exceed the amount of cells in all surfaces that use this channel."
 		},
-		"edgeColors": {
+		"perEdge": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the per-edge color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-edge colors. If defined, the amount of edge colors MUST match or exceed the amount of edges in all surfaces that use this channel."
 		},
-		"vertexColors": {
+		"perVertex": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the per-vertex color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-vertex colors. If defined, the amount of vertex colors MUST match or exceed the amount of vertices in all surfaces that use this channel."
 		},
