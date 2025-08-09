@@ -35,7 +35,7 @@ The `"extensions"` property is an object that allows for defining extensions to 
 
 Each key is the name of the extension, in the format of `"PREFIX_extension_name"`, where `PREFIX` is a reserved prefix registered with G4MF, and `extension_name` is the snake_case name of the extension. Extension names SHOULD further comply to `"PREFIX_subject_name"`, where `subject` is a category, often the name of an existing G4MF data structure being extended, or may be more general like `"audio"`, but may use any name followed by the prefix and an underscore.
 
-Each value is the extension data, which is a JSON object that conforms to the schema defined by the extension. Valid G4MF extensions MUST have schemas defined for any data they define, and those schemas MUST extend the G4MF Item schema whenever they are of type `object`. Note that, in niche use cases, it is possible for a G4MF extension to define no data and be used nowhere in any `"extensions"` property, in which case the extension's only behavior is a boolean flag that may or may not exist in `"extensionsUsed"`.
+Each value is the extension data, which is a JSON object that conforms to the schema defined by the extension. Valid G4MF extensions MUST have schemas defined for any data they define, and those schemas MUST extend the G4MF Item schema or a descendant schema whenever they are of type `object`. Note that, in niche use cases, it is possible for a G4MF extension to define no data and be used nowhere in any `"extensions"` property, in which case the extension's only behavior is a boolean flag that may or may not exist in `"extensionsUsed"`.
 
 #### Extras
 
