@@ -8,11 +8,11 @@
 	"properties": {
 		"cells": {
 			"$ref": "g4mf_id.schema.json",
-			"description": "The index of the accessor that contains the cell indices for this surface. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array. If not defined, the surface does not have explicit cells, and may be a wireframe-only surface."
+			"description": "The index of the accessor that contains the cell indices for this surface. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array. If not defined, the surface does not have explicit cells, and may be a wireframe-only surface, or may be calculated from the geometry data if needed."
 		},
 		"edges": {
 			"$ref": "g4mf_id.schema.json",
-			"description": "The index of the accessor that contains the edge indices for this surface. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed."
+			"description": "The index of the accessor that contains the edge indices for this surface. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed."
 		},
 		"geometry": {
 			"type": "array",
@@ -31,15 +31,10 @@
 			"type": "boolean",
 			"description": "If true, allow importing the cells as complex polytopes instead of simplexes. Each polytope is defined by a set of consecutive cells that share the same starting vertex. If not specified, the default is false.",
 			"default": false
-		},
-		"vertices": {
-			"$ref": "g4mf_id.schema.json",
-			"description": "The index of the accessor that contains the vertex data for this surface. This property is required."
 		}
 	},
 	"dependentRequired": {
 		"geometry": ["edges"],
 		"polytopeCells": ["cells"]
-	},
-	"required": ["vertices"]
+	}
 }

@@ -10,28 +10,42 @@ The following example defines.
 
 ## Mesh Properties
 
-| Property     | Type       | Description                                 | Default               |
-| ------------ | ---------- | ------------------------------------------- | --------------------- |
-| **surfaces** | `object[]` | An array of surfaces that make up the mesh. | Required, no default. |
+| Property     | Type       | Description                                                            | Default               |
+| ------------ | ---------- | ---------------------------------------------------------------------- | --------------------- |
+| **surfaces** | `object[]` | An array of surfaces that make up the mesh.                            | Required, no default. |
+| **vertices** | `integer`  | The index of the accessor that contains the vertex data for this mesh. | Required, no default. |
+
+### Surfaces
+
+The `"surfaces"` property is an array of objects, each of which defines a surface in the mesh. This property is required and has no default value.
+
+Surfaces define the visible geometry of the mesh. They may be wireframe-only, may have cells defined, or may have more complex geometry data defined. Each surface may have its own material.
+
+All surfaces in a mesh share the same vertices, which are defined by the `"vertices"` property. This allows for deduplication of vertex data across surfaces. This also allows for mesh deforming operations like skinned skeletal meshes and blend shapes / morph targets to only operate on one set of vertices.
+
+### Vertices
+
+The `"vertices"` property is an integer index that references an accessor containing the vertex data for this mesh. This property is required and has no default value.
+
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor SHOULD be of a floating-point primitive type, and SHOULD have the `"vectorSize"` property set to the dimension of the model. Vertices may be used by surface edges, cells, geometry, surface extensions, mesh extensions, and anything else that wishes to use them.
 
 ## Mesh Surface Properties
 
-| Property          | Type        | Description                                                                        | Default               |
-| ----------------- | ----------- | ---------------------------------------------------------------------------------- | --------------------- |
-| **cells**         | `integer`   | The index of the accessor that contains the cell indices for this surface.         | No cells.             |
-| **edges**         | `integer`   | The index of the accessor that contains the edge indices for this surface.         | No edges.             |
-| **geometry**      | `integer[]` | Optional extended hierarchical geometry data for this surface.                     | `[]` (empty array)    |
-| **material**      | `integer`   | The index of the material to use for this surface.                                 | No material.          |
-| **polytopeCells** | `boolean`   | If `true`, allow importing the cells as complex polytopes instead of simplexes.    | `false`               |
-| **vertices**      | `integer`   | The index of the accessor that contains the vertex data for this surface.          | Required, no default. |
+| Property          | Type        | Description                                                                     | Default            |
+| ----------------- | ----------- | ------------------------------------------------------------------------------- | ------------------ |
+| **cells**         | `integer`   | The index of the accessor that contains the cell indices for this surface.      | No cells.          |
+| **edges**         | `integer`   | The index of the accessor that contains the edge indices for this surface.      | No edges.          |
+| **geometry**      | `integer[]` | Optional extended hierarchical geometry data for this surface.                  | `[]` (empty array) |
+| **material**      | `integer`   | The index of the material to use for this surface.                              | No material.       |
+| **polytopeCells** | `boolean`   | If `true`, allow importing the cells as complex polytopes instead of simplexes. | `false`            |
 
 ### Cells
 
-The `"cells"` property is an integer index that references an accessor containing the cell indices for this surface. If not defined, the surface does not have explicit cells, and may be a wireframe-only surface.
+The `"cells"` property is an integer index that references an accessor containing the cell indices for this surface. If not defined, the surface does not have explicit cells, and may be a wireframe-only surface, or cells may be calculated from the geometry data if needed.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer primitive type, and MUST have the `"vectorSize"` property set to the number of vertices in a cell as determined by the dimension of the model: 3D models have triangular cells (3 vertices per cell), 4D models have tetrahedral cells (4 vertices per cell), and so on. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer primitive type, and MUST have the `"vectorSize"` property set to the number of vertices in a cell as determined by the dimension of the model: 3D models have triangular cells (3 vertices per cell), 4D models have tetrahedral cells (4 vertices per cell), and so on. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array.
 
-This property defines only ready-to-render simplex cells. Each primitive number in the array refers to a vertex in the vertices array of the surface. The number of vertices per cell is determined by the dimension of the model: 3D models have triangular cells (3 vertices per cell), 4D models have tetrahedral cells (4 vertices per cell), and so on. Optionally, multiple simplex cells may be combined into larger star-shaped polytopes by setting the `"polytopeCells"` property to `true`, enabling applications to treat these cells as part of the same polytope if needed without adding additional data.
+This property defines only ready-to-render simplex cells. Each primitive number in the array refers to a vertex in the mesh's vertices array of the surface. The number of vertices per cell is determined by the dimension of the model: 3D models have triangular cells (3 vertices per cell), 4D models have tetrahedral cells (4 vertices per cell), and so on. Optionally, multiple simplex cells may be combined into larger star-shaped polytopes by setting the `"polytopeCells"` property to `true`, enabling applications to treat these cells as part of the same polytope if needed without adding additional data.
 
 This property is not used to represent general hierarchical geometry. For example, in a 4D model, if two 3D cells share a 2D face, this array of cells does not contain information about this sharing, making it difficult to perform operations that require knowledge of the topological structure of the mesh, such as subdivision or smoothing. Such information could be reconstructed from these cells, but it would be computationally expensive to do so, and potentially lossy. For the purposes of interchange between DCC applications, consider defining the `"geometry"` property in addition to the `"cells"` property, which allows for more complex hierarchical geometry data to be defined. See [G4MF Mesh Geometry](#geometry) for more information.
 
@@ -39,7 +53,7 @@ This property is not used to represent general hierarchical geometry. For exampl
 
 The `"edges"` property is an integer index that references an accessor containing the edge indices for this surface. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed for visibility.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer primitive type, and MUST have the `"vectorSize"` property set to 2. Each primitive number in the array is an index of a vertex in the vertices array, and MUST NOT exceed the bounds of the vertices array. Every two primitive numbers in the array form an edge, so the array MUST have an even number of primitives.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer primitive type, and MUST have the `"vectorSize"` property set to 2. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array. Every two primitive numbers in the array form an edge, so the array MUST have an even number of primitives.
 
 ### Geometry
 
@@ -75,12 +89,6 @@ The `"polytopeCells"` property is a boolean that indicates if cells should be im
 If `true`, allow importing the cells as complex polytopes instead of simplexes. Each polytope is defined by a set of consecutive cells that share the same starting vertex. For example, in 3D a square polytope can be encoded as two triangle cells sharing the same starting vertex, and this flag marks those triangles as part of the square. Similarly, in 4D, a cube polytope can be encoded as set of 6 tetrahedral cells sharing the same starting vertex. Applications may ignore this flag to always import as simplexes, or use it to combine the cells as polytopes. To separate polytopes, choose a different starting vertex for each polytope.
 
 Note: This only supports shar-shaped polytopes with a simply connected topology where there exists a point on or within the polytope from which all vertices can be seen. See the Wikipedia article on star-shaped polygons: https://en.wikipedia.org/wiki/Star-shaped_polygon
-
-### Vertices
-
-The `"vertices"` property is an integer index that references an accessor containing the vertex data for this surface. This property is required.
-
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor SHOULD be of a floating-point primitive type, and MUST have the `"vectorSize"` property set to the dimension of the model. Vertices may be used by edges, cells, and anything else that wishes to use them.
 
 ## Calculating Cell Normals
 
