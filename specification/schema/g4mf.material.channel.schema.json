@@ -25,11 +25,11 @@
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the per-vertex color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-vertex colors. If defined, the amount of vertex colors MUST match or exceed the amount of vertices in all surfaces that use this channel."
 		},
-		"cellTextureMap": {
+		"textureMap": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-cell texture map data for this channel. A texture map, also known as a UV map or UVW map, is a mapping from the indices of the cell vertices to the texture coordinates. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space, which may be `cellTexture` or defined by an extension. The amount of vector elements in the accessor MUST match or exceed the amount of primitive numbers in the cells array of all surfaces that use this channel. If not defined, the channel does not have per-cell texture maps."
+			"description": "The index of the accessor that contains the per-vertex-instance texture map data for this channel. A texture map, also known as a UV map or UVW map, is a mapping from the indices of the vertex instances to the texture coordinates. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space, which is the same as the dimension of `texture` if defined. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances of all surfaces that use this material. If not defined, the channel does not have per-vertex-instance texture maps."
 		},
-		"cellTexture": {
+		"texture": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the texture used by the texture map. This references a texture defined in the G4MF document-level `textures` array. If not defined, the channel does not have a texture, but a texture map may still be defined and used by extensions."
 		}

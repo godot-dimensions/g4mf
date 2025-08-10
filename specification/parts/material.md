@@ -49,14 +49,14 @@ The default is a rough material with no texture, which means the surface has an 
 
 ## Material Channel Properties
 
-| Property           | Type       | Description                                                                             | Default              |
-| ------------------ | ---------- | --------------------------------------------------------------------------------------- | -------------------- |
-| **factor**         | `number[]` | The modulate factor, value, or RGB(A) color for the channel.                            | No factor.           |
-| **perCell**        | `integer`  | The index of the accessor that contains the per-cell data for this channel.             | No per cell data.    |
-| **perEdge**        | `integer`  | The index of the accessor that contains the per-edge data for this channel.             | No per edge data.    |
-| **perVertex**      | `integer`  | The index of the accessor that contains the per-vertex data for this channel.           | No per vertex data.  |
-| **cellTextureMap** | `integer`  | The index of the accessor that contains the per-cell texture map data for this channel. | No cell texture map. |
-| **cellTexture**    | `integer`  | The index of the texture used by the texture map.                                       | No cell texture.     |
+| Property       | Type       | Description                                                                            | Default             |
+| -------------- | ---------- | -------------------------------------------------------------------------------------- | ------------------- |
+| **factor**     | `number[]` | The modulate factor, value, or RGB(A) color for the channel.                           | No factor.          |
+| **perCell**    | `integer`  | The index of the accessor that contains the per-cell data for this channel.            | No per cell data.   |
+| **perEdge**    | `integer`  | The index of the accessor that contains the per-edge data for this channel.            | No per edge data.   |
+| **perVertex**  | `integer`  | The index of the accessor that contains the per-vertex-instance data for this channel. | No per vertex data. |
+| **textureMap** | `integer`  | The index of the accessor that contains the per-vertex-instance texture map data.      | No texture map.     |
+| **texture**    | `integer`  | The index of the texture used by the texture map.                                      | No texture.         |
 
 ### Factor
 
@@ -78,27 +78,29 @@ This is a reference to an accessor in the G4MF file's document-level `"accessors
 
 ### Per Vertex
 
-The `"perVertex"` property is an integer index that references an accessor containing the per-vertex data for this channel, such as colors. If not defined, the channel does not have per-vertex data.
+The `"perVertex"` property is an integer index that references an accessor containing the per-vertex-instance data for this channel, such as colors. If not defined, the channel does not have per-vertex data.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-vertex data MUST match or exceed the amount of vertices in all parent meshes of all mesh surfaces that use this material.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-vertex data MUST match or exceed the amount of vertex instances in all mesh surfaces that use this material.
 
-Note that per-vertex data applies directly to the vertices of the mesh, sampled together with the vertices whenever referenced by index, such as in a mesh's cells accessor or edges accessor. This means that if a mesh has multiple surfaces using per-vertex data, large amounts of data in that accessor may be unused in each surface. To avoid wasting memory, multiple materials can use the same per-vertex data, each pointing to the same accessor. Often, only some channels need to share per-vertex data, such as the `"normal"` channel. Alternatively, per-cell data, per-edge data, or a cell texture may be used instead. Alternatively, consider merging the surfaces together into a single surface. If different surfaces are required, and each needs different per-vertex data, consider splitting the mesh into multiple meshes.
+Per vertex data applies to a surface's vertex instances, which depend on the surface's `"cells"` and `"edges"` properties. See [G4MF Mesh Surface Vertex Instances](mesh.md#vertex-instances) for more information on how vertex instances are defined.
 
-### Cell Texture Map
+### Texture Map
 
-The `"cellTextureMap"` property is an integer index that references an accessor containing the per-cell texture map data for this channel. If not defined, the channel does not have per-cell texture maps.
+The `"textureMap"` property is an integer index that references an accessor containing the per-cell texture map data for this channel. If not defined, the channel does not have per-cell texture maps.
 
-A texture map, also known as a UV map, UVW map, or texture coordinate map, is a mapping from the indices of the cell vertices to the texture coordinates. The texture coordinates are usually on a range of 0.0 to 1.0. For 3D meshes, the texture coordinates usually refer to a 2D texture. For 4D meshes, the texture coordinates usually refer to a 3D texture. However, any dimension of texture coordinates is allowed. A 4D mesh may use a 2D texture, though this is not very useful because it will look untextured from certain angles, or a 4D texture, mapping the 4D vertices in the same dimension as the texture coordinates. This property is intended to be used together with the `"cellTexture"` property, but may be used without it, such as when defining a texture map for an untextured surface.
+A texture map, also known as a UV map, UVW map, or texture coordinate map, is a mapping from the indices of the vertex instances to the texture coordinates. Per vertex data applies to a surface's vertex instances, which depend on the surface's `"cells"` and `"edges"` properties. See [G4MF Mesh Surface Vertex Instances](mesh.md#vertex-instances) for more information on how vertex instances are defined.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type. The accessor MUST have its vector size set to the dimension of the texture space, which may be `cellTexture` or defined by an extension. The amount of vector elements in the accessor MUST match or exceed the amount of primitive numbers in the cells array of all mesh surfaces that use this channel.
+The texture coordinates are usually on a range of 0.0 to 1.0. For 3D meshes, the texture coordinates usually refer to a 2D texture. For 4D meshes, the texture coordinates usually refer to a 3D texture. However, any dimension of texture coordinates is allowed. A 4D mesh may use a 2D texture, though this is discouraged and not very useful because it will look untextured from certain angles, or a 4D texture, mapping the 4D vertices in the same dimension as the texture coordinates. This property is intended to be used together with the `"texture"` property, but may be used without it, such as when defining a texture map for an untextured surface.
 
-### Cell Texture
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type. The accessor MUST have its `"vectorSize"` set to the dimension of the texture space, which is the same as the dimension of `texture` if defined. For example, a 4D mesh with a 3D texture would have a texture map accessor with a `"vectorSize"` of `3`. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances of all mesh surfaces that use this channel. For example, a 4D mesh with 10 tetrahedral cells needs at least 40 vector elements in the texture map accessor; with 3D texture coordinates, that means at least 120 numbers in the accessor.
 
-The `"cellTexture"` property is an integer index that references a texture used by the texture map. If not defined, the channel does not have a cell texture.
+### Texture
+
+The `"texture"` property is an integer index that references a texture used by the texture map. If not defined, the channel does not have a texture.
 
 Usually, a texture's dimension is 1 dimension less than the dimension of the mesh. For 3D meshes, the texture is usually a 2D texture. For 4D meshes, the texture is usually a 3D texture. However, any dimension of texture is allowed. A 4D mesh may use a 2D texture, though this is not very useful because it will look untextured from certain angles. Alternatively, a 4D mesh may use a 4D texture, mapping the 4D vertices in the same dimension as the texture coordinates.
 
-This property is intended to be used together with the `"cellTextureMap"` property, but may be used without it. In the case of using a 4D texture on a 4D mesh, the mesh's local vertex positions are directly used as texture coordinates, and the `"cellTextureMap"` property is not required.
+This property is intended to be used together with the `"textureMap"` property, but may be used without it. In the case of using a 4D texture on a 4D mesh, the mesh's local vertex positions are directly used as texture coordinates, and the `"textureMap"` property is not required.
 
 This is a reference to a texture defined in the G4MF document-level `"textures"` array. The texture MUST be defined in the same file as the material. If not defined, the channel does not have a texture, but a texture map may still be defined and used by extensions.
 

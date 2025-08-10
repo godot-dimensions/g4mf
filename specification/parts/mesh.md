@@ -90,6 +90,17 @@ If `true`, allow importing the cells as complex polytopes instead of simplexes. 
 
 Note: This only supports shar-shaped polytopes with a simply connected topology where there exists a point on or within the polytope from which all vertices can be seen. See the Wikipedia article on star-shaped polygons: https://en.wikipedia.org/wiki/Star-shaped_polygon
 
+## Vertex Instances
+
+Each mesh surface has a set of vertex instances, implicitly defined how the surface's properties use the vertices. Vertex instances may be used by materials to define per-vertex data, such as colors or texture coordinates, for a mesh surface.
+
+Vertex instances are defined as the following:
+- If a mesh surface has the `"cells"` property defined, then the vertex instances are the usages of the vertices in the cells. For example, in a 4D model with tetarhedral cells, each cell has 4 vertex instances.
+- If a mesh surface does not have the `"cells"` property defined, but does have the `"edges"` property defined, then the vertex instances are the usages of the vertices in the edges. Each edge always has 2 vertex instances, one for each end of the edge.
+- If a mesh surface does not have the `"cells"` or `"edges"` properties defined, then the vertex instances are the mesh vertices themselves, allowing for point cloud materials.
+- The `"geometry"` property cannot be used to determine the vertex instances for a mesh surface.
+- Extensions may define other ways to determine the vertex instances for a mesh surface.
+
 ## Calculating Cell Normals
 
 In 3D rendering, winding order is used to determine which side of a triangle is the front or back. This is then used to decide if the triangle should be rendered or culled. The typical convention in right-handed coordinate systems like with OpenGL™ and glTF™ is to use a counter-clockwise winding order for meshes whose global basis has a positive determinant, and a clockwise winding order for meshes whose global basis has a negative determinant.
