@@ -66,7 +66,7 @@
 			"type": "array",
 			"description": "An array of zero or more models. Each model is a reference to self-contained data, such as another G4MF file, an OFF file, a glTF file, an OCIF file, or any other format.",
 			"items": {
-				"$ref": "g4mf.model.schema.json"
+				"$ref": "g4mf_file_ref.schema.json"
 			},
 			"minItems": 0,
 			"uniqueItems": true

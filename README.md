@@ -43,4 +43,4 @@ Additionally, there are many fine-detail differences between G4MF and glTF™:
 - G4MF accessors do not have `"normalized"`, `"max"`, or `"min"` properties, since these are not useful for interchange.
 - G4MF accessors are contiguous and do not support being sparse, while glTF™ accessors can be sparse. This is useful for GPU-ready performance optimizations, but is not useful for interchange.
 - G4MF buffer views do not have `"byteStride"` or `"target"` properties, meaning G4MF does not support interleaved data. This is useful in glTF™ for GPU-ready performance optimizations, but is not useful for interchange.
-- G4MF binary chunks have a 4-byte compression format indicator, allowing for compressed G4MF binary files in the future.
+- G4MF buffers and chunks support compression, allowing for compressed G4MF files, including compressing the JSON itself in binary `.g4b` files. This can result in much smaller files. glTF™ does not support compression, though extensions exist for compressing just specific parts of the file.
