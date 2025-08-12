@@ -1,0 +1,42 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.mesh.surface.schema.json",
+	"title": "G4MF Mesh Surface",
+	"type": "object",
+	"description": "A mesh surface is a collection of vertices, edges, and polytopes that define a part of a mesh. Each surface may have a material.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"cells": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the cell indices for this surface. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array. If not defined, the surface does not have explicit cells, and may be a wireframe-only surface, or may be calculated from the geometry data if needed."
+		},
+		"edges": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the edge indices for this surface. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed. If defined, may be used as the foundation of the data in `topology`."
+		},
+		"material": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the material used by this surface. This references a material defined in the G4MF document-level `materials` array. If not defined, the surface should use a default material."
+		},
+		"normals": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the per-vertex-instance normals for this surface. If not defined, flat shading is assumed, meaning that all vertex instances in a cell have the same normal as the cell itself."
+		},
+		"polytopeCells": {
+			"type": "boolean",
+			"description": "If true, allow importing the cells as complex polytopes instead of simplexes. Each polytope is defined by a set of consecutive cells that share the same starting vertex. If not specified, the default is false.",
+			"default": false
+		},
+		"textureMap": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the per-vertex-instance texture map data for the mesh surface's vertex instances. A texture map, also known as a UV map or UVW map, is a mapping from the vertex instances to the texture coordinates. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space."
+		},
+		"topology": {
+			"$ref": "g4mf.mesh.surface.topology.schema.json"
+		}
+	},
+	"dependentRequired": {
+		"topology": ["edges"],
+		"polytopeCells": ["cells"]
+	}
+}

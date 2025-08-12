@@ -71,13 +71,13 @@ For convenience, the details of how lights work are described in a separate file
 
 G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of multiple surfaces, each of which may have a separate material. Mesh surfaces have vertices, and may contain edge indices, cell indices, and more, each of which points to an accessor that encodes the data.
 
-For convenience, the details of how meshes work are described in a separate file: [G4MF Mesh](parts/mesh.md).
+For convenience, the details of how meshes work are described in a separate file: [G4MF Mesh](parts/mesh/mesh.md).
 
-## Materials
+### Materials
 
 G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate color, texture, and more. Materials are referenced by mesh surfaces, which are contained in meshes. Material channels may have per-cell colors, per-edge colors, per-vertex colors, and/or texture mapping, each of which points to an accessor that encodes the data.
 
-For convenience, the details of how materials work are described in a separate file: [G4MF Material](parts/material.md).
+For convenience, the details of how materials work are described in a separate file: [G4MF Material](parts/mesh/material.md).
 
 ## Physics
 
@@ -104,3 +104,7 @@ G4MF is designed to be extensible. All G4MF JSON objects inherit the `g4mf_item.
 G4MF files may be stored in a JSON-based text format (`.g4tf`) or a binary format (`.g4b`). With the text format, binary blobs of data may either be base64-encoded within the JSON, or referenced as external files. The binary format is a more compact representation of the same data, which appends binary blobs of data to the end of the JSON.
 
 For convenience, the details of how the binary format works are described in a separate file: [G4MF Binary File Format](parts/binary_file_format.md).
+
+## JSON Schema
+
+See [g4mf.schema.json](schema/g4mf.schema.json) for the G4MF main document JSON schema, and other files for all the other JSON schemas.

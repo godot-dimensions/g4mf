@@ -3,7 +3,7 @@
 	"$id": "g4mf.mesh.schema.json",
 	"title": "G4MF Mesh",
 	"type": "object",
-	"description": "A mesh is a collection of mesh surfaces that define the geometry of an object. Each surface may have a material.",
+	"description": "A mesh is a collection of vertices and mesh surfaces that define the geometry of an object. Each surface may have a material.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
 		"surfaces": {
@@ -16,7 +16,7 @@
 			"uniqueItems": true
 		},
 		"vertices": {
-			"$ref": "g4mf_id.schema.json",
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the vertex data for this mesh. This property is required."
 		}
 	},

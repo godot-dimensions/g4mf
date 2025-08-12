@@ -82,3 +82,7 @@ The intensity MUST scale up with the uniform scale of the node the light is atta
 The `"range"` property is a number that defines the range of the light in meters. If not specified, the default is `Infinity`.
 
 The range is only used for point and spot lights. The range defines the distance from the light source beyond which the light intensity is zero. The range MUST scale up with the uniform scale of the node the light is attached to, in order to ensure that a scaled model keeps the same light range relative to itself. For a uniform scale of 2.0, the range should be scaled up by 2.0.
+
+## JSON Schema
+
+See [g4mf.light.schema.json](../schema/g4mf.light.schema.json) for the G4MF Light properties JSON schema.

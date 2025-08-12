@@ -138,7 +138,7 @@ Meshes are the most common way to provide visible geometry for a node. A mesh ma
 
 The `"mesh"` property MUST NOT be used together with the `"camera"`, `"light"`, `"model"`, or `"physics"` properties on the same node.
 
-See [G4MF Mesh](mesh.md) for more information about meshes.
+See [G4MF Mesh](mesh/mesh.md) for more information about meshes.
 
 #### Model
 

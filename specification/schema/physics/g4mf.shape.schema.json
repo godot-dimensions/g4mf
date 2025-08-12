@@ -14,7 +14,7 @@
 			}
 		},
 		"heights": {
-			"$ref": "g4mf_id.schema.json",
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the accessor storing the heightmap data, if any."
 		},
 		"length": {
@@ -24,7 +24,7 @@
 			"default": 1.0
 		},
 		"mesh": {
-			"$ref": "g4mf_id.schema.json",
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the mesh to use for a mesh-based shape."
 		},
 		"size": {
