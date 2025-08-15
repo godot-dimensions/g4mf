@@ -60,7 +60,9 @@ This is a reference to an accessor in the G4MF file's document-level `"accessors
 
 The `"textureMap"` property is an integer index that references an accessor containing the per-vertex-instance texture map data for the toplogy vertex instances. If not defined, the topology does not have per-vertex-instance texture mapping.
 
-A texture map, also known as a UV map or UVW map, is a mapping from the vertex instances to the texture space coordinates. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its `"vectorSize"` property set to the dimension of the texture space. The amount of vector elements in the accessor MUST match or exceed the amount of topology vertex instances. See [Topology Vertex Instances](#topology-vertex-instances) for more information about topology vertex instances, which are used for the texture map.
+A texture map, also known as a UV map, UVW map, or texture coordinate map, is a mapping from the indices of the vertex instances to the texture space coordinates. This property is similar to the `"textureMap"` property in the mesh surface, but instead of mapping the mesh surface's vertex instances, it maps the topology vertex instances. See [Topology Vertex Instances](#topology-vertex-instances) for more information on how topology vertex instances are defined. See [G4MF Mesh Texture Map](mesh.md#texture-map) for more information on how texture maps are defined.
+
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its `"vectorSize"` property set to the dimension of the texture space. The amount of vector elements in the accessor MUST match or exceed the amount of topology vertex instances.
 
 ## Topology Vertex Instances
 

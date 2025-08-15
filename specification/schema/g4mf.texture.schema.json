@@ -3,7 +3,36 @@
 	"$id": "g4mf.texture.schema.json",
 	"title": "G4MF Texture",
 	"type": "object",
-	"description": "A texture is an image that can be applied to a material. TODO: Generalize textures for N-dimensions.",
+	"description": "A texture is an N-dimensional image with an optional sampler, which may be referenced by a material channel's `texture` property. Multiple images may be used to define high-dimensional textures, such as 3D textures, and optionally provide fallback images of different formats.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
-	"properties": {}
+	"properties": {
+		"images": {
+			"type": "array",
+			"description": "An array of zero or more images that this texture uses. Each image is a reference to image data stored in a file or in a buffer view.",
+			"items": {
+				"$ref": "g4mf_file_ref.schema.json"
+			}
+		},
+		"placeholder": {
+			"type": "array",
+			"description": "The placeholder color to use when no images are available. This is used when the texture cannot fill the given pixels due to no images being available, such as when the `images` array is empty, all image formats are unsupported, or there is not enough image data to fill the texture.",
+			"items": {
+				"type": "number"
+			},
+			"minItems": 1
+		},
+		"sampler": {
+			"$ref": "g4mf.texture.sampler.schema.json"
+		},
+		"size": {
+			"type": "array",
+			"description": "The size or resolution of the texture in pixels. The length of the array is the dimension of the texture.",
+			"items": {
+				"type": "integer",
+				"minimum": 1
+			},
+			"minItems": 1
+		}
+	},
+	"required": ["placeholder", "size"]
 }

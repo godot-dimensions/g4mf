@@ -1,0 +1,96 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.texture.sampler.schema.json",
+	"title": "G4MF Texture Sampler",
+	"type": "object",
+	"description": "A texture sampler defines how a texture is sampled when resized or read outside of its bounds.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"magFilter": {
+			"type": "string",
+			"description": "The filter mode used for magnification of the texture, such as when zooming in on a texture or looking closely at a texture on a surface. For pixel art graphics, this is the property that should be set to `nearest` to avoid blurring, the others can be left at their defaults.",
+			"default": "linear",
+			"anyOf": [
+				{
+					"const": "linear",
+					"description": "The texture is sampled using linear interpolation between the nearest texels. This results in a smooth appearance when the texture is scaled up."
+				},
+				{
+					"const": "nearest",
+					"description": "The texture is sampled using the nearest texel. This results in a pixelated appearance when the texture is scaled up, useful for pixel art or retro-style graphics."
+				},
+				{
+					"type": "string",
+					"description": "A custom filter mode defined by an extension."
+				}
+			]
+		},
+		"minFilter": {
+			"type": "string",
+			"description": "The filter mode used for minification of the texture, such as when zooming out on a texture or looking at a texture from a distance.",
+			"default": "linear",
+			"anyOf": [
+				{
+					"const": "linear",
+					"description": "The texture is sampled using linear interpolation between the nearest texels. This results in a smooth appearance when the texture is scaled down."
+				},
+				{
+					"const": "nearest",
+					"description": "The texture is sampled using the nearest texel. This results in a pixelated appearance when the texture is scaled down, resulting in aliasing artifacts, but is cheaper to calculate."
+				},
+				{
+					"type": "string",
+					"description": "A custom filter mode defined by an extension."
+				}
+			]
+		},
+		"mipmapFilter": {
+			"type": "string",
+			"description": "The filter mode used for mipmaps, which are precomputed lower-resolution versions used together with minification.",
+			"default": "linear",
+			"anyOf": [
+				{
+					"const": "linear",
+					"description": "The texture is sampled using linear interpolation between the nearest mipmap levels. This results in a smooth appearance when the texture is scaled down and mipmaps are used."
+				},
+				{
+					"const": "nearest",
+					"description": "The texture is sampled using the nearest mipmap level. This results in a pixelated appearance when the texture is scaled down and mipmaps are used, resulting in aliasing artifacts, but is cheaper to calculate."
+				},
+				{
+					"const": "none",
+					"description": "Do not use mipmaps. This means that the texture will not be sampled using lower-resolution versions. This reduces memory usage, but can result in low performance and aliasing artifacts when the texture is scaled down."
+				},
+				{
+					"type": "string",
+					"description": "A custom filter mode defined by an extension."
+				}
+			]
+		},
+		"wrap": {
+			"type": "array",
+			"description": "The wrap mode of the texture on each axis. This defines how the texture is repeated when sampling outside of the texture bounds. If only one wrap mode is specified, it applies to all axes. If multiple wrap modes are specified, they apply to each axis in the order of the texture's dimensions.",
+			"default": ["repeat"],
+			"items": {
+				"anyOf": [
+					{
+						"const": "clamp",
+						"description": "Clamp the texture on its boundary. This means that sampling outside of the texture bounds will return the color at the nearest border position."
+					},
+					{
+						"const": "mirror",
+						"description": "Mirror the texture across boundaries. Each odd number of repetitions on an axis mirrors the texture on that axis."
+					},
+					{
+						"const": "repeat",
+						"description": "Repeats the texture infinitely. This means that sampling outside of the texture bounds will repeat the texture in a tiled manner."
+					},
+					{
+						"type": "string",
+						"description": "A custom wrap mode defined by an extension."
+					}
+				]
+			}
+		}
+	}
+}

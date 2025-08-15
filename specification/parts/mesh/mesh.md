@@ -85,7 +85,13 @@ Note: This only supports star-shaped polytopes with a simply connected topology 
 
 The `"textureMap"` property is an integer index that references an accessor containing the per-vertex-instance texture map data for the mesh surface's vertex instances. If not defined, the surface does not have per-vertex-instance texture mapping.
 
-A texture map, also known as a UV map or UVW map, is a mapping from the vertex instances to the texture space coordinates. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its `"vectorSize"` property set to the dimension of the texture space. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances in the surface. See [Vertex Instances](#vertex-instances) for more information about vertex instances, which are used for the texture map.
+A texture map, also known as a UV map, UVW map, or texture coordinate map, is a mapping from the indices of the vertex instances to the texture space coordinates. Per vertex data applies to a surface's vertex instances, which depend on the surface's `"cells"` and `"edges"` properties. See [Vertex Instances](#vertex-instances) for more information on how vertex instances are defined.
+
+The texture coordinates are usually on a range of 0.0 to 1.0. For 3D meshes, the texture coordinates usually refer to a 2D texture. For 4D meshes, the texture coordinates usually refer to a 3D texture. However, any dimension of texture coordinates is allowed. A 4D mesh may use a 2D texture, though this is discouraged and not very useful because it will look untextured from certain angles, or a 4D texture, mapping the 4D vertices in the same dimension as the texture coordinates. This property is intended to be used together with the `"texture"` property, but may be used without it, such as when defining a texture map for an untextured surface.
+
+Texture map transforms, such as those supplied by `KHR_texture_transform` in glTF™, are not supported in G4MF. Instead, any texture transforms present in an application, such as scaling or translation, MUST be baked into the texture coordinates in the accessor when exporting the G4MF file. If dynamic texture transforms are required, such as for animation purposes, they may be defined by an extension, as long as the actual texture coordinates in the texture map properties have the current transforms baked in at export time.
+
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its `"vectorSize"` property set to the dimension of the texture space. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances in the surface.
 
 ### Topology
 

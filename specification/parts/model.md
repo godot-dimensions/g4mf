@@ -30,6 +30,8 @@ Only one of `"bufferView"` or `"uri"` MUST be defined. Both properties SHOULD NO
 
 The `"uri"` property is a string that defines the URI of the model file, relative to the G4MF file's location. If not specified, the default value is an empty string, meaning there is no URI.
 
+File names SHOULD use snake case and all lowercase letters to avoid case sensitivity issues across platforms, such as `my_model.g4b`. When embedding a model data into a buffer view, the name property SHOULD be set to the name of the file that would exist if it were external, for example if a separate file would look like `{ "mimeType": "model/g4mf-binary", "uri": "my_model.g4b" }`, the embedded equivalent SHOULD look like `{ "bufferView": 0, "mimeType": "model/g4mf-binary", "name": "my_model.g4b" }` with `0` replaced with the correct index. This is recommended for the purposes of clarity and semantic preservation during embedding, but any name is allowed, including no name at all.
+
 Specifying a URI is highly recommended, as it allows using an external file for the model, which is the main motivation for separating a tree of nodes into their own isolated models. However, storing model data in a buffer view may still be useful for deduplicating data in cases where the same tree of nodes is used many times in the same G4MF file.
 
 Only one of `"bufferView"` or `"uri"` MUST be defined. Both properties SHOULD NOT be defined at the same time. If both are defined, the `"uri"` property takes precedence, and the `"bufferView"` may be used as a fallback if the file at the URI cannot be loaded.
@@ -38,7 +40,7 @@ Only one of `"bufferView"` or `"uri"` MUST be defined. Both properties SHOULD NO
 
 The `"mimeType"` property is a string that defines the media type of the model file. This property is required and MUST be defined.
 
-Models may be used for any format that can be imported as a node or tree of nodes, so the MIME type is not limited to a specific set of values, but may be any valid MIME type. When a media type is registered with IANA, this MUST match the media type string as registered with IANA. When a media type is not registered with IANA, any placeholder name may be used pending registration. For example, here are some common MIME types that may sensibly be used for models:
+Models may be used for any format that can be imported as a node or tree of nodes. This means the MIME type is not limited to a specific set of values, but may be any valid MIME type. When a media type is registered with IANA, this MUST match the media type string as registered with IANA. When a media type is not registered with IANA, any placeholder name may be used pending registration. For example, here are some common MIME types that may sensibly be used for models:
 
 | MIME Type               | File Extension     | Description                       | Import Considerations                                                                                                                                                           |
 | ----------------------- | ------------------ | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

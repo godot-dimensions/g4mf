@@ -75,6 +75,8 @@ Only one of `"bufferView"` or `"uri"` MUST be defined. Both properties SHOULD NO
 
 The `"uri"` property is a string that defines the URI of the file, relative to the G4MF file's location. If not specified, the default value is an empty string, meaning there is no URI.
 
+File names SHOULD use snake case and all lowercase letters to avoid case sensitivity issues across platforms. When one G4MF resource corresponds to one file, it SHOULD have its name property set to the name of the file. This is recommended for the purposes of clarity and semantic preservation during embedding, but any name is allowed, including no name at all.
+
 Only one of `"bufferView"` or `"uri"` MUST be defined. Both properties SHOULD NOT be defined at the same time. If both are defined, the `"uri"` property takes precedence, and the `"bufferView"` may be used as a fallback if the file at the URI cannot be loaded.
 
 #### MIME Type
