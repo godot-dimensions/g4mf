@@ -1,0 +1,30 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.mesh.skin.schema.json",
+	"title": "G4MF Mesh Deformation Skin",
+	"type": "object",
+	"description": "A skin defines how a mesh is deformed by a skeleton by adding vertices to groups in a weighted way, defining how vertices are influenced by bones.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"groupNames": {
+			"type": "array",
+			"description": "An optional array of names for the groups in the `groups` array. If present, any skeletons using this mesh SHOULD have their bones either matching these group names, or end with a suffix of these names.",
+			"items": {
+				"type": "string"
+			}
+		},
+		"groups": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the group indices which influence the corresponding vertices. The size must match the number of indices in `vertices` and `weights`."
+		},
+		"vertices": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the indices of skinned vertices, with multiple indices for each vertex if it is influenced by multiple groups. The size must match the number of indices in `groups` and `weights`."
+		},
+		"weights": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the weights for how strongly each group influences the corresponding vertex. The size must match the number of indices in `groups` and `vertices`."
+		}
+	},
+	"required": ["groups", "vertices", "weights"]
+}

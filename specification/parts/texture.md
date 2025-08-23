@@ -25,7 +25,7 @@ Each image is a [G4MF File Reference](core.md#file-references) which references 
 
 Images SHOULD NOT contain embedded color space profiles (ICC profiles) or other metadata that alters the visual appearance of the image. This is to ensure that the image is displayed consistently in applications that do not support color spaces or other visual-affecting metadata.
 
-Images may use any format that supports being imported as a grid of pixels, particularly MIME types starting with `image/`. This means the MIME type is not limited to a specific set of values, but may be any valid MIME type. When a media type is registered with IANA, the `"mimeType"` MUST match the media type string as registered with IANA. When a media type is not registered with IANA, any placeholder name may be used pending registration.
+Images may use any format that supports being imported as a grid of pixels, particularly MIME types starting with `image/`. This means the MIME type is not limited to a specific set of values, but may be any valid MIME type. Implementations are highly encouraged to support at least the PNG, JPEG, and WebP formats (`image/png`, `image/jpeg`, and `image/webp`). When a media type is registered with IANA, the `"mimeType"` MUST match the media type string as registered with IANA. When a media type is not registered with IANA, any placeholder name may be used pending registration.
 
 For more information on MIME types, see the list of IANA media types: https://www.iana.org/assignments/media-types/media-types.xhtml#image
 

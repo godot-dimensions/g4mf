@@ -12,8 +12,22 @@ The following example defines.
 
 | Property     | Type       | Description                                                            | Default               |
 | ------------ | ---------- | ---------------------------------------------------------------------- | --------------------- |
+| **blend**    | `object`   | An object that defines the blend shape morph targets for this mesh.    | No blend shapes       |
+| **skin**     | `object`   | An object that defines the skinning information used for skeletons.    | No skinning           |
 | **surfaces** | `object[]` | An array of surfaces that make up the mesh.                            | Required, no default. |
 | **vertices** | `integer`  | The index of the accessor that contains the vertex data for this mesh. | Required, no default. |
+
+### Blend
+
+The `"blend"` property is an object that defines the blend shape morph targets for this mesh. This property is optional and defaults to no blend shapes.
+
+See [G4MF Blend Shape Mesh Deformation](blend.md) for more information about blend shapes.
+
+### Skin
+
+The `"skin"` property is an object that defines the skinning information used for skeletons. This property is optional and defaults to no skinning.
+
+See [G4MF Skinning Mesh Deformation](skin.md) for more information about skinning.
 
 ### Surfaces
 

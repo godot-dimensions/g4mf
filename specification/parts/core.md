@@ -85,7 +85,7 @@ The `"mimeType"` property is a string that defines the media type of the file. T
 
 The MIME type is not limited to a specific set of values, but may be any valid MIME type. When a file format's media type is registered with IANA, this MUST match the media type string as registered with IANA. When a file format's media type is not registered with IANA, any placeholder name may be used pending registration. For example, a PNG image file would be referenced with `"mimeType"` set to `"image/png"`, matching the IANA registration for PNG files.
 
-For more information, see the list of IANA media types: https://www.iana.org/assignments/media-types/media-types.xhtml#model
+For more information, see the list of IANA media types: https://www.iana.org/assignments/media-types/media-types.xhtml
 
 ## JSON Schema
 

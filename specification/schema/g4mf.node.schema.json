@@ -13,6 +13,11 @@
 				"type": "number"
 			}
 		},
+		"boneLength": {
+			"type": "number",
+			"description": "If this node is a skeleton bone, the length of the bone in meters in the +Y direction. If not defined, this node is not a skeleton bone.",
+			"default": -1.0
+		},
 		"camera": {
 			"$ref": "g4mf.node.camera.schema.json"
 		},
@@ -65,25 +70,40 @@
 				"exclusiveMinimum": 0.0
 			}
 		},
+		"skeleton": {
+			"$ref": "mesh/deformation/g4mf.node.skeleton.schema.json"
+		},
 		"visible": {
 			"type": "boolean",
-			"description": "Whether the node is visible. If false, the node and its children are not rendered."
+			"description": "Whether the node is visible. If false, the node and its children are not rendered.",
+			"default": true
 		}
 	},
 	"not": {
 		"anyOf": [
 			{ "required": ["basis", "rotor"] },
 			{ "required": ["basis", "scale"] },
+			{ "required": ["boneLength", "camera"] },
+			{ "required": ["boneLength", "light"] },
+			{ "required": ["boneLength", "mesh"] },
+			{ "required": ["boneLength", "model"] },
+			{ "required": ["boneLength", "physics"] },
+			{ "required": ["boneLength", "skeleton"] },
 			{ "required": ["camera", "light"] },
 			{ "required": ["camera", "mesh"] },
 			{ "required": ["camera", "model"] },
 			{ "required": ["camera", "physics"] },
+			{ "required": ["camera", "skeleton"] },
 			{ "required": ["light", "mesh"] },
 			{ "required": ["light", "model"] },
 			{ "required": ["light", "physics"] },
+			{ "required": ["light", "skeleton"] },
 			{ "required": ["mesh", "model"] },
 			{ "required": ["mesh", "physics"] },
-			{ "required": ["model", "physics"] }
+			{ "required": ["mesh", "skeleton"] },
+			{ "required": ["model", "physics"] },
+			{ "required": ["model", "skeleton"] },
+			{ "required": ["physics", "skeleton"] }
 		]
 	}
 }

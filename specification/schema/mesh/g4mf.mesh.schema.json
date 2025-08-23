@@ -6,6 +6,12 @@
 	"description": "A mesh is a collection of vertices and mesh surfaces that define the geometry of an object. Each surface may have a material.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
+		"blend": {
+			"$ref": "deformation/g4mf.mesh.blend.schema.json"
+		},
+		"skin": {
+			"$ref": "deformation/g4mf.mesh.skin.schema.json"
+		},
 		"surfaces": {
 			"type": "array",
 			"description": "An array of mesh surfaces that define the geometry of the mesh. Each surface may have a material.",

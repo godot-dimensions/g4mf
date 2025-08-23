@@ -15,5 +15,12 @@
 		"trigger": {
 			"$ref": "g4mf.node.physics.trigger.schema.json"
 		}
+	},
+	"not": {
+		"anyOf": [
+			{ "required": ["motion", "collider"] },
+			{ "required": ["motion", "trigger"] },
+			{ "required": ["collider", "trigger"] }
+		]
 	}
 }

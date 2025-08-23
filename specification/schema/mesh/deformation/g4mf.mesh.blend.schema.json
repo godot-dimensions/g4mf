@@ -1,0 +1,25 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.mesh.blend.schema.json",
+	"title": "G4MF Mesh Deformation Blend Properties",
+	"type": "object",
+	"description": "Blend shapes, also known as morph targets, define how a mesh can be deformed by displacing its vertex positions and other attributes. This schema contains an array of blend shapes and the amount of how much each shape is activated.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"amounts": {
+			"type": "array",
+			"description": "How much each blend shape is activated; the amount of influence each blend shape has on the mesh. This is typically a value on the range of 0.0 to 1.0, where 0.0 means no influence and 1.0 means full influence, but may also go beyond this range for exaggerated or inverted effects. The size of this array must match the number of items in `shapes`, or if `amounts` is not explicitly defined, `amounts` is implicitly defined to be the same size as `shapes` filled with all values set to `0.0`.",
+			"items": {
+				"type": "number"
+			}
+		},
+		"shapes": {
+			"type": "array",
+			"description": "An array of blend shape morph targets that define the deformations applied to the mesh. The size of this array must match the size of `amounts` if that array is defined, or the size of the shapes array defines the implicit size of `amounts`.",
+			"items": {
+				"$ref": "g4mf.mesh.blend.shape.schema.json"
+			}
+		}
+	},
+	"required": ["shapes"]
+}

@@ -1,0 +1,30 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.mesh.blend.shape.schema.json",
+	"title": "G4MF Mesh Deformation Blend Shape",
+	"type": "object",
+	"description": "A blend shape, also known as a morph target, defines how a mesh can be deformed by displacing its vertex positions and other attributes.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"normal": {
+			"allOf": [{ "$ref": "g4mf.mesh.blend.shape.target.schema.json" }],
+			"description": "The offset or displacement of the per-vertex-instance normals for the blend shape. For meshes with multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh. Normals MUST be re-normalized after applying all blend shapes for a mesh."
+		},
+		"position": {
+			"allOf": [{ "$ref": "g4mf.mesh.blend.shape.target.schema.json" }],
+			"description": "The offset or displacement of the vertex positions for the blend shape relative to the base mesh's `vertices` property."
+		},
+		"textureMap": {
+			"allOf": [{ "$ref": "g4mf.mesh.blend.shape.target.schema.json" }],
+			"description": "The offset or displacement of the per-vertex-instance texture space coordinates for the blend shape. For meshes with multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh."
+		},
+		"topologyNormal": {
+			"allOf": [{ "$ref": "g4mf.mesh.blend.shape.target.schema.json" }],
+			"description": "The offset or displacement of the per-topology-vertex-instance normals for the blend shape. For meshes with multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh. Normals MUST be re-normalized after applying all blend shapes for a mesh."
+		},
+		"topologyTextureMap": {
+			"allOf": [{ "$ref": "g4mf.mesh.blend.shape.target.schema.json" }],
+			"description": "The offset or displacement of the per-topology-vertex-instance texture space coordinates for the blend shape. For meshes with multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh."
+		}
+	}
+}
