@@ -68,6 +68,8 @@ For all shape types, the center of the shape is at the origin of the local coord
 
 For most shapes, scaling the G4MF node the shape is attached to is not recommended. Instead, scale the data in the shape itself, which will result in better compatibility with physics engines. However, for heightmap shapes, scaling the G4MF node is required to achieve different heightmap densities. Heightmaps SHOULD only be used for static objects, not moving objects. For all shapes, both the local and global transform of all G4MF nodes the shape is attached to MUST be conformal, meaning that their basis vectors are orthogonal and have the same length, and only position, rotation, and uniform scaling are allowed. If a shape is attached to a non-conformal G4MF node, the G4MF file is invalid and the behavior is undefined.
 
+If a given shape `"type"` is unrecognized, implementations SHOULD load the shape as a `"general"` shape. This allows extensions to define new shape types, while providing a fallback for implementations that do not support the extension.
+
 ## Curve Properties
 
 | Property     | Type       | Description                        | Default     |
