@@ -44,7 +44,7 @@ Since the geometry accessor 0 refers to edges, the `"edges"` property MUST be de
 
 The `"normals"` property is an integer that references an accessor containing the per-boundary-vertex-instance normals for this surface. If not defined and the `"geometry"` property is defined, the geometry has flat normals.
 
-For 3D meshes, this refers to vertex instances on 2D faces defined in the `"geometry"` property. For 4D meshes, this refers to vertex instances on 3D cells defined in the `"geometry"` property. For 5D meshes, this refers to vertex instances on 4D cells defined in the `"geometry"` property. See [Topology Vertex Instances](#topology-vertex-instances) for more details.
+For 3D meshes, this refers to vertex instances on 2D faces defined in the `"geometry"` property. For 4D meshes, this refers to vertex instances on 3D cells defined in the `"geometry"` property. For 5D meshes, this refers to vertex instances on 4D cells defined in the `"geometry"` property. See [Topology Vertex Instances](#topology-vertex-instances) for more details. Also, see [Orientation of Geometry Items](#orientation-of-geometry-items) for information about calculating normals of boundary geometry items for use cases like determining if a cell is facing towards or away from a camera.
 
 This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of a floating-point primitive type, and MUST have the `"vectorSize"` property set to the same value as the `"vectorSize"` of the vertices accessor. The amount of vectors in the accessor MUST be equal to the amount of vertex instances in the corresponding geometry items.
 
@@ -75,6 +75,30 @@ Topology vertex instances are defined as the following:
 - For 5D meshes, the topology vertex instances are those used by 4D cells defined in the `"geometry"` property.
 - This pattern continues for higher dimensions. 2D meshes are an exception, they use 2D faces like 3D meshes.
 - Extensions may define other ways to determine the topology vertex instances for a mesh surface's topology.
+
+This defines the source of the vertices, but the order still needs to be specified. To find the vertex instances, iterate over each N-dimensional boundary geometry item, then iterate over its (N-1)-dimensional elements, recursively and in-order, until reaching the vertex instances. Append these to a unique array, skipping duplicates, again preserving order. The resulting array is the cell's topology vertex instances.
+
+## Orientation of Geometry Items
+
+Use cases like determining if a boundary geometry item is facing towards or away from a camera require having normal vectors which are perpendicular to the cell they describe. These normal vectors can be calculated, but then it is important to not only know how the geometry items are connected, but also their orientation. There are rules to uniquely determine the orientation of each geometry item based on its component parts. The rules mandated by G4MF follow the rules of Geometric Algebra extended from the right-hand rule.
+
+Each 2D face has its orientation defined by its first 2 edges. The first 2 edges MUST share a vertex. Following edges MUST exist on the same plane spanned by the first 2 edges, MUST form a closed loop. For 2D faces only, the following edges MUST continue to share a vertex with the previous edge, until reaching the last edge, which MUST share a vertex with the first edge, closing the loop. The order of the first 2 edges defines the winding of the face. If the face's first 2 edges are swapped, the face's orientation is reversed. When a 2D face is used as the boundary of a 3D mesh, a counter-clockwise winding viewed by the camera means the face is facing towards the camera, while clockwise means it is facing away from the camera.
+
+![2D Face Orientation](2d_face_orientation.png)
+
+The face winding order is determined purely by the order of the edges, and does not consider the order of vertices within each edge. In this example image, if the arrows were pointing in the opposite direction, but the face still listed edge U before edge V, the face would still be considered to be facing towards the camera when interpreted as the boundary of a 3D mesh. To calculate the face normal, first find which vertex is shared between edge U and edge V. Find two vectors, one from the unshared vertex of edge U to the shared vertex, and one from the unshared vertex of edge U to the unshared vertex of edge V. Then, in 3D, the face normal is the cross product of these two vectors. Those three vertices, in that order, are also the first 3 vertices of the face as defined by G4MF's topology vertex instance rules.
+
+Each 3D cell has its orientation defined by its first 2 faces. The first 2 faces MUST share an edge. Following faces MUST exist on the same 3D hyperplane spanned by the first 2 faces, and MUST form a closed 3D volume. For dimensions 3 and higher, the order of following elements is not constrained, since it is not trivially defined how to traverse a closed volume in higher dimensions. The order of the first 2 faces defines the oriented volume of the cell. If the cell's first 2 faces are swapped, the cell's orientation is reversed. When a 3D cell is used as the boundary of a 4D mesh, an orientation like the below image in the XYZ axes means the cell is facing in the +W direction.
+
+![3D Cell Orientation](3d_cell_orientation.png)
+
+To calculate the cell normal, first find which edge is shared between the first 2 faces. In this example, the first face is the bottom face, formed by U and V, and the second face is the right face, formed by V and W. Get the edge on the first face after the shared edge, and get the edge on the second face after the shared edge. From those edges, get 4 vertices: the unshared vertex of the edge from the first face, the start vertex of the shared edge, the end vertex of the shared edge (such that the shared edge direction matters), and the unshared vertex of the edge from the second face (which adds to the span of the first face). Then, find the perpendicular product of the three vectors formed by the first vertex to each of the other three vertices. A cell facing in the +W direction, when these vectors are viewed in the XYZ axes, appears like the vectors of a right-handed basis with a positive determinant. Those four vertices, in that order, are also the first 4 vertices of the cell as defined by G4MF's topology vertex instance rules.
+
+For dimensions 5 and higher, it is still the case that each N-dimensional cell has its orientation defined by its first two (N-1)-dimensional elements, which MUST share an (N-2)-dimensional element. Following elements MUST exist on the same N-dimensional hyperplane spanned by the first two elements, and MUST form a closed N-dimensional volume.
+
+For more information, see the "Exterior Algebra" article on Wikipedia: https://en.wikipedia.org/wiki/Exterior_algebra
+
+<sub>Both of the above images were created by Maschen, licensed as CC0 via Wikimedia Commons https://commons.wikimedia.org/wiki/File:N_vector_positive.svg</sub>
 
 ## JSON Schema
 
