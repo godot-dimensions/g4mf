@@ -24,6 +24,16 @@
 			},
 			"description": "An array of all extensions used in this G4MF file. If an extension is used in `'extensions'` anywhere in the file, or in `'extensionsRequired'`, it MUST be listed here."
 		},
+		"extensionDependencies": {
+			"type": "object",
+			"additionalProperties": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"description": "An object mapping extensions to arrays of extensions that they depend on. If an extension inhibits the ability of another extension to function correctly, it MUST be listed here, except if both are already listed in `'extensionsRequired'`. If an implementation supports an extension, but does not support one of its dependencies, the implementation SHOULD ignore the data of that extension, treating the file as if the extension was not present."
+		},
 		"generator": {
 			"type": "string",
 			"description": "The name of the tool that generated this G4MF file. This is intended for informational purposes. This SHOULD include the version of the tool."
