@@ -54,9 +54,9 @@ Following all of the above rules, the data layout of a G4MF binary file can be s
 
 | Offset in bytes | Size in bytes | Description                                       | Valid values                                     |
 | --------------- | ------------- | ------------------------------------------------- | ------------------------------------------------ |
-| 0               | 4             | The G4MF file header's magic number.              | Constant `G4MF` or `0x47 0x34 0x4D 0x46`         |
-| 4               | 4             | The G4MF file header's version number.            | Constant based on the spec version               |
-| 8               | 8             | The G4MF file header's size in bytes.             | Between 32 and 2^64 - 1                          |
+| 0               | 4             | The G4MF binary file header's magic number.       | Constant `G4MF` or `0x47 0x34 0x4D 0x46`         |
+| 4               | 4             | The G4MF binary file header's version number.     | Constant based on the spec version               |
+| 8               | 8             | The G4MF binary file size in bytes.               | Between 32 and 2^64 - 1                          |
 | 16              | 4             | The first chunk's chunk type.                     | Constant `JSON` or `0x4A 0x53 0x4F 0x4E`         |
 | 20              | 4             | The first chunk's compression format.             | Constant `0x00000000` for uncompressed           |
 | 24              | 8             | The first chunk's size in bytes.                  | Between 0 and 2^64 - 33                          |
