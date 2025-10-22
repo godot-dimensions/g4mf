@@ -38,7 +38,7 @@ The `"compression"` property is a string that defines the compression algorithm 
 
 Valid compression values are strings representing [FourCC](https://en.wikipedia.org/wiki/FourCC) codes. This allows for easy identification of the headers if a human inspects the file in a hex editor. Implementations MAY choose to display these values to the user as plain text, such as by showing the compression format indicator in an error message when the compression format is unsupported.
 
-This value MUST be a string matching the binary compression format indicator magic number, as defined in [G4MF Binary File Format](binary_file_format.md). Each string MUST be 4 characters after any escaping, convertible to a sequence of 4 numbers between `0x00` and `0xFF`. All control characters MUST escaped to comply with the JSON specification for strings, and all non-ASCII characters MUST also be escaped, including those below `0x20` or above `0x7E` (other characters may also optionally be escaped, but these are required to be escaped). For example, the string `"Zstd"` indicates Zstandard compression, which corresponds to the byte sequence `0x5A 0x73 0x74 0x64`, or `0x6474735A` as a little-endian unsigned 32-bit integer, in the chunk compression type indicator magic number of a binary G4MF (`.g4b`) file. Uncompressed data MUST NOT have this property set, and for buffers in binary blob chunks, the compression format indicator magic number of uncompressed chunks MUST be set to `0x00000000` (four zero bytes).
+This value MUST be a string matching the binary compression format indicator magic number, as defined in [G4MF Binary File Format](binary_file_format.md). Each string MUST be 4 characters after any escaping, convertible to a sequence of 4 numbers between `0x00` and `0xFF`. All control characters MUST be escaped to comply with the JSON specification for strings, and all non-ASCII characters MUST also be escaped, including those below `0x20` or above `0x7E` (other characters may also optionally be escaped, but these are required to be escaped). For example, the string `"Zstd"` indicates Zstandard compression, which corresponds to the byte sequence `0x5A 0x73 0x74 0x64`, or `0x6474735A` as a little-endian unsigned 32-bit integer, in the chunk compression type indicator magic number of a binary G4MF (`.g4b`) file. Uncompressed data MUST NOT have this property set, and for buffers in binary blob chunks, the compression format indicator magic number of uncompressed chunks MUST be set to `0x00000000` (four zero bytes).
 
 When compressed data is stored in a separate file or a data URI, `"compression"` is the only way to indicate that the data is compressed, and the file size or data URI string content determines the compressed size of the data. When compressed data is stored in a binary blob chunk at the end of the file, both `"compression"` and the binary file's compression format indicator magic number MUST be set to the same value, and the binary file's chunk size is the compressed size of the data. If there is a mismatch between the `"compression"` property and the binary file's compression format indicator magic number, the file is invalid.
 
@@ -105,11 +105,11 @@ The primitive type SHOULD be some kind of primitive data type, such as float, in
 - `"float32"`: 32-bit or 4-byte IEEE 754 single-precision floating point number. This MUST be supported.
 - `"float64"`: 64-bit or 8-byte IEEE 754 double-precision floating point number.
 - `"float128"`: 128-bit or 16-byte IEEE 754 quadruple-precision floating point number.
-- `"int8"`: 8-bit or 1-byte two's compliment signed integer.
-- `"int16"`: 16-bit or 2-byte two's compliment signed integer.
-- `"int32"`: 32-bit or 4-byte two's compliment signed integer. This MUST be supported.
-- `"int64"`: 64-bit or 8-byte two's compliment signed integer.
-- `"int128"`: 128-bit or 16-byte two's compliment signed integer.
+- `"int8"`: 8-bit or 1-byte two's complement signed integer.
+- `"int16"`: 16-bit or 2-byte two's complement signed integer.
+- `"int32"`: 32-bit or 4-byte two's complement signed integer. This MUST be supported.
+- `"int64"`: 64-bit or 8-byte two's complement signed integer.
+- `"int128"`: 128-bit or 16-byte two's complement signed integer.
 - `"uint8"`: 8-bit or 1-byte unsigned integer.
 - `"uint16"`: 16-bit or 2-byte unsigned integer.
 - `"uint32"`: 32-bit or 4-byte unsigned integer. This MUST be supported.
@@ -118,7 +118,9 @@ The primitive type SHOULD be some kind of primitive data type, such as float, in
 
 Support for reading `"float32"`, `"int32"`, and `"uint32"` is REQUIRED, due to how common they are. For the remaining types, they are defined, but not required. 8-bit integers, 16-bit integers, and all 64-bit types are highly recommended. Implementations MAY support only a subset of these types. If an implementation does not want to support `"float8"`, `"float128"`, `"int128"`, or any other type, the implementation MAY skip this accessor, failing to load any objects that use it, or MAY refuse to load the entire file.
 
-Implementations MAY truncate or round types to fit into a supported type. For example, it is allowed to read `"float64` primitives which get converted to `"float32"` at import time, rounding the values to fit into the smaller type.
+Implementations MAY truncate or round types to fit into a supported type. For example, it is allowed to read `"float64"` primitives which get converted to `"float32"` at import time, rounding the values to fit into the smaller type.
+
+If the data in the accessor is always of type `"uint8"` with a vector size always set to 1, consider using a buffer view directly instead of an accessor, since the accessor is not providing any additional information beyond the slice of the buffer already provided by the buffer view. For example, do not use `"uint8"` to store the data of a PNG image, or any accessor type at all for that matter. The `"uint8"` type is intended to be used when users of this accessor need to interpret the data as numbers, and other accessor types are also allowed, simplifying usages, which can always point to an accessor instead of conditionally pointing to an accessor or a buffer view.
 
 Inside of the buffer view the accessor refers to, the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of the size of the primitive type, to ensure that the start of the data is aligned correctly, and ensure there are a whole number of primitives available in the accessor. For example, if the primitive type is `"float32"`, which requires 4 bytes each, then the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of 4, and the number of primitives in the accessor is equal to the buffer view's `"byteLength"` divided by 4. For accessors with a `"vectorSize"` greater than 1, there are additional requirements for `"byteLength"` aligning to a whole number of elements, which is a superset of this requirement.
 

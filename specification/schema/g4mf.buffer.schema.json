@@ -3,7 +3,7 @@
 	"$id": "g4mf.buffer.schema.json",
 	"title": "G4MF Buffer",
 	"type": "object",
-	"description": "A buffer is a chunk of raw binary data. Buffer data may be stored in one of three ways: in an extenal file, in a base64-encoded string, or in the case of binary G4MF files (`.glb`), the buffer at index 0 is used for the data chunk after the JSON at the end of the file. As an analogy, if a buffer view is a partition and an accessor is a file system, then a buffer is the whole disk.",
+	"description": "A buffer is a chunk of raw binary data. Buffer data may be stored in one of three ways: in an external file, in a base64-encoded string, or in the case of binary G4MF files (`.glb`), the buffer at index 0 is used for the data chunk after the JSON at the end of the file. As an analogy, if a buffer view is a partition and an accessor is a file system, then a buffer is the whole disk.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
 		"byteLength": {

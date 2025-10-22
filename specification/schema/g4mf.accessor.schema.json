@@ -36,23 +36,23 @@
 				},
 				{
 					"const": "int8",
-					"description": "8-bit or 1-byte two's compliment signed integer."
+					"description": "8-bit or 1-byte two's complement signed integer."
 				},
 				{
 					"const": "int16",
-					"description": "16-bit or 2-byte two's compliment signed integer."
+					"description": "16-bit or 2-byte two's complement signed integer."
 				},
 				{
 					"const": "int32",
-					"description": "32-bit or 4-byte two's compliment signed integer."
+					"description": "32-bit or 4-byte two's complement signed integer."
 				},
 				{
 					"const": "int64",
-					"description": "64-bit or 8-byte two's compliment signed integer."
+					"description": "64-bit or 8-byte two's complement signed integer."
 				},
 				{
 					"const": "int128",
-					"description": "128-bit or 16-byte two's compliment signed integer."
+					"description": "128-bit or 16-byte two's complement signed integer."
 				},
 				{
 					"const": "uint8",
