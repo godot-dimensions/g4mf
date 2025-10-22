@@ -12,7 +12,7 @@ The binary format begins with a 16-byte file header, which contains the followin
   - This value is only 0 for the draft version of the specification. The final version will have a different value.
 - A 8-byte size number.
   - This MUST be equal to the total size in bytes of the entire file, including the file header, all chunks, all JSON data, and all binary blobs of data.
-  - This value is a little-endian unsigned 64-bit integer, meaning the maximum file size of a binary G4MF file is 2^64 - 1 bytes.
+  - This value is a little-endian unsigned 64-bit integer, with the most significant bit set to zero. The maximum file size of a binary G4MF file is 2^63 - 1 bytes.
 
 After the file header, the file consists of a series of one or more chunks. Each chunk begins with its own 16-byte chunk header, with a similar format to the file header:
 
@@ -36,7 +36,7 @@ After the file header, the file consists of a series of one or more chunks. Each
   - Implementations MAY define additional compression formats. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value. Note: This does not need to match the magic number used by the compression format itself.
 - A 8-byte chunk data size number.
   - This MUST be equal to the size in bytes of the chunk data, excluding the chunk header, and excluding any padding after the chunk data.
-  - This value is a little-endian unsigned 64-bit integer. The maximum chunk data size is 2^64 - 33 bytes (an additional 32 bytes are subtracted for the file and chunk headers).
+  - This value is a little-endian unsigned 64-bit integer, with the most significant bit set to zero. The maximum chunk data size is 2^63 - 33 bytes (an additional 32 bytes are subtracted for the file and chunk headers).
   - If the chunk is compressed, this value is the size of the compressed data, not the uncompressed data. However, the `"byteLength"` field in the JSON data refers to the uncompressed size of the data.
 - The data in each chunk immediately follows the chunk header, and is of the size in bytes indicated by the chunk data size number.
 
@@ -54,18 +54,20 @@ Following all of the above rules, the data layout of a G4MF binary file can be s
 
 | Offset in bytes | Size in bytes | Description                                       | Valid values                                     |
 | --------------- | ------------- | ------------------------------------------------- | ------------------------------------------------ |
-| 0               | 4             | The G4MF binary file header's magic number.       | Constant `G4MF` or `0x47 0x34 0x4D 0x46`         |
-| 4               | 4             | The G4MF binary file header's version number.     | Constant based on the spec version               |
-| 8               | 8             | The G4MF binary file size in bytes.               | Between 32 and 2^64 - 1                          |
+| 0               | 4             | The binary G4MF file header's magic number.       | Constant `G4MF` or `0x47 0x34 0x4D 0x46`         |
+| 4               | 4             | The binary G4MF file header's version number.     | Constant based on the spec version               |
+| 8               | 8             | The binary G4MF file size in bytes.               | Between 32 and 2^63 - 1                          |
 | 16              | 4             | The first chunk's chunk type.                     | Constant `JSON` or `0x4A 0x53 0x4F 0x4E`         |
 | 20              | 4             | The first chunk's compression format.             | Constant `0x00000000` for uncompressed           |
-| 24              | 8             | The first chunk's size in bytes.                  | Between 0 and 2^64 - 33                          |
+| 24              | 8             | The first chunk's size in bytes.                  | Between 0 and 2^63 - 33                          |
 | 32              | N             | The first chunk's data, the G4MF JSON data.       | UTF-8 encoded JSON excluding control characters  |
 | 32 + N          | P1            | (optional) Padding if a second chunk exists.      | 0 to 15 null bytes or spaces to 16-byte boundary |
 | 32 + N + P1     | 4             | (optional) The second chunk's type.               | Constant `BLOB` or `0x42 0x4C 0x4F 0x42`         |
 | 36 + N + P1     | 4             | (optional) The second chunk's compression format. | Constant `0x00000000` for uncompressed           |
-| 40 + N + P1     | 8             | (optional) The second chunk's size in bytes.      | Between 0 and 2^64 - (48 + N + P1)               |
+| 40 + N + P1     | 8             | (optional) The second chunk's size in bytes.      | Between 0 and 2^63 - (48 + N + P1)               |
 | 48 + N + P1     | M             | (optional) The second chunk's data.               | Binary blob data                                 |
 | 48 + N + M + P1 | P2            | (optional) Padding if a third chunk exists.       | 0 to 15 null bytes or spaces to 16-byte boundary |
 
 More chunks may follow the second chunk, including additional BLOB chunks for buffers, or any other chunk type.
+
+For the file size number, and the size of all chunks, the most significant bit is reserved for future use, and MUST be set to zero. Implementations MUST reject files or chunks where this bit is set to one. This allows for future expansion of the specification to support larger files, such as 128-bit file sizes or beyond, without breaking compatibility, in a similar manner to how UTF-8 extends ASCII.
