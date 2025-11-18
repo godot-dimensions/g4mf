@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "g4mf.camera.schema.json",
+	"$id": "g4mf.node.camera.schema.json",
 	"title": "G4MF Camera",
 	"type": "object",
 	"description": "A camera provides a view from a location in the scene.",

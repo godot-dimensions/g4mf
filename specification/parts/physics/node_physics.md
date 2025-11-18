@@ -8,11 +8,11 @@ G4MF node physics defines the physical properties of objects in the scene. It al
 
 G4MF node physics properties are defined in the `"physics"` property of a node, which is an object containing the following properties:
 
-| Property     | Type     | Description                                                            | Default              |
-| ------------ | -------- | ---------------------------------------------------------------------- | -------------------- |
-| **motion**   | `object` | If present, this node has its motion controlled by physics.            | `null` (no motion)   |
-| **collider** | `object` | If present, this node has a solid shape that can be collided with.     | `null` (no collider) |
-| **trigger**  | `object` | If present, this node has a non-solid shape that can act as a trigger. | `null` (no trigger)  |
+| Property     | Type     | Description                                                            | Default      |
+| ------------ | -------- | ---------------------------------------------------------------------- | ------------ |
+| **motion**   | `object` | If present, this node has its motion controlled by physics.            | No motion.   |
+| **collider** | `object` | If present, this node has a solid shape that can be collided with.     | No collider. |
+| **trigger**  | `object` | If present, this node has a non-solid shape that can act as a trigger. | No trigger.  |
 
 Each of these properties MUST be defined on separate nodes. This results in a very clear, simple, and portable document structure, and ensures that each behavior has its own transform.
 

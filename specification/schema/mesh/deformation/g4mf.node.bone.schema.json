@@ -1,0 +1,25 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.node.bone.schema.json",
+	"title": "G4MF Bone",
+	"type": "object",
+	"description": "A bone in a skeleton, representing a segment of a skeletal structure used for animation and posing of 3D models.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"length": {
+			"type": "number",
+			"description": "The length of the bone in meters in the +Y direction. If defined, the value MUST NOT be negative. If not defined, this node does not have a defined length, and a length may be inferred through other means.",
+			"minimum": 0.0
+		},
+		"mass": {
+			"type": "number",
+			"description": "The mass of the bone in kilograms. If defined, the value MUST be greater than 0. If not defined, the bone does not have a defined mass.",
+			"exclusiveMinimum": 0.0
+		},
+		"shape": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The id of the shape referenced by this bone, which may be used for visualization, hit registration, ragdoll physics, or any other use case. If not defined, the bone does not specify a shape, and any shape may be inferred by the application.",
+			"default": -1
+		}
+	}
+}

@@ -66,22 +66,52 @@ Within the weights for a single vertex, the influences MUST be sorted in descend
 
 A full list of G4MF node properties is defined in [G4MF Node](../node.md). Important for skeletons are these two mutually exclusive properties:
 
-| Property       | Type     | Description                                                     | Default                 |
-| -------------- | -------- | --------------------------------------------------------------- | ----------------------- |
-| **boneLength** | `number` | If this node is a skeleton bone, the length in meters along +Y. | `-1.0` (not a bone)     |
-| **skeleton**   | `object` | If this node is a skeleton, the skeleton properties.            | `null` (not a skeleton) |
+| Property     | Type     | Description                                           | Default                      |
+| ------------ | -------- | ----------------------------------------------------- | ---------------------------- |
+| **bone**     | `object` | If this node is a skeleton bone, the bone properties. | `undefined` (not a bone)     |
+| **skeleton** | `object` | If this node is a skeleton, the skeleton properties.  | `undefined` (not a skeleton) |
 
-### Bone Length
+### Bone
 
-The `"boneLength"` property is a number that defines the length of the bone in meters. This property is optional and defaults to `-1.0`, indicating that the node is not a bone.
+The `"bone"` property is an object that defines the bone properties for this node. If not specified, the default value is `undefined`, meaning that the node is not a bone.
 
-All bones MUST have a non-negative `"boneLength"` property defined, even if it is zero, to indicate that the node is a bone. The length of the bone is used to determine how far the bone extends along the local Y axis of the bone node. The head of the bone is defined as the node's position, and the tail of the bone is offset from this position by `"boneLength"` in the local +Y direction. The final perceived bone length includes scale, so if the bone node has a `"boneLength"` property set to 0.1 and has a global scale of 3.0 along the local Y axis, the effective global bone length is 0.3 meters.
+All skeleton bones MUST have the `"bone"` property defined, even if it is an empty object. A node is a bone if and only if the `"bone"` property is defined; the absence of the `"bone"` property indicates that the node is not a bone. A bone MUST be a descendant of a skeleton, and MUST belong to exactly one skeleton, meaning that all bones MUST have a contiguous chain of bone parenting leading up to a skeleton node, indicated by the `"skeleton"` property. The parent node of a bone MUST either be another bone or the skeleton node itself. Additional properties MAY be added to bones by extensions.
 
 ### Skeleton
 
-The `"skeleton"` property is an object that defines the skeleton properties for this node. This property is optional and defaults to `null`, indicating that the node is not a skeleton.
+The `"skeleton"` property is an object that defines the skeleton properties for this node. If not specified, the default value is `undefined`, meaning that the node is not a skeleton.
 
-All skeletons MUST have the `"skeleton"` property defined, even if it is an empty object, to indicate that the node is a skeleton. All descendant bone nodes of the skeleton, indicated by the `"boneLength"` property, which form a contiguous chain of bone parenting to the skeleton node, are considered part of the skeleton. The `"skeleton"` property MAY have the `"joints"` property defined when it is used for skinned meshes, which defines the bones used for controlling the joints of skinned meshes. Additional properties MAY be added to skeletons by extensions.
+All skeletons MUST have the `"skeleton"` property defined, even if it is an empty object. A node is a skeleton if and only if the `"skeleton"` property is defined; the absence of the `"skeleton"` property indicates that the node is not a skeleton. All descendant bone nodes of the skeleton, which form a contiguous chain of bone parenting to the skeleton node, are considered part of the skeleton. The `"skeleton"` property MAY have the `"joints"` property defined when it is used for skinned meshes, which defines the bones used for controlling the joints of skinned meshes. Additional properties MAY be added to skeletons by extensions.
+
+## Node Bone Properties
+
+| Property   | Type      | Description                                                             | Default            |
+| ---------- | --------- | ----------------------------------------------------------------------- | ------------------ |
+| **length** | `number`  | The length of the bone in meters in the local +Y direction, if defined. | No defined length. |
+| **mass**   | `number`  | The mass of the bone in kilograms, if defined.                          | No defined mass.   |
+| **shape**  | `integer` | The id of the shape referenced by this bone, if defined.                | No defined shape.  |
+
+### Length
+
+The `"length"` property is a number that defines the length of the bone in meters. This property is optional, and if not defined, the bone does not have a defined length.
+
+If a bone has the `"length"` property defined, it MUST NOT be negative. The value `-1.0` is reserved as an in-memory value for undefined lengths, and MUST NOT be written into G4MF files. The length of the bone is used to determine how far the bone extends along the local Y axis of the bone node. The head of the bone is defined as the node's position, and the tail of the bone is offset from this position by `"length"` in the local +Y direction. The final perceived bone length includes scale, so if the bone node has a `"length"` property set to 0.1 and has a global scale of 3.0 along the local Y axis, the effective global bone length is 0.3 meters.
+
+### Mass
+
+The `"mass"` property is a number that defines the mass of the bone in kilograms. This property is optional, and if not defined, the bone does not have a defined mass.
+
+If a bone has the `"mass"` property defined, it MUST be greater than `0.0`. The value `-1.0` is reserved as an in-memory value for undefined masses, and MUST NOT be written into G4MF files. The mass of the bone MAY be used for physics simulations, such as ragdoll physics, or for other purposes. If an application does not support per-bone masses, it MAY safely ignore this property.
+
+If all bones in a skeleton have their `"mass"` property defined, and the skeleton has a physics motion parent, the total of all bone masses SHOULD add up to the mass of the physics body defined by the parent node's physics motion properties, within the margin of floating-point error. If some or no bones have their `"mass"` property defined, the application MAY choose to infer the masses of the undefined bones by distributing the remaining mass to them. This may be done using any heuristic the application desires. If the shapes of bones are defined, the volume of each bone's shape is recommended to be the heuristic used for this distribution.
+
+### Shape
+
+The `"shape"` property is an integer that defines the id of the shape referenced by this bone. This property is optional, and if not defined, the bone does not specify a shape.
+
+This is a reference to a shape in the G4MF file's document-level `"shapes"` array. The value `-1` is reserved as an in-memory value for undefined shapes, and MUST NOT be written into G4MF files. If the `"shape"` property is not defined, the bone does not specify a shape, and any shape MAY be inferred by the application using any heuristic it desires. The shape MAY be used for visualization, hit registration, ragdoll physics, or any other use case.
+
+The position of the shape is defined relative to the center of the bone's `"length"`, meaning that if a bone has a length of `L`, the shape's local origin is placed at an offset of `L / 2` in the local +Y direction from the bone's position. The shape uses the bone's local basis without additional rotations or scaling applied, meaning that the shape's local basis axes align with the bone's local basis axes.
 
 ## Node Skeleton Properties
 
@@ -93,11 +123,11 @@ All skeletons MUST have the `"skeleton"` property defined, even if it is an empt
 
 The `"joints"` property is an array of integers that defines the indices of G4MF nodes that represent the bones in the skeleton used as joints for controlling vertex groups of skinned meshes. This property is optional and defaults to an empty array.
 
-All joint nodes MUST also be bone nodes. Each and every bone node referred to in this array MUST have a non-negative `"boneLength"` property defined, even if it is zero, indicating that it is a bone. All indices in this array MUST refer to G4MF bone nodes that form a chain of bone descendants of the skeleton node. For example, if a bone node's parent does not have either the `"skeleton"` or `"boneLength"` properties defined, or any such node exists between itself and the skeleton, it cannot be included in the skeleton's `"joints"` array.
+All joint nodes MUST also be bone nodes. Each and every bone node referred to in this array MUST have the `"bone"` property defined, even if it is an empty object, which indicates that it is a bone. All indices in this array MUST refer to G4MF bone nodes that form a chain of bone descendants of the skeleton node. For example, if a bone node's parent does not have either the `"skeleton"` or `"bone"` properties defined, or any non-bone node exists between itself and the skeleton, it cannot be included in the skeleton's `"joints"` array.
 
 All joint nodes MUST be listed in a strictly increasing order, and MUST be listed with parent bones before child bones. Usually, a skeleton representing a character will have a root bone named "Hips". If a skeleton has a single root bone, this MUST be the first child of the skeleton node, and if this bone is used for skinning, it MUST be the first item in the `"joints"` array. Skeletons MAY have multiple root bones, and MAY have bones not used for skinning, indicated by not being listed in the `"joints"` array.
 
-The existence of the `"joints"` property allows preserving information about specifically which bones are used for controlling the joints of skinned meshes, and in what order. It would also be possible to generate this information from the skeleton hierarchy, but such an operation may produce different results depending how the application chooses to traverse the hierarchy, and would unnecessarily include bones not used for skinning.
+The existence of the `"joints"` property allows preserving information about specifically which bones are used for controlling the joints of skinned meshes, and in what order. It would also be possible to generate this information from the skeleton hierarchy, but such an operation may produce different results depending how the application chooses to traverse the hierarchy, and would unnecessarily include bones not used for skinning, forcing skinned meshes to reserve an index for those unused bones.
 
 The existence of the `"joints"` property also allows adding new bones and other nodes to the skeleton without breaking existing skinned meshes that use the skeleton. For example, without the `"joints"` property, if a new bone were added to the skeleton, existing bones may end up with different joint indices, which would break existing skinned meshes that use the skeleton if they were not updated to match the new joint indices, and would break if two different skeletons with different bone structures were used with the same skinned mesh. With the `"joints"` property, the skeleton can explicitly specify which bones map to the joint indices in skinned meshes.
 

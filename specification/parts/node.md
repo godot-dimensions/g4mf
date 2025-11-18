@@ -34,21 +34,21 @@ The following example defines a 4-dimensional G4MF file with a root node at inde
 
 ## Properties
 
-| Property       | Type        | Description                                                     | Default              |
-| -------------- | ----------- | --------------------------------------------------------------- | -------------------- |
-| **children**   | `integer[]` | The indices of the child nodes of this node.                    | `[]` (empty array)   |
-| **visible**    | `boolean`   | Whether the node is visible or not (affects rendering).         | `true`               |
-| **position**   | `number[]`  | The position of the node, relative to its parent node.          | Zero vector          |
-| **basis**      | `number[]`  | The basis of the node, relative to its parent node.             | Identity matrix      |
-| **rotor**      | `number[]`  | The rotation of the node, relative to its parent node.          | Identity rotor       |
-| **scale**      | `number[]`  | The scale of the node, relative to its own local rotation.      | Scale of one         |
-| **boneLength** | `number`    | If this node is a skeleton bone, the length in meters along +Y. | `-1.0` (no bone)     |
-| **camera**     | `object`    | If this node is a camera, the camera properties.                | `null` (no camera)   |
-| **light**      | `integer`   | If this node is a light, the index of the light properties.     | `-1` (no light)      |
-| **mesh**       | `integer`   | If this node is a mesh instance, the index of the mesh.         | `-1` (no mesh)       |
-| **model**      | `integer`   | If this node is a model instance, the index of the model.       | `-1` (no model)      |
-| **physics**    | `object`    | If this node is a physics object, the physics properties.       | `null` (no physics)  |
-| **skeleton**   | `object`    | If this node is a skeleton, the skeleton properties.            | `null` (no skeleton) |
+| Property     | Type        | Description                                                 | Default                   |
+| ------------ | ----------- | ----------------------------------------------------------- | ------------------------- |
+| **children** | `integer[]` | The indices of the child nodes of this node.                | `[]` (empty array)        |
+| **visible**  | `boolean`   | Whether the node is visible or not (affects rendering).     | `true`                    |
+| **position** | `number[]`  | The position of the node, relative to its parent node.      | Zero vector               |
+| **basis**    | `number[]`  | The basis of the node, relative to its parent node.         | Identity matrix           |
+| **rotor**    | `number[]`  | The rotation of the node, relative to its parent node.      | Identity rotor            |
+| **scale**    | `number[]`  | The scale of the node, relative to its own local rotation.  | Scale of one              |
+| **bone**     | `object`    | If this node is a skeleton bone, the bone properties.       | `undefined` (no bone)     |
+| **camera**   | `object`    | If this node is a camera, the camera properties.            | `undefined` (no camera)   |
+| **light**    | `integer`   | If this node is a light, the index of the light properties. | `-1` (no light)           |
+| **mesh**     | `integer`   | If this node is a mesh instance, the index of the mesh.     | `-1` (no mesh)            |
+| **model**    | `integer`   | If this node is a model instance, the index of the model.   | `-1` (no model)           |
+| **physics**  | `object`    | If this node is a physics object, the physics properties.   | `undefined` (no physics)  |
+| **skeleton** | `object`    | If this node is a skeleton, the skeleton properties.        | `undefined` (no skeleton) |
 
 ### Children
 
@@ -110,25 +110,25 @@ The scale MUST consist of only positive numbers as values. The values MUST NOT b
 
 G4MF nodes exist in the tree and have a transform, but in order for that tree of nodes to be useful, some nodes must have additional properties defined. These properties define the type of object the node represents, such as a bone, camera, light, mesh, model, or physics object. For lack of a better term, these are referred to as "component properties".
 
-Each node may only represent at most "one thing", allowing it to be imported as a single object of a single class. The `"boneLength"`, `"camera"`, `"light"`, `"mesh"`, `"model"`, and `"physics"` component properties are all mutually exclusive, meaning that a node MUST NOT have more than one of these properties defined at the same time. This means that a single G4MF node cannot be both a light and a mesh, or both a bone and a camera, instead multiple G4MF nodes are required to represent such scenarios. This requirement greatly simplifies the implementation of G4MF importers, and ensures that each conceptual part has its own transform on its own node in the tree.
+Each node may only represent at most "one thing", allowing it to be imported as a single object of a single class. The `"bone"`, `"camera"`, `"light"`, `"mesh"`, `"model"`, `"physics"`, and `"skeleton"` component properties are all mutually exclusive, meaning that a node MUST NOT have more than one of these properties defined at the same time. This means that a single G4MF node cannot be both a light and a mesh, or both a bone and a camera, instead multiple G4MF nodes are required to represent such scenarios. This requirement greatly simplifies the implementation of G4MF importers, and ensures that each conceptual part has its own transform on its own node in the tree.
 
 Note for extension authors: Properties defined by extensions SHOULD follow the same principle, such that they only combine properties where it makes sense as "one thing". For example, a vehicle body class should extend a dynamic physics body class, meaning that the object has properties of both. Therefore, the vehicle body extension data should be defined on the same node as the physics motion properties. For another example, an audio emitter class does not extend any of these, so it must not be defined on the same G4MF node as a bone, camera, light, mesh, model, or physics object.
 
 Note for asset authors: A G4MF node with physics motion properties is referred to as a "physics body" for short. To add a mesh to a physics body, the node mesh property MUST be defined on a separate node, which is then used as a child of the physics body node. Similarly, other types may be used together on separate nodes. Asset authors SHOULD prefer the top node of such a subtree to be the physics body, and then have other nodes as children of it, to ensure the component nodes follow the physics body when it moves. For skeletons, each bone MUST be a child of another bone or of the skeleton itself, meaning that to attach a light or other component to a bone, such a node must be added as a child of the bone. For subtrees without physics motion or skeletons, asset authors SHOULD prefer types _other than mesh or model_ as the top node. Mesh nodes are often leaf nodes, which simplifies some use cases of mesh nodes. This is not a requirement, but a recommendation to improve consistency when importing G4MF files into different applications with different requirements on tree structure.
 
-#### Bone Length
+#### Bone
 
-The `"boneLength"` property is a number that, for G4MF nodes representing skeleton bones, defines the length of the bone in meters in the local +Y direction. If not specified, the default value is `-1.0`, meaning the node is not a skeleton bone.
+The `"bone"` property is an object that defines the bone properties for this node. If not specified, the default value is `undefined`, meaning the node is not a bone.
 
-The `"boneLength"` property MUST NOT be used together with the `"camera"`, `"light"`, `"mesh"`, `"model"`, `"physics"`, or `"skeleton"` properties on the same node.
+The `"bone"` property MUST NOT be used together with the `"camera"`, `"light"`, `"mesh"`, `"model"`, `"physics"`, or `"skeleton"` properties on the same node.
 
-See [G4MF Skeleton Skinned Mesh Deformation](mesh/skeleton.md) for more information about skeletons and skinned meshes.
+See [G4MF Skeleton Skinned Mesh Deformation](mesh/skeleton.md) for more information about skeleton bones and skinned meshes.
 
 #### Camera
 
-The `"camera"` property is an object that defines the camera properties for this node. If not specified, the default value is `null`, meaning the node is not a camera.
+The `"camera"` property is an object that defines the camera properties for this node. If not specified, the default value is `undefined`, meaning the node is not a camera.
 
-The `"camera"` property MUST NOT be used together with the `"boneLength"`, `"light"`, `"mesh"`, `"model"`, `"physics"`, or `"skeleton"` properties on the same node.
+The `"camera"` property MUST NOT be used together with the `"bone"`, `"light"`, `"mesh"`, `"model"`, `"physics"`, or `"skeleton"` properties on the same node.
 
 See [G4MF Camera](camera.md) for more information about cameras.
 
@@ -136,7 +136,7 @@ See [G4MF Camera](camera.md) for more information about cameras.
 
 The `"light"` property is an integer index of a G4MF light. If not specified, the default value is `-1`, meaning the node is not a light.
 
-The `"light"` property MUST NOT be used together with the `"boneLength"`, `"camera"`, `"mesh"`, `"model"`, `"physics"`, or `"skeleton"` properties on the same node.
+The `"light"` property MUST NOT be used together with the `"bone"`, `"camera"`, `"mesh"`, `"model"`, `"physics"`, or `"skeleton"` properties on the same node.
 
 See [G4MF Light](light.md) for more information about lights.
 
@@ -146,7 +146,7 @@ The `"mesh"` property is an integer index of a G4MF mesh. If not specified, the 
 
 Meshes are the most common way to provide visible geometry for a node. A mesh may be used by multiple nodes, or a mesh may be not used by any nodes. This is a reference to a mesh in the G4MF file's document-level `"meshes"` array. When defined, it MUST be a valid index in the array.
 
-The `"mesh"` property MUST NOT be used together with the `"boneLength"`, `"camera"`, `"light"`, `"model"`, `"physics"`, or `"skeleton"` properties on the same node.
+The `"mesh"` property MUST NOT be used together with the `"bone"`, `"camera"`, `"light"`, `"model"`, `"physics"`, or `"skeleton"` properties on the same node.
 
 See [G4MF Mesh](mesh/mesh.md) for more information about meshes.
 
@@ -154,31 +154,31 @@ See [G4MF Mesh](mesh/mesh.md) for more information about meshes.
 
 The `"model"` property is an integer index of a G4MF model. If not specified, the default value is `-1`, meaning the node is not a model.
 
-Models are references to other self-contained files that can be used in the scene graph. Models may be embedded or saved as separate files. Models may be in the G4MF format, or in other formats such as [OFF](https://en.wikipedia.org/wiki/OFF_%28file_format%29), glTF™, [OCIF](https://github.com/ocwg/spec), or any other format.
+Models are references to other self-contained files that can be used in the scene graph. They are not to be confused with meshes, which are geometry data only, while models may be complex objects made of many meshes and other nodes. Models may be embedded or saved as separate files. Models may be in the G4MF format, or in other formats such as [OFF](https://en.wikipedia.org/wiki/OFF_%28file_format%29), glTF™, [OCIF](https://github.com/ocwg/spec), or any other format.
 
 When a host node has a `"model"` property defined, it is an instance of that model, such that the host node becomes a new instance of the model's nodes, inserting a potentially large tree of nodes into the scene graph. The instantiated root node replaces the host node, except that the host's properties, such as the transform properties, override the properties of the instantiated model's root node.
 
-The `"model"` property MUST NOT be used together with the `"boneLength"`, `"camera"`, `"light"`, `"mesh"`, `"physics"`, or `"skeleton"` properties on the same node.
+The `"model"` property MUST NOT be used together with the `"bone"`, `"camera"`, `"light"`, `"mesh"`, `"physics"`, or `"skeleton"` properties on the same node.
 
-Seee [G4MF Model](model.md) for more information about models.
+See [G4MF Model](model.md) for more information about models.
 
 #### Physics
 
-The `"physics"` property is an object that defines the physics properties for this node. If not specified, the default value is `null`, meaning the node has no physics properties.
+The `"physics"` property is an object that defines the physics properties for this node. If not specified, the default value is `undefined`, meaning the node has no physics properties.
 
 Physics information MAY be ignored by static renderers or any other applications that do not support physics simulation. For such applications, physics nodes may be treated as plain/empty nodes with no special properties or behavior other than the children, visibility, and transform properties, entirely ignoring the `"physics"` property.
 
-The `"physics"` property MUST NOT be used together with the `"boneLength"`, `"camera"`, `"light"`, `"mesh"`, `"model"`, or `"skeleton"` properties on the same node.
+The `"physics"` property MUST NOT be used together with the `"bone"`, `"camera"`, `"light"`, `"mesh"`, `"model"`, or `"skeleton"` properties on the same node.
 
 See [G4MF Node Physics](physics/node_physics.md) for more information about physics properties.
 
 #### Skeleton
 
-The `"skeleton"` property is an object that defines the skeleton properties for this node. If not specified, the default value is `null`, meaning the node is not a skeleton.
+The `"skeleton"` property is an object that defines the skeleton properties for this node. If not specified, the default value is `undefined`, meaning the node is not a skeleton.
 
 The `"skeleton"` property is used to define the root of a hierarchy of bones used for skeletal animation. Skinned meshes MAY be added as direct children of the skeleton node to be animated by the skeleton.
 
-The `"skeleton"` property MUST NOT be used together with the `"boneLength"`, `"camera"`, `"light"`, `"mesh"`, `"model"`, or `"physics"` properties on the same node.
+The `"skeleton"` property MUST NOT be used together with the `"bone"`, `"camera"`, `"light"`, `"mesh"`, `"model"`, or `"physics"` properties on the same node.
 
 See [G4MF Skeleton Skinned Mesh Deformation](mesh/skeleton.md) for more information about skeletons and skinned meshes.
 
