@@ -37,19 +37,19 @@ The following tree structure is the bipedal humanoid bone structure defined by G
           - `LeftLowerArm`
             - `LeftHand`
               - `LeftThumbMetacarpal`, `LeftThumbProximal`, `LeftThumbDistal`, etc.
-              - `LeftIndexMetacarpal` (optional), `LeftIndexProximal`, `LeftIndexIntermediate`, `LeftIndexDistal`, etc.
-              - `LeftMiddleMetacarpal` (optional), `LeftMiddleProximal`, `LeftMiddleIntermediate`, `LeftMiddleDistal`, etc.
-              - `LeftRingMetacarpal` (optional), `LeftRingProximal`, `LeftRingIntermediate`, `LeftRingDistal`, etc.
-              - `LeftLittleMetacarpal` (optional), `LeftLittleProximal`, `LeftLittleIntermediate`, `LeftLittleDistal`, etc.
+              - `LeftIndexMetacarpal` (unusual), `LeftIndexProximal`, `LeftIndexIntermediate`, `LeftIndexDistal`, etc.
+              - `LeftMiddleMetacarpal` (unusual), `LeftMiddleProximal`, `LeftMiddleIntermediate`, `LeftMiddleDistal`, etc.
+              - `LeftRingMetacarpal` (unusual), `LeftRingProximal`, `LeftRingIntermediate`, `LeftRingDistal`, etc.
+              - `LeftLittleMetacarpal` (unusual), `LeftLittleProximal`, `LeftLittleIntermediate`, `LeftLittleDistal`, etc.
       - `RightShoulder`
         - `RightUpperArm`
           - `RightLowerArm`
             - `RightHand`
               - `RightThumbMetacarpal`, `RightThumbProximal`, `RightThumbDistal`, etc.
-              - `RightIndexMetacarpal` (optional), `RightIndexProximal`, `RightIndexIntermediate`, `RightIndexDistal`, etc.
-              - `RightMiddleMetacarpal` (optional), `RightMiddleProximal`, `RightMiddleIntermediate`, `RightMiddleDistal`, etc.
-              - `RightRingMetacarpal` (optional), `RightRingProximal`, `RightRingIntermediate`, `RightRingDistal`, etc.
-              - `RightLittleMetacarpal` (optional), `RightLittleProximal`, `RightLittleIntermediate`, `RightLittleDistal`, etc.
+              - `RightIndexMetacarpal` (unusual), `RightIndexProximal`, `RightIndexIntermediate`, `RightIndexDistal`, etc.
+              - `RightMiddleMetacarpal` (unusual), `RightMiddleProximal`, `RightMiddleIntermediate`, `RightMiddleDistal`, etc.
+              - `RightRingMetacarpal` (unusual), `RightRingProximal`, `RightRingIntermediate`, `RightRingDistal`, etc.
+              - `RightLittleMetacarpal` (unusual), `RightLittleProximal`, `RightLittleIntermediate`, `RightLittleDistal`, etc.
 
 **Important note:** G4MF requires that all names are unique within the file, including node names. Therefore, nodes may be named either exactly as above, or with a prefix of the character name. For example, if two characters "Alice" and "Bob" exist in the same file, "Alice" would have `AliceHips`, `AliceSpine`, etc, and "Bob" would have `BobHips`, `BobSpine`, etc. This ensures that names are always both predictable and unique. If only "Alice" exists in the file, its bones may either be named `Hips` or `AliceHips`, and so on for the other bones. Each of the above names is unique enough to allow for implementations to use `String.endsWith()` or similar to identify the bones, regardless of the presence of a prefix.
 
