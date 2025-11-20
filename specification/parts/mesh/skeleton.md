@@ -75,7 +75,7 @@ A full list of G4MF node properties is defined in [G4MF Node](../node.md). Impor
 
 The `"bone"` property is an object that defines the bone properties for this node. If not specified, the default value is `undefined`, meaning that the node is not a bone.
 
-All skeleton bones MUST have the `"bone"` property defined, even if it is an empty object. A node is a bone if and only if the `"bone"` property is defined; the absence of the `"bone"` property indicates that the node is not a bone. A bone MUST be a descendant of a skeleton, and MUST belong to exactly one skeleton, meaning that all bones MUST have a contiguous chain of bone parenting leading up to a skeleton node, indicated by the `"skeleton"` property. The parent node of a bone MUST either be another bone or the skeleton node itself. Additional properties MAY be added to bones by extensions.
+All skeleton bones MUST have the `"bone"` property defined, even if it is an empty object. A node is a bone if and only if the `"bone"` property is defined; the absence of the `"bone"` property indicates that the node is not a bone. A bone MUST be a descendant of a skeleton, and MUST belong to exactly one skeleton, as indicated by the `"skeleton"` property. The parent node of a bone MUST either be another bone or the skeleton node itself, meaing that all bones MUST have a contiguous chain of bone parenting leading up to a skeleton node. Additional properties MAY be added to bones by extensions.
 
 ### Skeleton
 
@@ -89,7 +89,7 @@ All skeletons MUST have the `"skeleton"` property defined, even if it is an empt
 | ---------- | --------- | ----------------------------------------------------------------------- | ------------------ |
 | **length** | `number`  | The length of the bone in meters in the local +Y direction, if defined. | No defined length. |
 | **mass**   | `number`  | The mass of the bone in kilograms, if defined.                          | No defined mass.   |
-| **shape**  | `integer` | The id of the shape referenced by this bone, if defined.                | No defined shape.  |
+| **shape**  | `integer` | The index of the shape referenced by this bone, if defined.             | No defined shape.  |
 
 ### Length
 
@@ -101,17 +101,21 @@ If a bone has the `"length"` property defined, it MUST NOT be negative. The valu
 
 The `"mass"` property is a number that defines the mass of the bone in kilograms. This property is optional, and if not defined, the bone does not have a defined mass.
 
-If a bone has the `"mass"` property defined, it MUST be greater than `0.0`. The value `-1.0` is reserved as an in-memory value for undefined masses, and MUST NOT be written into G4MF files. The mass of the bone MAY be used for physics simulations, such as ragdoll physics, or for other purposes. If an application does not support per-bone masses, it MAY safely ignore this property.
+The mass of the bone MAY be used for physics simulations, such as ragdoll physics, or for other purposes. If an application does not support per-bone masses, it MAY safely ignore this property.
 
-If all bones in a skeleton have their `"mass"` property defined, and the skeleton has a physics motion parent, the total of all bone masses SHOULD add up to the mass of the physics body defined by the parent node's physics motion properties, within the margin of floating-point error. If some or no bones have their `"mass"` property defined, the application MAY choose to infer the masses of the undefined bones by distributing the remaining mass to them. This may be done using any heuristic the application desires. If the shapes of bones are defined, the volume of each bone's shape is recommended to be the heuristic used for this distribution.
+If a bone has the `"mass"` property defined, it MUST NOT be negative. If the mass is set to exactly `0.0`, it indicates that the bone is not meant to be simulated on its own, and rather provides shapes for its first parent bone that has a non-zero mass. If the mass is undefined or negative, the application MAY choose to infer the mass of the bone using any heuristic it desires. The value `-1.0` is reserved as an in-memory value for undefined masses, and MUST NOT be written into G4MF files.
+
+If all bones in a skeleton have their `"mass"` property defined, and the skeleton has a physics motion parent, the total of all bone masses SHOULD add up to the mass of the physics body defined by the parent node's physics motion properties, within the margin of floating-point error. If some or no bones have their `"mass"` property defined, the application MAY choose to infer the masses of the undefined bones by distributing the remaining mass to them. If the shapes of bones are defined, the volume of each bone's shape is recommended to be the heuristic used for this distribution.
 
 ### Shape
 
-The `"shape"` property is an integer that defines the id of the shape referenced by this bone. This property is optional, and if not defined, the bone does not specify a shape.
+The `"shape"` property is an integer index of the shape referenced by this bone. This property is optional, and if not defined, the bone does not specify a shape.
 
 This is a reference to a shape in the G4MF file's document-level `"shapes"` array. The value `-1` is reserved as an in-memory value for undefined shapes, and MUST NOT be written into G4MF files. If the `"shape"` property is not defined, the bone does not specify a shape, and any shape MAY be inferred by the application using any heuristic it desires. The shape MAY be used for visualization, hit registration, ragdoll physics, or any other use case.
 
 The position of the shape is defined relative to the center of the bone's `"length"`, meaning that if a bone has a length of `L`, the shape's local origin is placed at an offset of `L / 2` in the local +Y direction from the bone's position. The shape uses the bone's local basis without additional rotations or scaling applied, meaning that the shape's local basis axes align with the bone's local basis axes.
+
+The `"shape"` property depends on the `"length"` property. If `"shape"` is defined, `"length"` MUST also be defined. This is because the shape's local origin is positioned at the midpoint of the bone's length, which is ambiguous if the length is undefined or inferred. Therefore, shape placement is only valid when an explicit `"length"` value is provided. This requirement ensures that the position of a shape can always be determined correctly, without any ambiguity.
 
 ## Node Skeleton Properties
 

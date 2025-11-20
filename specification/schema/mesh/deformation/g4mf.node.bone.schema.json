@@ -18,8 +18,11 @@
 		},
 		"shape": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The id of the shape referenced by this bone, which may be used for visualization, hit registration, ragdoll physics, or any other use case. If not defined, the bone does not specify a shape, and any shape may be inferred by the application.",
+			"description": "The index of the shape referenced by this bone, which may be used for visualization, hit registration, ragdoll physics, or any other use case. If not defined, the bone does not specify a shape, and any shape may be inferred by the application. If defined, the `length` property MUST also be defined.",
 			"default": -1
 		}
+	},
+	"dependentRequired": {
+		"shape": ["length"]
 	}
 }
