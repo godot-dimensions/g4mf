@@ -36,20 +36,20 @@ The following tree structure is the bipedal humanoid bone structure defined by G
         - `LeftUpperArm`
           - `LeftLowerArm`
             - `LeftHand`
-              - `LeftThumbMetacarpal`, `LeftThumbProximal`, `LeftThumbDistal`, etc.
-              - `LeftIndexMetacarpal` (unusual), `LeftIndexProximal`, `LeftIndexIntermediate`, `LeftIndexDistal`, etc.
-              - `LeftMiddleMetacarpal` (unusual), `LeftMiddleProximal`, `LeftMiddleIntermediate`, `LeftMiddleDistal`, etc.
-              - `LeftRingMetacarpal` (unusual), `LeftRingProximal`, `LeftRingIntermediate`, `LeftRingDistal`, etc.
-              - `LeftPinkyMetacarpal` (unusual), `LeftPinkyProximal`, `LeftPinkyIntermediate`, `LeftPinkyDistal`, etc.
+              - `LeftThumbMetacarpal`, `LeftThumbProximal`, `LeftThumbDistal`.
+              - `LeftIndexMetacarpal` (unusual), `LeftIndexProximal`, `LeftIndexIntermediate`, `LeftIndexDistal`.
+              - `LeftMiddleMetacarpal` (unusual), `LeftMiddleProximal`, `LeftMiddleIntermediate`, `LeftMiddleDistal`.
+              - `LeftRingMetacarpal` (unusual), `LeftRingProximal`, `LeftRingIntermediate`, `LeftRingDistal`.
+              - `LeftPinkyMetacarpal` (unusual), `LeftPinkyProximal`, `LeftPinkyIntermediate`, `LeftPinkyDistal`.
       - `RightShoulder`
         - `RightUpperArm`
           - `RightLowerArm`
             - `RightHand`
-              - `RightThumbMetacarpal`, `RightThumbProximal`, `RightThumbDistal`, etc.
-              - `RightIndexMetacarpal` (unusual), `RightIndexProximal`, `RightIndexIntermediate`, `RightIndexDistal`, etc.
-              - `RightMiddleMetacarpal` (unusual), `RightMiddleProximal`, `RightMiddleIntermediate`, `RightMiddleDistal`, etc.
-              - `RightRingMetacarpal` (unusual), `RightRingProximal`, `RightRingIntermediate`, `RightRingDistal`, etc.
-              - `RightPinkyMetacarpal` (unusual), `RightPinkyProximal`, `RightPinkyIntermediate`, `RightPinkyDistal`, etc.
+              - `RightThumbMetacarpal`, `RightThumbProximal`, `RightThumbDistal`.
+              - `RightIndexMetacarpal` (unusual), `RightIndexProximal`, `RightIndexIntermediate`, `RightIndexDistal`.
+              - `RightMiddleMetacarpal` (unusual), `RightMiddleProximal`, `RightMiddleIntermediate`, `RightMiddleDistal`.
+              - `RightRingMetacarpal` (unusual), `RightRingProximal`, `RightRingIntermediate`, `RightRingDistal`.
+              - `RightPinkyMetacarpal` (unusual), `RightPinkyProximal`, `RightPinkyIntermediate`, `RightPinkyDistal`.
 
 **Important note:** G4MF requires that all names are unique within the file, including node names. Therefore, nodes may be named either exactly as above, or with a prefix of the character name. For example, if two characters "Alice" and "Bob" exist in the same file, "Alice" would have `AliceHips`, `AliceSpine`, etc, and "Bob" would have `BobHips`, `BobSpine`, etc. This ensures that names are always both predictable and unique. If only "Alice" exists in the file, its bones may either be named `Hips` or `AliceHips`, and so on for the other bones. Each of the above names is unique enough to allow for implementations to use `String.endsWith()` or similar to identify the bones, regardless of the presence of a prefix.
 
@@ -79,13 +79,13 @@ Usage rules:
 
 The G4MF bipedal humanoid skeleton is designed to be minimally different from other existing standards, however since the existing standards differ from each other, some differences are unavoidable. For convenience, here are some other standards and how to convert them to G4MF, with names from those standards quoted in `"`, and the names from G4MF in backticks:
 
-- To convert from a VRM humanoid rig: Replace "upperChest" with `Chest1` if present. The rest of the bones have the same names, but you must capitalize the first letter of each bone name to use PascalCase instead of camelCase, so "leftUpperLeg" becomes `LeftUpperLeg`, and so on.
+- To convert from a VRM humanoid rig: Replace "upperChest" with `Chest1` if present. Replace "Little" with "Pinky". The rest of the bones have the same names, but you must capitalize the first letter of each bone name to use PascalCase instead of camelCase, so "leftUpperLeg" becomes `LeftUpperLeg`, and so on.
 
-- To convert from a Godot humanoid skeleton: Replace "UpperChest" with `Chest1` if present. The rest of the bones have the same names, with the same capitalization.
+- To convert from a Godot humanoid skeleton: Replace "UpperChest" with `Chest1` if present. Replace "Little" with "Pinky". The rest of the bones have the same names, with the same capitalization.
 
-- To convert from a Unity humanoid rig: Replace the "Proximal", "Intermediate", and "Distal" suffixes with absent or numbered suffixes as described above. Replace "Upper Chest" with `Chest1` if present. The rest of the bones have the same names, but you must removes spaces from the names.
+- To convert from a Unity humanoid rig: Replace the "Proximal" and "Intermediate" thumb bones with "Metacarpal" and "Proximal" respectively. Replace "Little" with "Pinky". Replace "Upper Chest" with `Chest1` if present. The rest of the bones have the same names, but you must removes spaces from the names.
 
-- To convert from a Mixamo rig: Replace "Spine2" with `Chest`, replace "LeftUpLeg" with `LeftUpperLeg`, replace "LeftLeg" with `LeftLowerLeg`, replace "LeftArm" with `LeftUpperArm`, replace "LeftForeArm" with `LeftLowerArm`, and the same for the right side. Replace the numbered finger bones with the explicit names defined above. The rest of the bones have the same names, with the same capitalization.
+- To convert from a Mixamo rig: Replace "Spine1" with `Chest`, replace "Spine2" with `Chest1` if present, replace "LeftUpLeg" with `LeftUpperLeg`, replace "LeftLeg" with `LeftLowerLeg`, replace "LeftArm" with `LeftUpperArm`, replace "LeftForeArm" with `LeftLowerArm`, and the same for the right side. Replace the numbered finger bones with the explicit names defined above. Replace "Little" with "Pinky". The rest of the bones have the same names, with the same capitalization.
 
 // TODO: Collaborate with Khronos, Metaverse Standards Forum, and more to define an industry-wide standard. Existing standards vary, let's try not to fragment further.
 
