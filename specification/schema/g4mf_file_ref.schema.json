@@ -16,7 +16,7 @@
 		},
 		"uri": {
 			"type": "string",
-			"description": "The relative URI to the file. This URI is relative to the G4MF file's location."
+			"description": "The URI leading to the file. This URI may be relative to the G4MF file's location, or may be a web address, or any other valid URI format."
 		}
 	},
 	"oneOf": [{ "required": ["mimeType", "uri"] }, { "required": ["bufferView", "mimeType"] }]

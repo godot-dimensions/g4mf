@@ -44,9 +44,9 @@ When compressed data is stored in a separate file or a data URI, `"compression"`
 
 #### URI
 
-The `"uri"` property is a string that may either be a relative URI to an external file, or a base64-encoded string. This property is required, except for buffer index 0 in binary G4MF files, which refers to the binary blob data chunk at the end of the file.
+The `"uri"` property is a string that may either be a URI to an external file, or a base64-encoded string. This property is required, except for buffer index 0 in binary G4MF files, which refers to the binary blob data chunk at the end of the file.
 
-If using a base64-encoded string, it MUST be a data URI, which starts with the MIME type data prefix `data:application/octet-stream;base64,` and is followed by the base64-encoded data.
+The URI may be relative to the G4MF file's location, or alternatively, may be a web address, or any other valid URI format. If the URI starts with `https://`, it is treated as a web address and indicates the model is located there. Implementations may cache and reuse downloaded models as they see fit. If the URI starts with any other scheme, it uses that protocol. If using a base64-encoded string, it MUST be a data URI, which starts with the MIME type data prefix `data:application/octet-stream;base64,` and is followed by the base64-encoded data. If the URI does not contain `://` and is not a data URI, it is treated as a relative path to the G4MF file's location.
 
 For binary `.g4b` G4MF files, `"uri"` MUST NOT be defined when the buffer refers to a binary blob data chunk at the end of the file. For all other buffers in a binary G4MF, `"uri"` SHOULD NOT contain base64-encoded data, since that would be less efficient than just storing the same data in the binary blob data chunks. Binary G4MF files SHOULD either have buffer data stored in binary blob chunks at the end of the file, or store buffer data in external files, or a mix, but not store buffer data in base64-encoded data URIs.
 

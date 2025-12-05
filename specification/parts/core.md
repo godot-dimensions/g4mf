@@ -73,7 +73,9 @@ Only one of `"bufferView"` or `"uri"` MUST be defined. Both properties SHOULD NO
 
 #### URI
 
-The `"uri"` property is a string that defines the URI of the file, relative to the G4MF file's location. If not specified, the default value is an empty string, meaning there is no URI.
+The `"uri"` property is a string that defines the URI of the file. If not specified, the default value is an empty string, meaning there is no URI.
+
+The URI may be relative to the G4MF file's location, or alternatively, may be a web address, or any other valid URI format. If the URI starts with `https://`, it is treated as a web address and indicates the model is located there. Implementations may cache and reuse downloaded models as they see fit. If the URI starts with any other scheme, it uses that protocol. If the URI does not contain `://`, it is treated as a relative path to the G4MF file's location.
 
 File names SHOULD use snake case and all lowercase letters to avoid case sensitivity issues across platforms. When one G4MF resource corresponds to one file, it SHOULD have its name property set to the name of the file. This is recommended for the purposes of clarity and semantic preservation during embedding, but any name is allowed, including no name at all.
 
