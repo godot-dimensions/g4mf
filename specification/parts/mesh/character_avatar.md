@@ -125,7 +125,7 @@ The following viseme names are defined by G4MF, as a superset of common viseme s
 | `VisemeOU`  | u, ʊ            | b**oo**t, b**oo**k                                         | Lips rounded, slightly forward      |
 | `VisemeUH`  | ə, ɜ, ʌ, ɐ      | **a**bout, b**i**rd, b**u**t, n**u**t (varies by accent)   | Mostly neutral, lips open slightly  |
 
-Each example word corresponds to the listed phonemes in order. Some sounds may be merged in common English accents, in which cases a language or accent is specified in the table, otherwise the examples are based on General American English as spoken in the 21st century. For RR, those sounds are allophonic in English and most languages, therefore only one example word is provided, but the specific choice may vary by accent.
+Each example word corresponds to the listed phonemes in order. Some sounds may be merged in common English accents, in which cases a language or accent is specified in the table, otherwise the examples are based on General American English as spoken in the 21st century. For RR, those sounds are allophonic in English and most languages, therefore only one example word is provided, but the specific choice may vary by accent. For a reference on what each phoneme sounds like, see the "IPA Chart" link in the "Viseme References" section below.[^1]
 
 Usage rules:
 
@@ -151,6 +151,7 @@ The G4MF viseme blend shape naming is designed to be close to other existing sta
 
 ### Viseme References
 
+- IPA Chart (highly recommended) https://www.ipachart.com/
 - VRChat Visemes https://wiki.vrchat.com/wiki/Visemes and https://creators.vrchat.com/avatars/animator-parameters/#viseme-values
 - MPEG-4 Face and Body Animation (FBA) https://visagetechnologies.com/uploads/2012/08/MPEG-4FBAOverview.pdf
 - Meta Horizon Visemes https://developers.meta.com/horizon/documentation/unity/audio-ovrlipsync-viseme-reference/
@@ -276,3 +277,5 @@ Usage rules:
 - ARKit Face Blendshapes unofficial documentation https://arkit-face-blendshapes.com/
 - Meta Movement (Quest Pro) https://developers.meta.com/horizon/documentation/native/android/move-ref-blendshapes/
 - Facial Action Coding System (FACS) Cheat Sheet https://melindaozel.com/arkit-to-facs-cheat-sheet/
+
+[^1]: IPA Chart (highly recommended) https://www.ipachart.com/
