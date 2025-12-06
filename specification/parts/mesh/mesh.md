@@ -33,7 +33,7 @@ See [G4MF Skinning Mesh Deformation](skin.md) for more information about skinnin
 
 The `"surfaces"` property is an array of objects, each of which defines a surface in the mesh. This property is required and has no default value.
 
-Surfaces define the visible geometry of the mesh. They may be wireframe-only, may have cells defined, or may have more complex geometry data defined. Each surface may have its own material.
+Surfaces define the visible geometry of the mesh. They may be wireframe-only, may have cells defined, or may have more complex geometry data defined. Each surface may have its own material. Surfaces are known as "Material Slots" in Unity and Blender, and are known as "Mesh Primitives" in glTF™.
 
 All surfaces in a mesh share the same vertices, which are defined by the `"vertices"` property. This allows for deduplication of vertex data across surfaces. This also allows for mesh deforming operations such as skeletal skinning and blend shapes (morph targets) to operate on a single shared set of vertices.
 
