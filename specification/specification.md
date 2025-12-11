@@ -43,7 +43,7 @@ For convenience, the details of the asset header are in a separate file: [G4MF A
 
 ## Scene Hierarchy
 
-The core building block of a G4MF file is a hierarchy of zero or more nodes. Each node defines an object in the scene with a transform, and defines child nodes that are attached to it.
+The core building block of a G4MF scene is a hierarchy of zero or more nodes. Each node defines an object in the scene with a transform, and defines child nodes that are attached to it.
 
 The node at index 0 is the root node. All other nodes in the file are either descendants of the root node, or are not used. Nodes not used in the core scene hierarchy MAY be used by extensions. G4MF files may also contain zero nodes, in which case the file is not a scene, but a collection of data, such as a 4D mesh.
 
@@ -69,7 +69,7 @@ For convenience, the details of how lights work are described in a separate file
 
 ## Meshes
 
-G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of multiple surfaces, each of which may have a separate material. Mesh surfaces have vertices, and may contain edge indices, cell indices, and more, each of which points to an accessor that encodes the data.
+G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of vertices and multiple surfaces, each of which may have a separate material. Mesh surfaces reference the shared mesh vertices, and may contain edge indices, cell indices, and more, each of which points to an accessor that encodes the data.
 
 For convenience, the details of how meshes work are described in a separate file: [G4MF Mesh](parts/mesh/mesh.md).
 
@@ -78,6 +78,16 @@ For convenience, the details of how meshes work are described in a separate file
 G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate color, texture, and more. Materials are referenced by mesh surfaces, which are contained in meshes. Material channels may have per-cell colors, per-edge colors, per-vertex colors, and/or texture mapping, each of which points to an accessor that encodes the data.
 
 For convenience, the details of how materials work are described in a separate file: [G4MF Material](parts/mesh/material.md).
+
+### Deformation
+
+G4MF meshes may be deformed by skeletons and blend shapes.
+
+Skeletons are made of joints that are attached to bone nodes in the scene hierarchy, where mesh vertices are weighted to them, as detailed in [G4MF Skeleton Skinned Mesh Deformation](parts/mesh/skeleton.md).
+
+Blend shapes allow for per-vertex deformations to be applied to meshes, as well as per-vertex-instance deformations for normals and texture coordinates, as detailed in [G4MF Blend Shape Mesh Deformation](parts/mesh/blend.md).
+
+Skeletons and blend shapes may be used to represent rigs and facial expressions of characters/avatars, as detailed in [G4MF Characters/Avatars](parts/mesh/character_avatar.md).
 
 ## Physics
 
