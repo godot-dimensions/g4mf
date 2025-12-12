@@ -51,7 +51,7 @@ For convenience, the details of how nodes work are described in a separate file:
 
 ## Coordinate System
 
-Generally speaking, G4MF defines a coordinate system that is a superset of the right-handed 3D coordinate system found in OpenGL™, glTF™, and other 3D software and formats. The +X axis points to the right, the +Y axis points up, the +Z axis points out of the screen towards the viewer and is used for depth, and any additional axes are perpendicular to these. Distance is measured in meters, angles are measured in radians, and all units are SI metric units whenever possible.
+Generally speaking, G4MF defines a coordinate system that is a superset of the right-handed 3D coordinate system found in OpenGL™, glTF™, and other 3D software and formats. For a camera, the +X axis points to the right, the +Y axis points up, the +Z axis points out of the screen towards the viewer and is used for depth, and any additional axes are perpendicular to these. Distance is measured in meters, angles are measured in radians, and all units are SI metric units whenever possible.
 
 For convenience, the details of how the coordinate system works are described in a separate file: [G4MF Coordinate System](parts/coordinate_system.md).
 
