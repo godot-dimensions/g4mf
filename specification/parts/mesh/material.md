@@ -2,7 +2,7 @@
 
 ## Overview
 
-G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate modulate factor, texture, and more. Materials are stored in the document-level `"materials"` array, and each surface in a mesh may reference a material by its index in the array. Material channels may have per-cell data, per-edge data, per-vertex data, and/or texture mapping, each of which points to an accessor that encodes the data (see [G4MF Data](data.md)). Channel data may be thought of as colors, but they may also encode other data, such as normal vectors, or ORM values.
+G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate modulate factor, texture, and more. Materials are stored in the document-level `"materials"` array, and each surface in a mesh may reference a material by its index in the array. Material channels may have per-cell data, per-edge data, per-vertex data, and/or texture mapping, each of which points to an accessor that encodes the data (see [G4MF Data Storage](data.md)). Channel data may be thought of as colors, but they may also encode other data, such as normal vectors, or ORM values.
 
 ## Example
 

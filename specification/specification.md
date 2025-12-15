@@ -4,6 +4,18 @@
 
 Good 4D Model Format, or G4MF for short, is a JSON-based 4D-focused multi-dimensional model format inspired by Khronos's [glTF™](https://github.com/KhronosGroup/glTF), allowing for transmission, interchange, and interoperability of higher dimensional content between applications.
 
+## Core Concepts
+
+The core foundational data schemas underlying G4MF are described in [G4MF Core](parts/core.md). These structures are used generally everywhere in G4MF files, not just in specific parts.
+
+### Extensions
+
+G4MF is designed to be extensible. All G4MF JSON objects inherit the `g4mf_item.schema.json` schema, which allows for `"extensions"`, `"extras"`, and `"name"` properties.
+
+- The `"extensions"` property is an object, where each key is the name of an extension, and the value is a JSON object containing the extension data. Extensions are used when a formal specification exists, and the data inside conforms to a well-defined schema outside of the core G4MF specification.
+  - Each extension name MUST be in the form of a registered prefix assigned to a group or organization, followed by an underscore, followed by the name of the extension. This ensures that extension names are unique, and avoids conflicts with other extensions.
+- The `"extras"` property is an object, where each key may be any string, and each value may be any JSON value. Extras are used when a formal specification does not exist, such as for custom application-specific data. Users may use any keys and values they want, with no restrictions, and no guarantees of data consistency, interoperability, or conflict avoidance.
+
 ## Properties
 
 The top-level G4MF document defines the following properties:
@@ -25,7 +37,7 @@ The details of how these properties work are described in the below sections.
 
 In addition to these properties, all G4MF objects, including the top-level G4MF document, MAY contain `"extensions"`, `"extras"`, and `"name"` properties.
 
-## Asset Header
+### Asset Header
 
 At a minimum, the G4MF JSON data MUST contain `"asset"` with `"dimension"` defining the dimension of the model. This example defines an empty 4D G4MF file:
 
@@ -41,7 +53,13 @@ If `"dimension"` is not defined or is not an integer, the file is not a valid G4
 
 For convenience, the details of the asset header are in a separate file: [G4MF Asset](parts/asset.md).
 
-## Scene Hierarchy
+### Data Storage
+
+G4MF stores blobs of data with a combination of buffers, buffer views, and accessors. As an analogy with computer storage drives, a buffer is a disk, a buffer view is a partition, and an accessor is a file system.
+
+For convenience, the details of how these work are described in a separate file: [G4MF Data Storage](parts/data.md).
+
+### Scene Hierarchy
 
 The core building block of a G4MF scene is a hierarchy of zero or more nodes. Each node defines an object in the scene with a transform, and defines child nodes that are attached to it.
 
@@ -49,37 +67,31 @@ The node at index 0 is the root node. All other nodes in the file are either des
 
 For convenience, the details of how nodes work are described in a separate file: [G4MF Node](parts/node.md).
 
-## Coordinate System
-
-Generally speaking, G4MF defines a coordinate system that is a superset of the right-handed 3D coordinate system found in OpenGL™, glTF™, and other 3D software and formats. For a camera, the +X axis points to the right, the +Y axis points up, the +Z axis points out of the screen towards the viewer and is used for depth, and any additional axes are perpendicular to these. Distance is measured in meters, angles are measured in radians, and all units are SI metric units whenever possible.
-
-For convenience, the details of how the coordinate system works are described in a separate file: [G4MF Coordinate System](parts/coordinate_system.md).
-
-## Data Storage
-
-G4MF stores data with a combination of buffers, buffer views, and accessors. As an analogy with computer storage drives, a buffer is a disk, a buffer view is a partition, and an accessor is a file system.
-
-For convenience, the details of how these work are described in a separate file: [G4MF Data](parts/data.md).
-
-## Lights
+### Lights
 
 G4MF lights define the light sources in the scene. Each light object defines the properties of a light, such as the type, color, intensity, and other properties. Lights may be referenced by nodes to instance them in the scene.
 
 For convenience, the details of how lights work are described in a separate file: [G4MF Light](parts/light.md).
 
-## Meshes
+### Meshes
 
 G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of vertices and multiple surfaces, each of which may have a separate material. Mesh surfaces reference the shared mesh vertices, and may contain edge indices, cell indices, and more, each of which points to an accessor that encodes the data.
 
 For convenience, the details of how meshes work are described in a separate file: [G4MF Mesh](parts/mesh/mesh.md).
 
-### Materials
+#### Materials
 
 G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate color, texture, and more. Materials are referenced by mesh surfaces, which are contained in meshes. Material channels may have per-cell colors, per-edge colors, per-vertex colors, and/or texture mapping, each of which points to an accessor that encodes the data.
 
 For convenience, the details of how materials work are described in a separate file: [G4MF Material](parts/mesh/material.md).
 
-### Deformation
+#### Textures
+
+G4MF defines textures constructed out of images. Each texture is N-dimensional, and is made of any amount of N-dimensional images with an optional sampler, which may be referenced by the `"texture"` property in material channels, or used for any other purpose. Multiple images may be used to define high-dimensional textures, such as 3D textures, and optionally provide fallback images of different formats.
+
+For convenience, the details of how textures work are described in a separate file: [G4MF Texture](parts/texture.md).
+
+#### Deformation
 
 G4MF meshes may be deformed by skeletons and blend shapes.
 
@@ -89,31 +101,29 @@ Blend shapes allow for per-vertex deformations to be applied to meshes, as well 
 
 Skeletons and blend shapes may be used to represent rigs and facial expressions of characters/avatars, as detailed in [G4MF Characters/Avatars](parts/mesh/character_avatar.md).
 
-## Physics
+### Physics
 
 G4MF physics defines the physical properties of objects in the scene. It allows using shapes to define solid colliders or non-solid triggers, and allows defining the motion properties of objects, including mass, inertia, and more. Physics properties are not needed for loading the mesh geometry of the scene, and may be ignored if the file is only used for visual purposes, or if loading into an application that does not support physics and only needs the mesh geometry.
 
 For convenience, the details of how physics work are described in a separate file: [G4MF Node Physics](parts/physics/node_physics.md).
 
-### Shapes
+#### Shapes
 
 G4MF shapes define mathematical shapes used for physics and other use cases. Each shape has a type and many size parameters which define the bounds of the shape. Most shapes are implicit surfaces, meaning that they are defined by a mathematical function and have a well-defined inside and outside. Shapes may be referenced on nodes to be used as physics colliders. If shapes are not referenced by node physics or by an extension, they are not used and may be ignored.
 
 For convenience, the details of how shapes work are described in a separate file: [G4MF Shape](parts/physics/shape.md).
-
-## Extensions
-
-G4MF is designed to be extensible. All G4MF JSON objects inherit the `g4mf_item.schema.json` schema, which allows for `"extensions"`, `"extras"`, and `"name"` properties.
-
-- The `"extensions"` property is an object, where each key is the name of an extension, and the value is a JSON object containing the extension data. Extensions are used when a formal specification exists, and the data inside conforms to a well-defined schema outside of the core G4MF specification.
-  - Each extension name MUST be in the form of a registered prefix assigned to a group or organization, followed by an underscore, followed by the name of the extension. This ensures that extension names are unique, and avoids conflicts with other extensions.
-- The `"extras"` property is an object, where each key may be any string, and each value may be any JSON value. Extras are used when a formal specification does not exist, such as for custom application-specific data. Users may use any keys and values they want, with no restrictions, and no guarantees of data consistency, interoperability, or conflict avoidance.
 
 ## Binary File Format
 
 G4MF files may be stored in a JSON-based text format (`.g4tf`) or a binary format (`.g4b`). With the text format, binary blobs of data may either be base64-encoded within the JSON, or referenced as external files. The binary format is a more compact representation of the same data, which appends binary blobs of data to the end of the JSON.
 
 For convenience, the details of how the binary format works are described in a separate file: [G4MF Binary File Format](parts/binary_file_format.md).
+
+## Coordinate System
+
+Generally speaking, G4MF defines a coordinate system that is a superset of the right-handed 3D coordinate system found in OpenGL™, glTF™, and other 3D software and formats. For a camera, the +X axis points to the right, the +Y axis points up, the +Z axis points out of the screen towards the viewer and is used for depth, and any additional axes are perpendicular to these. Distance is measured in meters, angles are measured in radians, and all units are SI metric units whenever possible.
+
+For convenience, the details of how the coordinate system works are described in a separate file: [G4MF Coordinate System](parts/coordinate_system.md).
 
 ## JSON Schema
 
