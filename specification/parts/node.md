@@ -8,6 +8,8 @@ Each node defines a transform, which is a combination of a position, and a basis
 
 The node at index 0 is the root node. All other nodes in the file are either descendants of the root node, or are not used. Nodes not used in the core scene hierarchy MAY be used by extensions. G4MF files may also contain zero nodes, in which case the file is not a scene, but a collection of data, such as a 4D mesh. The root node at index 0 MUST NOT have any transform properties defined, since it represents the origin of the file itself.
 
+Node names MUST be file-unique, MUST NOT include `"`, `.`, `:`, `@`, `/`, and literal `\` characters, and MUST follow all of the requirements for G4MF item names as defined in [G4MF Core](core.md#name). Node names are RECOMMENDED to be PascalCase, however any compliant name is allowed.
+
 G4MF nodes may be empty nodes, or at most "one thing". For example, a single node MUST NOT be both a camera and a mesh instance at the same time.
 
 ## Example
