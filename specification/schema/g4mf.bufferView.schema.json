@@ -8,7 +8,8 @@
 	"properties": {
 		"buffer": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The index of the buffer that contains the data for this buffer view. This is a reference to a buffer in the G4MF file's document-level `buffers` array."
+			"description": "The index of the buffer that contains the data for this buffer view. This is a reference to a buffer in the G4MF file's document-level `buffers` array.",
+			"default": 0
 		},
 		"byteLength": {
 			"type": "integer",
@@ -22,5 +23,5 @@
 			"default": 0
 		}
 	},
-	"required": ["buffer", "byteLength"]
+	"required": ["byteLength"]
 }

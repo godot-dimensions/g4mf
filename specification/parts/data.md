@@ -58,13 +58,13 @@ Buffer views define a subset of a buffer as a slice or view. They are the intend
 
 | Property       | Type      | Description                                                          | Default               |
 | -------------- | --------- | -------------------------------------------------------------------- | --------------------- |
-| **buffer**     | `integer` | The index of the buffer that contains the data for this buffer view. | Required, no default. |
+| **buffer**     | `integer` | The index of the buffer that contains the data for this buffer view. | `0`                   |
 | **byteLength** | `integer` | The length of the buffer view in bytes.                              | Required, no default. |
 | **byteOffset** | `integer` | The start offset of the buffer view in bytes.                        | `0`                   |
 
 #### Buffer
 
-The `"buffer"` property is an integer index that references a buffer in the G4MF file's document-level buffers array which contains the data for this buffer view. This property is required.
+The `"buffer"` property is an integer index that references a buffer in the G4MF file's document-level buffers array which contains the data for this buffer view. This property is optional, if not specified, the buffer view refers to buffer index 0.
 
 #### Byte Length
 
