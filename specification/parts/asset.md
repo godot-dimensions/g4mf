@@ -65,6 +65,12 @@ The `"generator"` property is a string that defines the name of the application 
 
 This property is highly recommended to be set to a human-readable name of the application and any addons/plugins that were used to generate the file. It SHOULD also contain the version of the application and any addons/plugins, if possible.
 
+### Specification
+
+The `"specification"` property is a string that defines an optional link to the G4MF specification that the file adheres to. This property is optional and defaults to an empty string.
+
+This property is intended for informational purposes when manually inspecting a file, and SHOULD NOT be used by implementations for any functional purpose. A URI to a website is recommended, such as `"https://github.com/godot-dimensions/g4mf"`, but any string is allowed.
+
 ### Version
 
 The `"version"` property is a string that defines the version of the G4MF specification used to generate the file.

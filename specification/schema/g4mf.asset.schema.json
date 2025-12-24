@@ -36,7 +36,13 @@
 		},
 		"generator": {
 			"type": "string",
-			"description": "The name of the tool that generated this G4MF file. This is intended for informational purposes. This SHOULD include the version of the tool."
+			"description": "The name of the tool that generated this G4MF file. This is intended for informational purposes. This SHOULD include the version of the tool.",
+			"default": ""
+		},
+		"specification": {
+			"type": "string",
+			"description": "An optional link to the G4MF specification that the file adheres to. This is intended for informational purposes when manually inspecting a file, and SHOULD NOT be used by implementations for any functional purpose.",
+			"default": ""
 		},
 		"version": {
 			"type": "string",
