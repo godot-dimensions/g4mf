@@ -55,6 +55,18 @@ The `"size"` property is an array of integers that defines the size or resolutio
 
 The `"size"` array MUST have at least one item, and each item MUST be a positive integer, not zero or negative. The length of the array defines the dimension of the texture. For example, a 2D texture may have a size of `[1024, 1024]`, or a 3D texture may have a size of `[128, 128, 128]`. Textures are RECOMMENDED to have power-of-two sizes and be the same in all dimensions, but any size is allowed.
 
+## Texture Coordinates
+
+Texture coordinates index into texture data in image space, relative to the pixels of the assembled texture. Each coordinate corresponds directly to an axis of the texture's pixel (texel) array, independent of any spatial or geometric interpretation.
+
+- The X coordinate corresponds to increasing pixel indices along the texture's horizontal axis.
+- The Y coordinate corresponds to increasing pixel indices along the texture's vertical axis.
+- The Z coordinate corresponds to consecutive slices in a multi-dimensional texture, and higher dimensions follow the same rule.
+
+For the common case of interpreting an image as originating at the top-left corner, the X axis increases to the right, and the Y axis increases downward. For the Z axis of 3D textures, and for additional axes in higher-dimensional textures, no spatial orientation, directionality, or handedness is implied by texture coordinates, and no preferred spatial interpretation is defined by G4MF. Visualization of texture axes is considered a presentation detail and does not affect the interpretation of the underlying texture data.
+
+For the case of 2D textures, this means the texture coordinates are the same as in OpenGL™, Vulkan™, glTF™, and most other 3D formats.
+
 ## Assembling High-Dimensional Textures
 
 When texturing the 3D surface of a 4D mesh, a 3D texture is required. There are some image formats with capability for volumetric 3D image data, such as [KTX2 3D textures](https://github.com/donmccurdy/KTX2-Samples/tree/main/ktx2) and [JPEG 2000 Part 10 - Extensions for Three-Dimensional Data](https://ieeexplore.ieee.org/document/1693474). However, these formats are not widely supported by image editors and other applications, and also they only provide up to 3D textures, while G4MF allows textures to be of any dimension.
