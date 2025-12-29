@@ -4,7 +4,7 @@
 
 A shape in G4MF is a pure geometric object defined by an enumerated type and a set of size parameters. Shapes are useful for things like physics calculations, but are not expected to be directly used for rendering.
 
-The surface of a G4MF shape is usually a mathematical [implicit surface](https://en.wikipedia.org/wiki/Implicit_surface) meaning that its surface is defined by a mathematical function and it has an explicit inside and outside. G4MF shapes are usually manifolds, but this is not a requirement. One important exception is the concave mesh shape, whose surface is defined by the cells of a mesh, not a mathematical function. Concave mesh shapes often do not have a well-defined inside and outside, so are not implicit surfaces, and are often not manifolds. Also, lines and rays are not implicit surfaces, and lines, rays, and planes are not manifolds.
+The surface of a G4MF shape is usually a mathematical [implicit surface](https://en.wikipedia.org/wiki/Implicit_surface) meaning that its surface is defined by a mathematical function and it has an explicit inside and outside. G4MF shapes are usually manifolds, but this is not a requirement. One important exception is the concave mesh shape, whose surface is defined by the simplexes of a mesh, not a mathematical function. Concave mesh shapes often do not have a well-defined inside and outside, so are not implicit surfaces, and are often not manifolds. Also, lines and rays are not implicit surfaces, and lines, rays, and planes are not manifolds.
 
 See "Common General Shapes" below for examples of how to define many common shapes in G4MF, including boxes, spheres, capsules, cylinders, and so on.
 

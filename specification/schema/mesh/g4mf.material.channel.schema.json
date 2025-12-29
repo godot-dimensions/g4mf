@@ -13,13 +13,13 @@
 				"type": "number"
 			}
 		},
-		"perCell": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-cell color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-cell colors. If defined, the amount of cell colors MUST match or exceed the amount of cells in all surfaces that use this channel."
-		},
 		"perEdge": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the per-edge color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-edge colors. If defined, the amount of edge colors MUST match or exceed the amount of edges in all surfaces that use this channel."
+		},
+		"perSimplex": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the per-simplex color data for this channel. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-simplex colors. If defined, the amount of simplex cell colors MUST match or exceed the amount of simplex cells in all surfaces that use this channel."
 		},
 		"perVertex": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],

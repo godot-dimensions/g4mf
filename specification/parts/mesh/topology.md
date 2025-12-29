@@ -1,12 +1,10 @@
 # G4MF Mesh Topology
 
-G4MF allows defining topology data for mesh surfaces, which defines how the mesh surface is hierarchically structured in terms of its geometry and connectivity.
-
-This is useful for DCC applications, but not required for runtime applications like game engines. To save space, this data SHOULD be omitted when exporting an optimized model only intended to be consumed by a runtime application, rather than edited in a DCC application.
-
 ## Overview
 
-G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of multiple surfaces, each of which may have a separate material. Mesh surfaces have vertices, and may contain edge indices, cell indices, and more, each of which points to an accessor that encodes the data (see [G4MF Data Storage](data.md)).
+G4MF allows defining topology data for mesh surfaces, which defines how the mesh surface is hierarchically structured in terms of its geometry and connectivity.
+
+This is useful for DCC applications, but usually not required for runtime applications like game engines. To save space, this data is usually be omitted when "exporting" an optimized model only intended to be consumed by a runtime application, rather than "saving" a model to later be edited in a DCC application.
 
 ## Example
 
@@ -14,16 +12,16 @@ The following example defines.
 
 ## Mesh Topology Properties
 
-| Property       | Type        | Description                                                                       | Default            |
-| -------------- | ----------- | --------------------------------------------------------------------------------- | ------------------ |
-| **geometry**   | `integer[]` | Hierarchical geometry data for this surface.                                      | `[]` (empty array) |
-| **normals**    | `integer`   | The per-vertex-instance normals of boundary geometry items.                       | Flat normals       |
-| **seams**      | `integer`   | The list of which boundary geometry items are marked as seams.                    | No seams           |
-| **textureMap** | `integer`   | The texture space coordinates of the vertex instances of boundary geometry items. | No texture mapping |
+| Property       | Type        | Description                                                                       | Default              |
+| -------------- | ----------- | --------------------------------------------------------------------------------- | -------------------- |
+| **geometry**   | `integer[]` | Hierarchical geometry data for this surface.                                      | Required, no default |
+| **normals**    | `integer`   | The per-vertex-instance normals of boundary geometry items.                       | Flat normals         |
+| **seams**      | `integer`   | The list of which boundary geometry items are marked as seams.                    | No seams             |
+| **textureMap** | `integer`   | The texture space coordinates of the vertex instances of boundary geometry items. | No texture mapping   |
 
 ### Geometry
 
-The `"geometry"` property is an array of integers, each of which is an index that references an accessor containing complex hierarchical geometry data for this surface. If not defined, the surface does not have any complex hierarchical geometry data.
+The `"geometry"` property is an array of integers, each of which is an index that references an accessor containing complex hierarchical geometry data for this surface. This property is required for all mesh surfaces with the topology property defined.
 
 Hierarchical geometry data means that polytopes of successive dimensions are defined as combinations of polytopes from the previous dimension, providing structured topological data. This is similar to the data found within the [OFF file format](https://en.wikipedia.org/wiki/OFF_%28file_format%29), except that the first tier references edges, not points.
 
@@ -36,13 +34,13 @@ If defined, the array SHOULD have an amount of entries equivalent to the dimensi
 
 This property allows preserving geometric information about polytopes and the connections between their parts. This is useful for DCC applications, and allows them to use G4MF as a save format. For example, Blender stores how faces connect to edges, therefore also storing how the faces connect to each other, preserving the topology of the mesh. Such information is useful for high-level operations like subdivision, smoothing, defining seams, and other operations that require knowledge of how the mesh topology is structured.
 
-This property is not needed to render a cellular mesh if the `"cells"` property is defined, since the `"cells"` property contains ready-to-use simplex cells. If the `"cells"` property is not present, the simplex cells can be computed from the geometry data, however this may be computationally expensive, especially for higher dimensions. When exporting a model to a final destination such as a game engine or other runtime, it is recommended to define the `"cells"` property, and the `"geometry"` property may be omitted to reduce file size.
+This property is not needed to render a cellular mesh if the `"simplexes"` property of the mesh surface is defined, since the `"simplexes"` property contains ready-to-use simplex cells. If the `"simplexes"` property is not present, the simplex cells can be computed from the topology's geometry data, however this may be computationally expensive, especially for higher dimensions. When exporting a model to a final destination such as a game engine or other runtime, it is recommended to define the `"simplexes"` property, and the `"geometry"` property may be omitted to reduce file size.
 
-Since the geometry accessor 0 refers to edges, the `"edges"` property MUST be defined and set to a valid value if the `"geometry"` property is defined and non-empty. If `"edges"` is not defined, and edges are calculated from the cells, this calculated data CANNOT be used as the edges referenced by the `"geometry"` property.
+Since the geometry accessor 0 refers to edges, the `"edges"` property MUST be defined and set to a valid value if the `"geometry"` property is defined and non-empty. If `"edges"` is not defined, and edges are calculated from the simplex cells, this calculated data CANNOT be used as the edges referenced by the `"geometry"` property, only explicitly defined edges can be used.
 
 ### Normals
 
-The `"normals"` property is an integer that references an accessor containing the per-boundary-vertex-instance normals for this surface. If not defined and the `"geometry"` property is defined, the geometry has flat normals.
+The `"normals"` property is an integer that references an accessor containing the per-boundary-vertex-instance normals for this surface's topology geometry. If not defined and the `"geometry"` property is defined, the geometry has flat normals.
 
 For 3D meshes, this refers to vertex instances on 2D faces defined in the `"geometry"` property. For 4D meshes, this refers to vertex instances on 3D cells defined in the `"geometry"` property. For 5D meshes, this refers to vertex instances on 4D cells defined in the `"geometry"` property. See [Topology Vertex Instances](#topology-vertex-instances) for more details. Also, see [Orientation of Geometry Items](#orientation-of-geometry-items) for information about calculating normals of boundary geometry items for use cases like determining if a cell is facing towards or away from a camera.
 
@@ -66,7 +64,7 @@ This is a reference to an accessor in the G4MF file's document-level `"accessors
 
 ## Topology Vertex Instances
 
-In addition to each mesh surface having vertex instances defined by the `"cells"` or `"edges"` properties, the `"topology"` property contains its own set of vertex instances defined by boundary geometry items. Topology vertex instances may be used to define normal vectors, and may be used by materials to define per-vertex-instance data, such as colors or texture coordinates, for a mesh surface's topology.
+In addition to each mesh surface having vertex instances defined by the `"simplexes"` or `"edges"` properties, the `"topology"` property contains its own set of vertex instances defined by boundary geometry items. Topology vertex instances may be used to define normal vectors, and may be used by materials to define per-vertex-instance data, such as colors or texture coordinates, for a mesh surface's topology.
 
 Topology vertex instances are defined as the following:
 

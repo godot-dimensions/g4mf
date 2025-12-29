@@ -2,7 +2,7 @@
 
 ## Overview
 
-G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate modulate factor, texture, and more. Materials are stored in the document-level `"materials"` array, and each surface in a mesh may reference a material by its index in the array. Material channels may have per-cell data, per-edge data, per-vertex data, and/or texture mapping, each of which points to an accessor that encodes the data (see [G4MF Data Storage](data.md)). Channel data may be thought of as colors, but they may also encode other data, such as normal vectors, or ORM values.
+G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate modulate factor, texture, and more. Materials are stored in the document-level `"materials"` array, and each surface in a mesh may reference a material by its index in the array. Material channels may have per-simplex data, per-edge data, per-vertex data, and/or texture mapping, each of which points to an accessor that encodes the data (see [G4MF Data Storage](data.md)). Channel data may be thought of as colors, but they may also encode other data, such as normal vectors, or ORM values.
 
 ## Example
 
@@ -31,9 +31,9 @@ The emissive strength can be controlled by increasing the `"factor"` property of
 
 ### Normal
 
-The `"normal"` property is an object that defines the normal map channel of the material. If not defined, the default is a flat normal map with no texture, which means the surface has flat shading and only uses the cell normals for light angle calculations.
+The `"normal"` property is an object that defines the normal map channel of the material. If not defined, the default is a flat normal map with no texture, which means the surface has flat shading and uses only the normals derived from the geometry itself for light angle calculations (see [Calculating Cell Normals](mesh.md#calculating-cell-normals)).
 
-Note that the "colors" in normal maps are not visual colors, but instead encode vectors. For example, a 4D material may use three or four numbers in a color, RGB(A), to encode a 4D normal vector's XYZ(W) components, similar to how a 3D material may use two or three numbers in a color, RG(B), to encode a 3D normal vector's XY(Z) components. Generalizing further, a 5D, 6D, 7D, etc material may use four, five, six, seven, etc numbers in a color to encode a 5D, 6D, 7D, etc normal vector's XYZW(VUT) components, at which point the data is no longer interpretable as an RGB(A) color. This is why the material channel properties use generic names like `"factor"` and `"perCell"` instead of specific names like `"color"` and `"perCellColor"`.
+Note that the "colors" in normal maps are not visual colors, but instead encode vectors. For example, a 4D material may use three or four numbers in a color, RGB(A), to encode a 4D normal vector's XYZ(W) components, similar to how a 3D material may use two or three numbers in a color, RG(B), to encode a 3D normal vector's XY(Z) components. Generalizing further, a 5D, 6D, 7D, etc material may use four, five, six, seven, etc numbers in a color to encode a 5D, 6D, 7D, etc normal vector's XYZW(VUT) components, at which point the data is no longer interpretable as an RGB(A) color. This is why the material channel properties use generic names like `"factor"` and `"perSimplex"` instead of specific names like `"color"` and `"perSimplexColor"`.
 
 In the form of colors or textures, the red channel represents the X component, the green channel represents the Y component, the blue channel represents the Z component, and the alpha channel represents the W component of the normal vector. Alternatively, if the texture refers to a format with dedicated normal channels, such as OpenEXR, use those channels instead of red, green, blue, and alpha. This allows for a single OpenEXR texture to encode potentially dozens of channels, including dedicated channels for normals. For 6D and higher-dimensional materials, a standard RGBA texture cannot encode the normals, and therefore formats like OpenEXR are required, or alternatively, the normals may be encoded in the per-vertex data.
 
@@ -52,7 +52,7 @@ The default is a rough material with no texture, which means the surface has an 
 | Property               | Type       | Description                                                                            | Default                            |
 | ---------------------- | ---------- | -------------------------------------------------------------------------------------- | ---------------------------------- |
 | **factor**             | `number[]` | The modulate factor, value, or RGB(A) color for the channel.                           | No factor.                         |
-| **perCell**            | `integer`  | The index of the accessor that contains the per-cell data for this channel.            | No per cell data.                  |
+| **perSimplex**         | `integer`  | The index of the accessor that contains the per-simplex data for this channel.         | No per simplex data.               |
 | **perEdge**            | `integer`  | The index of the accessor that contains the per-edge data for this channel.            | No per edge data.                  |
 | **perVertex**          | `integer`  | The index of the accessor that contains the per-vertex-instance data for this channel. | No per vertex data.                |
 | **texture**            | `integer`  | The index of the texture used by the texture map.                                      | No texture.                        |
@@ -65,11 +65,11 @@ The `"factor"` property is an array of numbers that defines the modulate factor,
 
 If used together with other properties, this acts as a modulate which is per-component multiplied with the other properties. The color is represented as an array of usually three or four numbers, each usually in the range 0.0 to 1.0, but may go above 1.0 for overbright colors. A plain white color of `[1.0, 1.0, 1.0]` produces no modulation.
 
-### Per Cell
+### Per Simplex
 
-The `"perCell"` property is an integer index that references an accessor containing the per-cell data for this channel, such as colors. If not defined, the channel does not have per-cell data.
+The `"perSimplex"` property is an integer index that references an accessor containing the per-simplex data for this channel, such as colors. If not defined, the channel does not have per-simplex data.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-cell data MUST match or exceed the amount of cells in all mesh surfaces that use this material.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-simplex data MUST match or exceed the amount of simplexes in all mesh surfaces that use this material.
 
 ### Per Edge
 
@@ -83,7 +83,7 @@ The `"perVertex"` property is an integer index that references an accessor conta
 
 This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-vertex data MUST match or exceed the amount of vertex instances in all mesh surfaces that use this material.
 
-Per vertex data applies to a surface's vertex instances, which depend on the surface's `"cells"` and `"edges"` properties. See [G4MF Mesh Surface Vertex Instances](mesh.md#vertex-instances) for more information on how vertex instances are defined.
+Per vertex data applies to a surface's vertex instances, which depend on the surface's `"simplexes"` and `"edges"` properties. See [G4MF Mesh Surface Vertex Instances](mesh.md#vertex-instances) for more information on how vertex instances are defined.
 
 ### Texture
 
@@ -99,13 +99,13 @@ This is a reference to a texture defined in the G4MF document-level `"textures"`
 
 The `"textureMap"` property is an integer index that references an accessor overriding the texture map data for this channel. If not defined, the mesh surface's texture map is used instead.
 
-A texture map, also known as a UV map, UVW map, or texture coordinate map, is a mapping from the indices of the vertex instances to the texture space coordinates. Per vertex data applies to a surface's vertex instances, which depend on the surface's `"cells"` and `"edges"` properties. See [G4MF Mesh Surface Vertex Instances](mesh.md#vertex-instances) for more information on how vertex instances are defined.
+A texture map, also known as a UV map, UVW map, or texture coordinate map, is a mapping from the indices of the vertex instances to the texture space coordinates. Per vertex data applies to a surface's vertex instances, which depend on the surface's `"simplexes"` and `"edges"` properties. See [G4MF Mesh Surface Vertex Instances](mesh.md#vertex-instances) for more information on how vertex instances are defined.
 
 The texture coordinates are usually on a range of 0.0 to 1.0. For 3D meshes, the texture coordinates usually refer to a 2D texture. For 4D meshes, the texture coordinates usually refer to a 3D texture. However, any dimension of texture coordinates is allowed. A 4D mesh may use a 2D texture, though this is discouraged and not very useful because it will look untextured from certain angles, or a 4D texture, mapping the 4D vertices in the same dimension as the texture coordinates. This property is intended to be used together with the `"texture"` property, but may be used without it, such as when defining a texture map for an untextured surface.
 
 Texture map transforms, such as those supplied by `KHR_texture_transform` in glTF™, are not supported in G4MF. Instead, any texture transforms present in an application, such as scaling or translation, MUST be baked into the texture coordinates in the accessor when exporting the G4MF file. If dynamic texture transforms are required, such as for animation purposes, they may be defined by an extension, as long as the actual texture coordinates in the texture map properties have the current transforms baked in at export time.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type. The accessor MUST have its `"vectorSize"` set to the dimension of the texture space, which is the same as the dimension of `texture` if defined. For example, a 4D mesh with a 3D texture would have a texture map accessor with a `"vectorSize"` of `3`. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances of all mesh surfaces that use this channel. For example, a 4D mesh with 10 tetrahedral cells needs at least 40 vector elements in the texture map accessor; with 3D texture coordinates, that means at least 120 numbers in the accessor.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type. The accessor MUST have its `"vectorSize"` set to the dimension of the texture space, which is the same as the dimension of `texture` if defined. For example, a 4D mesh with a 3D texture would have a texture map accessor with a `"vectorSize"` of `3`. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances of all mesh surfaces that use this channel. For example, a 4D mesh with 10 tetrahedral simplex cells needs at least 40 vector elements in the texture map accessor; with 3D texture coordinates, that means at least 120 numbers in the accessor.
 
 ### Topology Texture Map
 

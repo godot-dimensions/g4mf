@@ -10,7 +10,7 @@ The following example defines.
 
 ## Buffers
 
-Buffers are the top-level data storage unit in G4MF. They are used to store many binary blobs of data together in a single file. For example, a buffer may contain vertices for several meshes, normal vectors for several meshes, edge or cell indices for several meshes, or all at once.
+Buffers are the top-level data storage unit in G4MF. They are used to store many binary blobs of data together in a single file. For example, a buffer may contain vertices for several meshes, edge or simplex indices for several meshes, normal vectors for several meshes, the bytes of an image, or all at once.
 
 For text-based G4MF, this often takes the form of a `.bin` file next to the `.g4tf` file, or embedded base64-encoded data. For binary G4MF, this is usually the binary chunk of data at the end of the file, but this may also be a separate file. Most files only need one buffer for all the binary blob data in the file, but multiple buffers are allowed if the file is needed to be split into multiple files, such as if there is a file size limit.
 

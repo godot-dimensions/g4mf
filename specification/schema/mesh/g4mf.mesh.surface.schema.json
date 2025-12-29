@@ -6,13 +6,9 @@
 	"description": "A mesh surface is a collection of vertices, edges, and polytopes that define a part of a mesh. Each surface may have a material.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
-		"cells": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the cell indices for this surface. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array. If not defined, the surface does not have explicit cells, and may be a wireframe-only surface, or may be calculated from the geometry data if needed."
-		},
 		"edges": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the edge indices for this surface. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array. If not defined, the surface does not have explicit edges, but edges may be calculated from the cells if needed. If defined, may be used as the foundation of the data in `topology`."
+			"description": "The index of the accessor that contains the edge indices for this surface. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array. If not defined, the surface does not have explicit edges, but edges may be calculated from the simplex cells if needed. If defined, may be used as the foundation of the data in `topology`."
 		},
 		"material": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
@@ -20,12 +16,16 @@
 		},
 		"normals": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-vertex-instance normals for this surface. If not defined, flat shading is assumed, meaning that all vertex instances in a cell have the same normal as the cell itself."
+			"description": "The index of the accessor that contains the per-vertex-instance normals for this surface. If not defined, flat shading is assumed, meaning that all vertex instances in a simplex cell have the same normal as the simplex cell itself."
 		},
-		"polytopeCells": {
+		"polytopeSimplexes": {
 			"type": "boolean",
-			"description": "If true, allow importing the cells as complex polytopes instead of simplexes. Each polytope is defined by a set of consecutive cells that share the same starting vertex. If not specified, the default is false.",
+			"description": "If true, allow importing the simplex data as complex polytopes instead of individual simplex cells. Each polytope is defined by a set of consecutive simplexes that share the same starting vertex index. If not specified, the default is false.",
 			"default": false
+		},
+		"simplexes": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the simplex cell indices for this surface. Each primitive number in the array is an index of a vertex in the mesh's vertices array, and MUST NOT exceed the bounds of the mesh's vertices array. If not defined, the surface does not have explicit simplex cells, and may be a wireframe-only surface, or may be calculated from the geometry data if needed."
 		},
 		"textureMap": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
@@ -37,6 +37,6 @@
 	},
 	"dependentRequired": {
 		"topology": ["edges"],
-		"polytopeCells": ["cells"]
+		"polytopeSimplexes": ["simplexes"]
 	}
 }

@@ -75,13 +75,13 @@ For convenience, the details of how lights work are described in a separate file
 
 ### Meshes
 
-G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of vertices and multiple surfaces, each of which may have a separate material. Mesh surfaces reference the shared mesh vertices, and may contain edge indices, cell indices, and more, each of which points to an accessor that encodes the data.
+G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of vertices and multiple surfaces, each of which may have a separate material. Mesh surfaces reference the shared mesh vertices, and may contain edge indices, simplex indices, and more, each of which points to an accessor that encodes the data.
 
 For convenience, the details of how meshes work are described in a separate file: [G4MF Mesh](parts/mesh/mesh.md).
 
 #### Materials
 
-G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate color, texture, and more. Materials are referenced by mesh surfaces, which are contained in meshes. Material channels may have per-cell colors, per-edge colors, per-vertex colors, and/or texture mapping, each of which points to an accessor that encodes the data.
+G4MF uses materials to define the appearance of surfaces. Each material is made of multiple channels, each of which may have a separate color, texture, and more. Materials are referenced by mesh surfaces, which are contained in meshes. Material channels may have per-simplex colors, per-edge colors, per-vertex colors, and/or texture mapping, each of which points to an accessor that encodes the data.
 
 For convenience, the details of how materials work are described in a separate file: [G4MF Material](parts/mesh/material.md).
 

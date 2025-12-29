@@ -45,7 +45,7 @@ All of these properties use the [Blend Shape Target](#blend-shape-target-propert
 
 The `"normal"` property is an object that defines the offset or displacement of the per-vertex-instance normals for the blend shape. This property is optional and defaults to no displacement.
 
-If the mesh has multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh. For example, for a 4D mesh with two surfaces, the first with 10 tetrahedral cells and the second with 20 tetrahedral cells, indices 0 to 39 refer to the first surface's vertex indices, and indices 40 to 119 refer to the second surface's vertex indices.
+If the mesh has multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh. For example, for a 4D mesh with two surfaces, the first with 10 tetrahedral simplex cells and the second with 20 tetrahedral simplex cells, indices 0 to 39 refer to the first surface's vertex indices, and indices 40 to 119 refer to the second surface's vertex indices.
 
 Normals MUST be re-normalized after applying all blend shapes for a mesh.
 
@@ -57,7 +57,7 @@ The `"position"` property is an object that defines the offset or displacement o
 
 The `"textureMap"` property is an object that defines the offset or displacement of the per-vertex-instance texture space coordinates for the blend shape. This property is optional and defaults to no displacement.
 
-If the mesh has multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh. For example, for a 4D mesh with two surfaces, the first with 10 tetrahedral cells and the second with 20 tetrahedral cells, indices 0 to 39 refer to the first surface's vertex indices, and indices 40 to 119 refer to the second surface's vertex indices.
+If the mesh has multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh. For example, for a 4D mesh with two surfaces, the first with 10 tetrahedral simplex cells and the second with 20 tetrahedral simplex cells, indices 0 to 39 refer to the first surface's vertex indices, and indices 40 to 119 refer to the second surface's vertex indices.
 
 ### Topology Normal
 
