@@ -69,19 +69,19 @@ If used together with other properties, this acts as a modulate which is per-com
 
 The `"perSimplex"` property is an integer index that references an accessor containing the per-simplex data for this channel, such as colors. If not defined, the channel does not have per-simplex data.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-simplex data MUST match or exceed the amount of simplexes in all mesh surfaces that use this material.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-simplex data MUST match or exceed the amount of simplexes in all mesh surfaces that use this material.
 
 ### Per Edge
 
 The `"perEdge"` property is an integer index that references an accessor containing the per-edge data for this channel, such as colors. If not defined, the channel does not have per-edge data.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-edge data MUST match or exceed the amount of edges in all mesh surfaces that use this material.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-edge data MUST match or exceed the amount of edges in all mesh surfaces that use this material.
 
 ### Per Vertex
 
 The `"perVertex"` property is an integer index that references an accessor containing the per-vertex-instance data for this channel, such as colors. If not defined, the channel does not have per-vertex data.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-vertex data MUST match or exceed the amount of vertex instances in all mesh surfaces that use this material.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. If defined, the amount of per-vertex data MUST match or exceed the amount of vertex instances in all mesh surfaces that use this material.
 
 Per vertex data applies to a surface's vertex instances, which depend on the surface's `"simplexes"` and `"edges"` properties. See [G4MF Mesh Surface Vertex Instances](mesh.md#vertex-instances) for more information on how vertex instances are defined.
 
@@ -105,7 +105,7 @@ The texture coordinates are usually on a range of 0.0 to 1.0. For 3D meshes, the
 
 Texture map transforms, such as those supplied by `KHR_texture_transform` in glTF™, are not supported in G4MF. Instead, any texture transforms present in an application, such as scaling or translation, MUST be baked into the texture coordinates in the accessor when exporting the G4MF file. If dynamic texture transforms are required, such as for animation purposes, they may be defined by an extension, as long as the actual texture coordinates in the texture map properties have the current transforms baked in at export time.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point primitive type. The accessor MUST have its `"vectorSize"` set to the dimension of the texture space, which is the same as the dimension of `texture` if defined. For example, a 4D mesh with a 3D texture would have a texture map accessor with a `"vectorSize"` of `3`. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances of all mesh surfaces that use this channel. For example, a 4D mesh with 10 tetrahedral simplex cells needs at least 40 vector elements in the texture map accessor; with 3D texture coordinates, that means at least 120 numbers in the accessor.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point component type. The accessor MUST have its `"vectorSize"` set to the dimension of the texture space, which is the same as the dimension of `texture` if defined. For example, a 4D mesh with a 3D texture would have a texture map accessor with a `"vectorSize"` of `3`. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances of all mesh surfaces that use this channel. For example, a 4D mesh with 10 tetrahedral simplex cells needs at least 40 vector elements in the texture map accessor; with 3D texture coordinates, that means at least 120 numbers in the accessor.
 
 ### Topology Texture Map
 

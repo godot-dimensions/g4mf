@@ -2,7 +2,7 @@
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "g4mf_item.schema.json",
 	"title": "G4MF Base Item Schema",
-	"description": "The base schema which all G4MF items should inherit from.",
+	"description": "The base schema which all G4MF items should inherit from, including extension schemas.",
 	"type": "object",
 	"properties": {
 		"comment": {

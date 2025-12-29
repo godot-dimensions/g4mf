@@ -42,7 +42,7 @@ Group names MUST be unique within the skin, MUST NOT be empty strings, and MUST 
 
 The `"groups"` property is an integer that defines the index of the accessor that contains the vertex group indices influencing the vertices. This property is required and has no default value.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer primitive type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each index in this accessor is a group index, and the corresponding items in the `"vertices"` and `"weights"` accessors define a vertex that is influenced by that group by that weight.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer component type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each index in this accessor is a group index, and the corresponding items in the `"vertices"` and `"weights"` accessors define a vertex that is influenced by that group by that weight.
 
 Each group may be listed multiple times in this accessor, allowing for a group to influence multiple vertices, or be listed only once if it influences a single vertex, or not at all if it does not influence any vertex. If a skeleton bone index is not present in this accessor, those bones are not used for skinning this mesh. If the maximum value of items in this accessor exceeds the number of bones in the skeleton, those groups do nothing. If the maximum value of items in this accessor is greater than the amount of group names, then those groups are not named.
 
@@ -50,7 +50,7 @@ Each group may be listed multiple times in this accessor, allowing for a group t
 
 The `"vertices"` property is an integer that defines the index of the accessor that contains the indices of skinned vertices. This property is required and has no default value.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer primitive type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each index in this accessor corresponds to a vertex in the mesh, and the corresponding items in the `"groups"` and `"weights"` accessors define which groups influence that vertex and by how much.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer component type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each index in this accessor corresponds to a vertex in the mesh, and the corresponding items in the `"groups"` and `"weights"` accessors define which groups influence that vertex and by how much.
 
 Each vertex may be listed multiple times in this accessor, allowing for multiple groups to influence the same vertex, or be listed only once if it is influenced by a single group, or not at all if it is not influenced by any group. The maximum value of items in this accessor MUST NOT exceed the number of vertices in the mesh. The values in this accessor MUST be sorted in ascending order, and MUST NOT decrease.
 
@@ -58,7 +58,7 @@ Each vertex may be listed multiple times in this accessor, allowing for multiple
 
 The `"weights"` property is an integer that defines the index of the accessor that contains the weights for how strongly each group influences the corresponding vertex. This property is required and has no default value.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of a floating-point primitive type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each value in this accessor corresponds to a weight for the group at the same index in the `"groups"` accessor, and the corresponding vertex at the same index in the `"vertices"` accessor.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of a floating-point component type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each value in this accessor corresponds to a weight for the group at the same index in the `"groups"` accessor, and the corresponding vertex at the same index in the `"vertices"` accessor.
 
 Within the weights for a single vertex, the influences MUST be sorted in descending order, with the first value being the strongest influence. For example, if vertex 0 is influenced by only groups 0, 1, and 2, with weights of 0.5, 0.75, and 0.25 respectively, the first three values in this accessor would be 0.75, 0.5, and 0.25, the first three values in the `"vertices"` accessor would be 0, 0, and 0, and the first three values in the `"groups"` accessor would be 1, 0, and 2. This allows implementations with arbitrary limits on the number of groups influencing a vertex to only read the first N values, where N is the maximum number of groups that can influence a vertex.
 

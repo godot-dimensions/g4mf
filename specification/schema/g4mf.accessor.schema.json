@@ -10,9 +10,9 @@
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the buffer view that contains the data for this accessor. This is a reference to a buffer view in the G4MF file's document-level `bufferViews` array."
 		},
-		"primitiveType": {
+		"componentType": {
 			"type": "string",
-			"description": "The primitive data type used for each primitive component in the accessor.",
+			"description": "The component data type used for each primitive number in the accessor.",
 			"anyOf": [
 				{
 					"const": "float8",
@@ -76,16 +76,16 @@
 				},
 				{
 					"type": "string",
-					"description": "An extension-defined primitive type."
+					"description": "An extension-defined component type."
 				}
 			]
 		},
 		"vectorSize": {
 			"type": "integer",
-			"description": "The number of primitives in each element of the accessor. For scalars this is 1, for 2D vectors this is 2, for 3D vectors this is 3, for 4D vectors this is 4, and so on. Matrices can be encoded as many-dimensional vectors, such as a 4x4 matrix with this property set to 16. This number MUST be a positive integer. If not specified, the default is 1, which means each primitive is a scalar element.",
+			"description": "The number of components in each element of the accessor. For scalars this is 1, for 2D vectors this is 2, for 3D vectors this is 3, for 4D vectors this is 4, and so on. Matrices can be encoded as many-dimensional vectors, such as a 4x4 matrix with this property set to 16. This number MUST be a positive integer. If not specified, the default is 1, which means each component is a scalar element.",
 			"minimum": 1,
 			"default": 1
 		}
 	},
-	"required": ["bufferView", "primitiveType"]
+	"required": ["bufferView", "componentType"]
 }

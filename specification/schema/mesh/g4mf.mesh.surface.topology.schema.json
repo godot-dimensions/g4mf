@@ -25,7 +25,7 @@
 		},
 		"textureMap": {
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-vertex-instance texture map data for the topology's vertex instances. A texture map, also known as a UV map or UVW map, is a mapping from the vertex instances to the texture coordinates. The accessor MUST have a floating-point primitive type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space."
+			"description": "The index of the accessor that contains the per-vertex-instance texture map data for the topology's vertex instances. A texture map, also known as a UV map or UVW map, is a mapping from the vertex instances to the texture coordinates. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space."
 		}
 	},
 	"required": [

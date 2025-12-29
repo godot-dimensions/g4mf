@@ -86,7 +86,7 @@ This property may only be used when at least one mesh surface has the `"
 
 The `"indices"` property is an integer that defines the index of the accessor that contains the indices for the mesh deformation blend shape morph target. This property is required and has no default value.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer primitive type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each index in this accessor corresponds to an item in the mesh that the blend shape morph target applies to, such as a vertex position, per-vertex-instance normal, or another attribute, and MUST NOT exceed the number of items in the targeted array.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer component type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each index in this accessor corresponds to an item in the mesh that the blend shape morph target applies to, such as a vertex position, per-vertex-instance normal, or another attribute, and MUST NOT exceed the number of items in the targeted accessor.
 
 ### Offsets
 

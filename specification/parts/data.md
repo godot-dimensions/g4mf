@@ -78,27 +78,27 @@ The byte offset is relative to the start of the buffer. For example, if the byte
 
 ## Accessors
 
-Accessors provide a typed interpretation of the data in a buffer view. Accessors define the primitive data type and define the number of primitives in each element of the accessor. They are the intended way to handle numeric data, such as arrays of vertices, normals, colors, or texture coordinates.
+Accessors provide a typed interpretation of the data in a buffer view. Accessors define the component data type and define the number of components in each element of the accessor (1 for scalar elements, more for vector elements). They are the intended way to handle numeric data, such as arrays of vertices, normals, colors, or texture coordinates.
 
 ### Properties
 
 | Property          | Type      | Description                                                                | Default               |
 | ----------------- | --------- | -------------------------------------------------------------------------- | --------------------- |
 | **bufferView**    | `integer` | The index of the buffer view that contains the data for this accessor.     | Required, no default. |
-| **primitiveType** | `string`  | The primitive data type used for each primitive component in the accessor. | Required, no default. |
-| **vectorSize**    | `integer` | The number of primitives in each element of the accessor.                  | `1`                   |
+| **componentType** | `string`  | The component data type used for each component component in the accessor. | Required, no default. |
+| **vectorSize**    | `integer` | The number of components in each element of the accessor.                  | `1`                   |
 
 #### Buffer View
 
 The `"bufferView"` property is an integer index that references a buffer view in the G4MF file that contains the data for this accessor. This property is required.
 
-The buffer view's `"byteLength"` MUST be a multiple of the size of each element, which is the size of the primitive type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element. Additionally, the buffer view's `"byteOffset"` MUST be a multiple of the size of the primitive type, to ensure that the start of the data is aligned correctly.
+The buffer view's `"byteLength"` MUST be a multiple of the size of each element, which is the size of the component type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element. Additionally, the buffer view's `"byteOffset"` MUST be a multiple of the size of the component type, to ensure that the start of the data is aligned correctly.
 
-#### Primitive Type
+#### Component Type
 
-The `"primitiveType"` property is a string that defines the primitive data type used for each primitive component in the accessor. This property is required.
+The `"componentType"` property is a string that defines the component data type used for each primitive component in the accessor. This property is required.
 
-The primitive type SHOULD be some kind of primitive data type, such as float, int, or uint, and indicate the size. The enum is unbounded, allowing for future extensions, but the base specification defines a very wide range of types from 8-bit to 128-bit that should cover nearly all use cases. The following primitive types are DEFINED:
+The component type SHOULD be some kind of primitive numeric data type, such as float, int, or uint, and indicate the size. The enum is unbounded, allowing for future extensions, but the base specification defines a very wide range of types from 8-bit to 128-bit that should cover nearly all use cases. The following component types are DEFINED:
 
 - `"float8"`: 8-bit or 1-byte IEEE-like quarter-precision floating point number with 1 sign bit, 4 exponent bits, 3 mantissa bits, max finite value 240.
 - `"float16"`: 16-bit or 2-byte IEEE 754 half-precision floating point number.
@@ -116,23 +116,23 @@ The primitive type SHOULD be some kind of primitive data type, such as float, in
 - `"uint64"`: 64-bit or 8-byte unsigned integer.
 - `"uint128"`: 128-bit or 16-byte unsigned integer.
 
-Support for reading `"float32"`, `"int32"`, and `"uint32"` is REQUIRED, due to how common they are. For the remaining types, they are defined, but not required. 8-bit integers, 16-bit integers, and all 64-bit types are highly recommended. Implementations MAY support only a subset of these types. If an implementation does not want to support `"float8"`, `"float128"`, `"int128"`, or any other type, the implementation MAY skip this accessor, failing to load any objects that use it, or MAY refuse to load the entire file.
+Support for reading `"float32"`, `"int32"`, and `"uint32"` is REQUIRED, due to how common they are. For the remaining types, they are defined, but not required. 8-bit integers and 16-bit integers are very highly recommended, and all 64-bit types are highly recommended. Implementations MAY support only a subset of these types. If an implementation does not want to support `"float8"`, `"float128"`, `"int128"`, or any other type, the implementation MAY skip this accessor, failing to load any objects that use it, or MAY refuse to load the entire file.
 
-Implementations MAY truncate or round types to fit into a supported type. For example, it is allowed to read `"float64"` primitives which get converted to `"float32"` at import time, rounding the values to fit into the smaller type.
+Implementations MAY truncate or round types to fit into a supported type. For example, it is allowed to read `"float64"` components which get converted to `"float32"` at import time, rounding the values to fit into the smaller type. Accessor component types only define how the data is stored in the file, not how it is represented in memory at runtime, and do not impose restrictions on mathematical operations or other usage.
 
 If the data in the accessor is always of type `"uint8"` with a vector size always set to 1, consider using a buffer view directly instead of an accessor, since the accessor is not providing any additional information beyond the slice of the buffer already provided by the buffer view. For example, do not use `"uint8"` to store the data of a PNG image, or any accessor type at all for that matter. The `"uint8"` type is intended to be used when users of this accessor need to interpret the data as numbers, and other accessor types are also allowed, simplifying usages, which can always point to an accessor instead of conditionally pointing to an accessor or a buffer view.
 
-Inside of the buffer view the accessor refers to, the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of the size of the primitive type, to ensure that the start of the data is aligned correctly, and ensure there are a whole number of primitives available in the accessor. For example, if the primitive type is `"float32"`, which requires 4 bytes each, then the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of 4, and the number of primitives in the accessor is equal to the buffer view's `"byteLength"` divided by 4. For accessors with a `"vectorSize"` greater than 1, there are additional requirements for `"byteLength"` aligning to a whole number of elements, which is a superset of this requirement.
+Inside of the buffer view the accessor refers to, the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of the size of the component type, to ensure that the start of the data is aligned correctly, and ensure there are a whole number of components available in the accessor. For example, if the component type is `"float32"`, which requires 4 bytes each, then the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of 4, and the number of components in the accessor is equal to the buffer view's `"byteLength"` divided by 4. For accessors with a `"vectorSize"` greater than 1, there are additional requirements for `"byteLength"` aligning to a whole number of elements, which is a superset of this requirement.
 
 #### Vector Size
 
-The `"vectorSize"` property is a positive integer number defining the number of primitives in each element of the accessor. This property is optional and defaults to 1.
+The `"vectorSize"` property is a positive integer number defining the number of components in each element of the accessor. This property is optional and defaults to 1.
 
-For scalars this is 1, for 2D vectors this is 2, for 3D vectors this is 3, for 4D vectors this is 4, and so on. Matrices can be encoded as many-dimensional vectors, such as a 4x4 matrix with this property set to 16. Note that this is the number of primitives, not the number of bytes. This number MUST be a positive integer. If not specified, the vector size is 1, meaning each primitive is its own scalar element.
+For scalars this is 1, for 2D vectors this is 2, for 3D vectors this is 3, for 4D vectors this is 4, and so on. Matrices can be encoded as many-dimensional vectors, such as a 4x4 matrix with this property set to 16. Note that this is the number of components, not the number of bytes. This number MUST be a positive integer. If not specified, the vector size is 1, meaning each component is its own scalar element.
 
-Inside of the buffer view the accessor refers to, the `"byteLength"` property MUST be a multiple of the size of each element, which is the size of the primitive type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element.
+Inside of the buffer view the accessor refers to, the `"byteLength"` property MUST be a multiple of the size of each element, which is the size of the component type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element.
 
-For example, if encoding an array of Vector3 structs made of 32-bit floating-point numbers, the primitive type would be `"float32"` and the vector size would be `3`. Each of those accessor elements then takes up 12 bytes. The buffer view's `"byteLength"` then MUST be a multiple of 12, such as 120 bytes encoding 10 elements. Additionally, the buffer view's `"byteOffset"` MUST be a multiple of 4, since the primitive type has a size of 4 bytes, as described above.
+For example, if encoding an array of Vector3 structs made of 32-bit floating-point numbers, the component type would be `"float32"` and the vector size would be `3`. Each of those accessor elements then takes up 12 bytes. The buffer view's `"byteLength"` then MUST be a multiple of 12, such as 120 bytes encoding 10 elements. Additionally, the buffer view's `"byteOffset"` MUST be a multiple of 4, since the component type has a size of 4 bytes, as described above.
 
 ## JSON Schema
 
