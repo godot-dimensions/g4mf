@@ -116,7 +116,7 @@ The component type SHOULD be some kind of primitive numeric data type, such as f
 - `"uint64"`: 64-bit or 8-byte unsigned integer.
 - `"uint128"`: 128-bit or 16-byte unsigned integer.
 
-Support for reading `"float32"`, `"int32"`, and `"uint32"` is REQUIRED, due to how common they are. For the remaining types, they are defined, but not required. 8-bit integers and 16-bit integers are very highly recommended, and all 64-bit types are highly recommended. Implementations MAY support only a subset of these types. If an implementation does not want to support `"float8"`, `"float128"`, `"int128"`, or any other type, the implementation MAY skip this accessor, failing to load any objects that use it, or MAY refuse to load the entire file.
+Support for reading `"float32"`, `"int32"`, and `"uint32"` is REQUIRED, due to how common they are. For the remaining types, they are defined, but not required. 8-bit integers and 16-bit integers are very highly recommended, 16-bit floats are highly recommended, and all 64-bit types are recommended. Implementations MAY support only a subset of these types. If an implementation does not want to support `"float8"`, `"float128"`, `"int128"`, or any other type, the implementation MAY skip this accessor, failing to load any objects that use it, or MAY refuse to load the entire file.
 
 Implementations MAY truncate or round types to fit into a supported type. For example, it is allowed to read `"float64"` components which get converted to `"float32"` at import time, rounding the values to fit into the smaller type. Accessor component types only define how the data is stored in the file, not how it is represented in memory at runtime, and do not impose restrictions on mathematical operations or other usage.
 

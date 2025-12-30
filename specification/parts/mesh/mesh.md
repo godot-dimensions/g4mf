@@ -117,18 +117,6 @@ The `"topology"` property is an object that contains optional extended topology 
 
 See [G4MF Mesh Topology](topology.md) for more information about this property.
 
-## Vertex Instances
-
-Each mesh surface has a set of simplex vertex instances, implicitly defined how the surface's simplex properties use the vertices. Vertex instances may be used to define normal vectors, and may be used by materials to define per-vertex-instance data, such as colors or texture coordinates, for a mesh surface. Blender calls vertex instances "corners".
-
-Mesh surface simplex vertex instances are defined as the following:
-
-- If a mesh surface has the `"simplexes"` property defined, then the vertex instances are the usages of the vertices in the simplexes. For example, in a 4D model with tetrahedral simplex cells, each simplex cell has 4 vertex instances.
-- If a mesh surface does not have the `"simplexes"` property defined, but does have the `"edges"` property defined, then the vertex instances are the usages of the vertices in the edges. Each edge always has 2 vertex instances, one for each end of the edge.
-- If a mesh surface does not have the `"simplexes"` or `"edges"` properties defined, then the vertex instances are the mesh vertices themselves, allowing for point cloud materials to be used on meshes without any defined geometry.
-- The `"topology"` property cannot be used to determine the vertex instances for a mesh surface's simplexes. Items inside `"topology"` have their own separate definition of topology vertex instances defined by boundary geometry items.
-- Extensions may define other ways to determine the vertex instances for a mesh surface.
-
 ## Calculating Cell Normals
 
 In 3D rendering, winding order is used to determine which side of a triangle is the front or back. This is then used to decide if the triangle should be rendered or culled. The typical convention in right-handed coordinate systems like with OpenGL™ and glTF™ is to use a counter-clockwise winding order for meshes whose global basis has a positive determinant, and a clockwise winding order for meshes whose global basis has a negative determinant.

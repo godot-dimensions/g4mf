@@ -62,20 +62,6 @@ A texture map, also known as a UV map, UVW map, or texture coordinate map, is a 
 
 This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its `"vectorSize"` property set to the dimension of the texture space. The amount of vector elements in the accessor MUST match or exceed the amount of topology vertex instances.
 
-## Topology Vertex Instances
-
-In addition to each mesh surface having vertex instances defined by the `"simplexes"` or `"edges"` properties, the `"topology"` property contains its own set of vertex instances defined by boundary geometry items. Topology vertex instances may be used to define normal vectors, and may be used by materials to define per-vertex-instance data, such as colors or texture coordinates, for a mesh surface's topology.
-
-Topology vertex instances are defined as the following:
-
-- For 3D meshes, the topology vertex instances are those used by 2D faces defined in the `"geometry"` property.
-- For 4D meshes, the topology vertex instances are those used by 3D cells defined in the `"geometry"` property.
-- For 5D meshes, the topology vertex instances are those used by 4D cells defined in the `"geometry"` property.
-- This pattern continues for higher dimensions. 2D meshes are an exception, they use 2D faces like 3D meshes.
-- Extensions may define other ways to determine the topology vertex instances for a mesh surface's topology.
-
-This defines the source of the vertices, but the order still needs to be specified. To find the vertex instances, iterate over each N-dimensional boundary geometry item, then iterate over its (N-1)-dimensional elements, recursively and in-order, until reaching the vertex instances. Append these to a unique array, skipping duplicates, again preserving order. The resulting array is the cell's topology vertex instances.
-
 ## Orientation of Geometry Items
 
 Use cases like determining if a boundary geometry item is facing towards or away from a camera require having normal vectors which are perpendicular to the cell they describe. These normal vectors can be calculated, but then it is important to not only know how the geometry items are connected, but also their orientation. There are rules to uniquely determine the orientation of each geometry item based on its component parts. The rules mandated by G4MF follow the rules of Geometric Algebra extended from the right-hand rule.
