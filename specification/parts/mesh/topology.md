@@ -2,26 +2,34 @@
 
 ## Overview
 
-G4MF allows defining topology data for mesh surfaces, which defines how the mesh surface is hierarchically structured in terms of its geometry and connectivity.
+G4MF allows defining topology data for mesh surfaces via the `"geometry"` and `"seams"` properties on the mesh surface. This defines how the mesh surface is hierarchically structured in terms of its geometry and connectivity. The `"geometry"` property of bindings defines other data, like corner/vertex colors and texture maps, associated with the geometry structure.
 
-This is useful for DCC applications, but usually not required for runtime applications like game engines. To save space, this data is usually be omitted when "exporting" an optimized model only intended to be consumed by a runtime application, rather than "saving" a model to later be edited in a DCC application.
+G4MF is an N-dimensional format. Mesh surfaces store vertices in the mesh's `"vertices"` property, and edges in the surface's `"edges"` property. Edges always have exactly 2 vertices, so they are stored as pairs of vertex indices (no need to store "2 0 1" when "0 1" will do). Higher-dimensional polytopes have variable amounts of lower-dimensional elements on their boundaries, so their data is stored as a count followed by indices. The `"geometry"` array stores these higher-dimensional polytopes in successive tiers:
+
+- **Geometry index 0** stores 2D polygons (faces) made of edge indices. For example, `4 0 1 2 3` defines a quad made of edges 0, 1, 2, and 3.
+- **Geometry index 1** stores 3D polyhedra (volumes) made of polygon indices. For example, `6 0 1 2 3 4 5` defines a cube made of 6 square faces.
+- **Geometry index 2** stores 4D polytopes (hypervolumes) made of polyhedron indices, and so on for higher dimensions.
+
+Each tier references elements from the previous tier, building up the hierarchical structure of the mesh. For an N-dimensional mesh, N-dimensional elements (geometry index N-2) are the maximum possible, (N-1)-dimensional elements (geometry index N-3) define the boundary cells (possible to be visible), (N-2)-dimensional elements (geometry index N-4) define the border cells (possible to be seams), and so on. Edges are effectively geometry index negative 1, since geometry index 0 refers to them, but edges are structured separately, since each edge is always made of exactly 2 vertices.
+
+This is useful for DCC applications, but usually not required for runtime applications like game engines. To save space, this data is usually omitted when "exporting" an optimized model only intended to be consumed by a runtime application, rather than "saving" a model to later be edited in a DCC application.
 
 ## Example
 
 The following example defines.
 
-## Mesh Topology Properties
+## Mesh Surface Topology Properties
 
-| Property       | Type        | Description                                                                       | Default              |
-| -------------- | ----------- | --------------------------------------------------------------------------------- | -------------------- |
-| **geometry**   | `integer[]` | Hierarchical geometry data for this surface.                                      | Required, no default |
-| **normals**    | `integer`   | The per-vertex-instance normals of boundary geometry items.                       | Flat normals         |
-| **seams**      | `integer`   | The list of which boundary geometry items are marked as seams.                    | No seams             |
-| **textureMap** | `integer`   | The texture space coordinates of the vertex instances of boundary geometry items. | No texture mapping   |
+These properties are defined on the mesh surface object.
+
+| Property     | Type        | Description                                                  | Default          |
+| ------------ | ----------- | ------------------------------------------------------------ | ---------------- |
+| **geometry** | `integer[]` | Hierarchical geometry data for this surface.                 | No geometry data |
+| **seams**    | `integer`   | The list of which border geometry items are marked as seams. | No seams         |
 
 ### Geometry
 
-The `"geometry"` property is an array of integers, each of which is an index that references an accessor containing complex hierarchical geometry data for this surface. This property is required for all mesh surfaces with the topology property defined.
+The `"geometry"` property is an array of integers, each of which is an index that references an accessor containing complex hierarchical geometry data for this surface. This property is optional.
 
 Hierarchical geometry data means that polytopes of successive dimensions are defined as combinations of polytopes from the previous dimension, providing structured topological data. This is similar to the data found within the [OFF file format](https://en.wikipedia.org/wiki/OFF_%28file_format%29), except that the first tier references edges, not points.
 
@@ -34,47 +42,17 @@ If defined, the array SHOULD have an amount of entries equivalent to the dimensi
 
 This property allows preserving geometric information about polytopes and the connections between their parts. This is useful for DCC applications, and allows them to use G4MF as a save format. For example, Blender stores how faces connect to edges, therefore also storing how the faces connect to each other, preserving the topology of the mesh. Such information is useful for high-level operations like subdivision, smoothing, defining seams, and other operations that require knowledge of how the mesh topology is structured.
 
-This property is not needed to render a cellular mesh if the `"simplexes"` property of the mesh surface is defined, since the `"simplexes"` property contains ready-to-use simplex cells. If the `"simplexes"` property is not present, the simplex cells can be computed from the topology's geometry data, however this may be computationally expensive, especially for higher dimensions. When exporting a model to a final destination such as a game engine or other runtime, it is recommended to define the `"simplexes"` property, and the `"geometry"` property may be omitted to reduce file size.
+This property is not needed to render a cellular mesh if the `"simplexes"` property of the mesh surface is defined, since the `"simplexes"` property contains ready-to-use simplex cells. If the `"simplexes"` property is not present, the simplex cells can be computed from the geometry data, however this may be computationally expensive, especially for higher dimensions. When exporting a model to a final destination such as a game engine or other runtime, it is recommended to define the `"simplexes"` property, and the `"geometry"` property may be omitted to reduce file size.
 
 Since the geometry accessor 0 refers to edges, the `"edges"` property MUST be defined and set to a valid value if the `"geometry"` property is defined and non-empty. If `"edges"` is not defined, and edges are calculated from the simplex cells, this calculated data CANNOT be used as the edges referenced by the `"geometry"` property, only explicitly defined edges can be used.
 
-### Normals
-
-The `"normals"` property is an integer that references an accessor containing the per-boundary-vertex-instance normals for this surface's topology geometry. If not defined and the `"geometry"` property is defined, the geometry has flat normals.
-
-For 3D meshes, this refers to vertex instances on 2D faces defined in the `"geometry"` property. For 4D meshes, this refers to vertex instances on 3D cells defined in the `"geometry"` property. For 5D meshes, this refers to vertex instances on 4D cells defined in the `"geometry"` property. See [Topology Vertex Instances](#topology-vertex-instances) for more details. Also, see [Orientation of Geometry Items](#orientation-of-geometry-items) for information about calculating normals of boundary geometry items for use cases like determining if a cell is facing towards or away from a camera.
-
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of a floating-point component type, and MUST have the `"vectorSize"` property set to the same value as the `"vectorSize"` of the vertices accessor. The amount of vectors in the accessor MUST be equal to the amount of vertex instances in the corresponding geometry items.
-
 ### Seams
 
-The `"seams"` property is an integer that references an accessor containing the list of which boundary geometry items are marked as seams. If not defined, the surface does not have seams.
+The `"seams"` property is an integer that references an accessor containing the list of which border geometry items are marked as seams. If not defined, the surface does not have seams.
 
-Seams refer to the boundaries of boundary geometry items; this is the dimension of the mesh minus 2. For 3D meshes, seams refer to 1D edges defined in the mesh surface `"edges"`, which bound 2D faces, since 2D faces form the boundary of 3D meshes. For 4D meshes, seams refer to 2D faces defined in the `"geometry"` property, which bound 3D cells, since 3D cells form the boundary of 4D meshes. For 5D meshes, seams refer to 3D cells defined in the `"geometry"` property, which bound 4D cells, since 4D cells form the boundary of 5D meshes, and so on for higher dimensions. 2D meshes are an exception, they use 2D faces like 3D meshes, and so their seams refer to 1D edges like 3D meshes.
+Seams refer to the boundaries of boundary geometry items; this is the dimension of the mesh minus 2. For 3D meshes, seams refer to 1D edges defined in the mesh surface `"edges"`, which bound 2D faces, since 2D faces form the boundary of 3D meshes. For 4D meshes, seams refer to 2D faces defined in the `"geometry"` property at index 0, which bound 3D cells at index 1, since 3D cells form the boundary of 4D meshes. For 5D meshes, seams refer to 3D cells defined in the `"geometry"` property at index 1, which bound 4D cells at index 2, since 4D cells form the boundary of 5D meshes, and so on for higher dimensions. 2D meshes are an exception, they use 2D faces like 3D meshes, and so their seams refer to 1D edges like 3D meshes.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer component type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each primitive number component in the accessor is an index of an item in either the `"edges"` accessor or one of the accessors in `"geometry"`, and MUST NOT exceed the amount of boundary geometry items in the referenced accessor. For example, for 3D meshes, the maximum value in the seams accessor MUST NOT exceed the amount of edges in the `"edges"` accessor. For 4D meshes, the maximum value in the seams accessor MUST NOT exceed the amount of faces in the first geometry accessor, and so on. The seams accessor MUST NOT contain duplicate values, and MUST be sorted in strictly ascending order.
-
-### Texture Map
-
-The `"textureMap"` property is an integer index that references an accessor containing the per-vertex-instance texture map data for the toplogy vertex instances. If not defined, the topology does not have per-vertex-instance texture mapping.
-
-A texture map, also known as a UV map, UVW map, or texture coordinate map, is a mapping from the indices of the vertex instances to the texture space coordinates. This property is similar to the `"textureMap"` property in the mesh surface, but instead of mapping the mesh surface's vertex instances, it maps the topology vertex instances. See [Topology Vertex Instances](#topology-vertex-instances) for more information on how topology vertex instances are defined. See [G4MF Mesh Texture Map](mesh.md#texture-map) for more information on how texture maps are defined.
-
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its `"vectorSize"` property set to the dimension of the texture space. The amount of vector elements in the accessor MUST match or exceed the amount of topology vertex instances.
-
-## Topology Vertex Instances
-
-In addition to each mesh surface having vertex instances defined by the `"simplexes"` or `"edges"` properties, the `"topology"` property contains its own set of vertex instances defined by boundary geometry items. Topology vertex instances may be used to define normal vectors, and may be used by materials to define per-vertex-instance data, such as colors or texture coordinates, for a mesh surface's topology.
-
-Topology vertex instances are defined as the following:
-
-- For 3D meshes, the topology vertex instances are those used by 2D faces defined in the `"geometry"` property.
-- For 4D meshes, the topology vertex instances are those used by 3D cells defined in the `"geometry"` property.
-- For 5D meshes, the topology vertex instances are those used by 4D cells defined in the `"geometry"` property.
-- This pattern continues for higher dimensions. 2D meshes are an exception, they use 2D faces like 3D meshes.
-- Extensions may define other ways to determine the topology vertex instances for a mesh surface's topology.
-
-This defines the source of the vertices, but the order still needs to be specified. To find the vertex instances, iterate over each N-dimensional boundary geometry item, then iterate over its (N-1)-dimensional elements, recursively and in-order, until reaching the vertex instances. Append these to a unique array, skipping duplicates, again preserving order. The resulting array is the cell's topology vertex instances.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer component type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each primitive number component in the accessor is an index of an item in either the `"edges"` accessor or one of the accessors in `"geometry"`, and MUST NOT exceed the amount of border geometry items in the referenced accessor. For example, for 3D meshes, the maximum value in the seams accessor MUST NOT exceed the amount of edges in the `"edges"` accessor. For 4D meshes, the maximum value in the seams accessor MUST NOT exceed the amount of faces in the first geometry accessor, and so on. The seams accessor MUST NOT contain duplicate values, and MUST be sorted in strictly ascending order.
 
 ## Orientation of Geometry Items
 
@@ -84,13 +62,13 @@ Each 2D face has its orientation defined by its first 2 edges. The first 2 edges
 
 ![2D Face Orientation](2d_face_orientation.png)
 
-The face winding order is determined purely by the order of the edges, and does not consider the order of vertices within each edge. In this example image, if the arrows were pointing in the opposite direction, but the face still listed edge U before edge V, the face would still be considered to be facing towards the camera when interpreted as the boundary of a 3D mesh. To calculate the face normal, first find which vertex is shared between edge U and edge V. Find two vectors, one from the unshared vertex of edge U to the shared vertex, and one from the unshared vertex of edge U to the unshared vertex of edge V. Then, in 3D, the face normal is the cross product of these two vectors. Those three vertices, in that order, are also the first 3 vertices of the face as defined by G4MF's topology vertex instance rules.
+The face winding order is determined purely by the order of the edges, and does not consider the order of vertices within each edge. In this example image, if the arrows were pointing in the opposite direction, but the face still listed edge U before edge V, the face would still be considered to be facing towards the camera when interpreted as the boundary of a 3D mesh. To calculate the face normal, first find which vertex is shared between edge U and edge V. Find two vectors, one from the unshared vertex of edge U to the shared vertex, and one from the unshared vertex of edge U to the unshared vertex of edge V. Then, in 3D, the face normal is the cross product of these two vectors.
 
 Each 3D cell has its orientation defined by its first 2 faces. The first 2 faces MUST share an edge. Following faces MUST exist on the same 3D hyperplane spanned by the first 2 faces, and MUST form a closed 3D volume. For dimensions 3 and higher, the order of following elements is not constrained, since it is not trivially defined how to traverse a closed volume in higher dimensions. The order of the first 2 faces defines the oriented volume of the cell. If the cell's first 2 faces are swapped, the cell's orientation is reversed. When a 3D cell is used as the boundary of a 4D mesh, an orientation like the below image in the XYZ axes means the cell is facing in the +W direction.
 
 ![3D Cell Orientation](3d_cell_orientation.png)
 
-To calculate the cell normal, first find which edge is shared between the first 2 faces. In this example, the first face is the bottom face, formed by U and V, and the second face is the right face, formed by V and W. Get the edge on the first face after the shared edge, and get the edge on the second face after the shared edge. From those edges, get 4 vertices: the unshared vertex of the edge from the first face, the start vertex of the shared edge, the end vertex of the shared edge (such that the shared edge direction matters), and the unshared vertex of the edge from the second face (which adds to the span of the first face). Then, find the perpendicular product of the three vectors formed by the first vertex to each of the other three vertices. A cell facing in the +W direction, when these vectors are viewed in the XYZ axes, appears like the vectors of a right-handed basis with a positive determinant. Those four vertices, in that order, are also the first 4 vertices of the cell as defined by G4MF's topology vertex instance rules.
+To calculate the cell normal, first find which edge is shared between the first 2 faces. In this example, the first face is the bottom face, formed by U and V, and the second face is the right face, formed by V and W. Get the edge on the first face after the shared edge, and get the edge on the second face after the shared edge. From those edges, get 4 vertices: the unshared vertex of the edge from the first face, the start vertex of the shared edge, the end vertex of the shared edge (such that the shared edge direction matters), and the unshared vertex of the edge from the second face (which adds to the span of the first face). Then, find the perpendicular product of the three vectors formed by the first vertex to each of the other three vertices. A cell facing in the +W direction, when these vectors are viewed in the XYZ axes, appears like the vectors of a right-handed basis with a positive determinant.
 
 For dimensions 5 and higher, it is still the case that each N-dimensional cell has its orientation defined by its first two (N-1)-dimensional elements, which MUST share an (N-2)-dimensional element. Following elements MUST exist on the same N-dimensional hyperplane spanned by the first two elements, and MUST form a closed N-dimensional volume.
 
@@ -100,6 +78,7 @@ For more information, see the "Exterior Algebra" article on Wikipedia: https://e
 
 ## JSON Schema
 
-- See [g4mf.mesh.surface.topology.schema.json](../../schema/mesh/g4mf.mesh.surface.topology.schema.json) for the mesh surface topology properties JSON schema.
 - See [g4mf.mesh.surface.schema.json](../../schema/mesh/g4mf.mesh.surface.schema.json) for the mesh surface properties JSON schema.
+- See [g4mf.mesh.surface.binding.schema.json](../../schema/mesh/g4mf.mesh.surface.binding.schema.json) for the binding properties JSON schema.
+- See [g4mf.mesh.surface.binding.geometry.schema.json](../../schema/mesh/g4mf.mesh.surface.binding.geometry.schema.json) for the geometry decomposition properties JSON schema.
 - See [g4mf.mesh.schema.json](../../schema/mesh/g4mf.mesh.schema.json) for the mesh properties JSON schema.

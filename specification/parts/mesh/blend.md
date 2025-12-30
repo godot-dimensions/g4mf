@@ -31,23 +31,21 @@ In addition to the below listed properties, blend shapes are highly recommended 
 
 ## Blend Shape Properties
 
-| Property               | Type     | Description                                                               | Default          |
-| ---------------------- | -------- | ------------------------------------------------------------------------- | ---------------- |
-| **normal**             | `object` | The offset or displacement of the per-vertex-instance normals.            | No displacement. |
-| **position**           | `object` | The offset or displacement of the vertex positions.                       | No displacement. |
-| **textureMap**         | `object` | The offset or displacement of the per-vertex-instance texture map.        | No displacement. |
-| **topologyNormal**     | `object` | Like `"normal"` but for the per-topology-vertex-instance normals.         | No displacement. |
-| **topologyTextureMap** | `object` | Like `"textureMap"` but for the per-topology-vertex-instance texture map. | No displacement. |
+| Property       | Type     | Description                                                      | Default          |
+| -------------- | -------- | ---------------------------------------------------------------- | ---------------- |
+| **normal**     | `object` | The offset or displacement of the normal direction values.       | No displacement. |
+| **position**   | `object` | The offset or displacement of the vertex positions.              | No displacement. |
+| **textureMap** | `object` | The offset or displacement of the texture map coordinate values. | No displacement. |
 
 All of these properties use the [Blend Shape Target](#blend-shape-target-properties) schema to contain the indices and offsets.
 
 ### Normal
 
-The `"normal"` property is an object that defines the offset or displacement of the per-vertex-instance normals for the blend shape. This property is optional and defaults to no displacement.
+The `"normal"` property is an object that defines the offset or displacement of the normal direction values for the blend shape. This property is optional and defaults to no displacement.
 
-If the mesh has multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh. For example, for a 4D mesh with two surfaces, the first with 10 tetrahedral simplex cells and the second with 20 tetrahedral simplex cells, indices 0 to 39 refer to the first surface's vertex indices, and indices 40 to 119 refer to the second surface's vertex indices.
+For meshes with multiple surfaces, the target indices refer to a combination of all normal value accessors for all surfaces in the mesh. For example, if surface 0 has 5 normal values, then surface 1's normal values are referenced starting from the number 5 in the target indices.
 
-Normals MUST be re-normalized after applying all blend shapes for a mesh.
+Normals MUST be re-normalized before rendering after applying all blend shapes for a mesh.
 
 ### Position
 
@@ -55,25 +53,9 @@ The `"position"` property is an object that defines the offset or displacement o
 
 ### Texture Map
 
-The `"textureMap"` property is an object that defines the offset or displacement of the per-vertex-instance texture space coordinates for the blend shape. This property is optional and defaults to no displacement.
+The `"textureMap"` property is an object that defines the offset or displacement of the texture map's texture space coordinate values for the blend shape. This property is optional and defaults to no displacement.
 
-If the mesh has multiple surfaces, the blend shape target indices are a combination of the per-vertex-instance indices for all surfaces in the mesh. For example, for a 4D mesh with two surfaces, the first with 10 tetrahedral simplex cells and the second with 20 tetrahedral simplex cells, indices 0 to 39 refer to the first surface's vertex indices, and indices 40 to 119 refer to the second surface's vertex indices.
-
-### Topology Normal
-
-The `"topologyNormal"` property is an object that defines the offset or displacement of the per-topology-vertex-instance normals for the blend shape. This property is optional and defaults to no displacement.
-
-If the mesh has multiple surfaces, the blend shape target indices are a combination of the per-topology-vertex-instance indices for all boundary geometry items in all mesh surfaces. For example, for a 4D mesh with two surfaces, the first with 10 cubic cells and the second with 20 cubic cells, indices 0 to 79 refer to the first surface's topology vertex indices, and indices 80 to 239 refer to the second surface's topology vertex indices.
-
-Normals MUST be re-normalized after applying all blend shapes for a mesh.
-
-### Topology Texture Map
-
-The `"topologyTextureMap"` property is an object that defines the offset or displacement of the per-topology-vertex-instance texture space coordinates for the blend shape. This property is optional and defaults to no displacement.
-
-If the mesh has multiple surfaces, the blend shape target indices are a combination of the per-topology-vertex-instance indices for all boundary geometry items in all mesh surfaces. For example, for a 4D mesh with two surfaces, the first with 10 cubic cells and the second with 20 cubic cells, indices 0 to 79 refer to the first surface's topology vertex indices, and indices 80 to 239 refer to the second surface's topology vertex indices.
-
-This property may only be used when at least one mesh surface has the `"
+For meshes with multiple surfaces, the target indices refer to a combination of all texture map value accessors for all surfaces in the mesh. For example, if surface 0 has 5 texture map values, then surface 1's texture map values are referenced starting from the number 5 in the target indices.
 
 ## Blend Shape Target Properties
 
@@ -86,7 +68,7 @@ This property may only be used when at least one mesh surface has the `"
 
 The `"indices"` property is an integer that defines the index of the accessor that contains the indices for the mesh deformation blend shape morph target. This property is required and has no default value.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer component type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each index in this accessor corresponds to an item in the mesh that the blend shape morph target applies to, such as a vertex position, per-vertex-instance normal, or another attribute, and MUST NOT exceed the number of items in the targeted accessor.
+This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an unsigned integer component type, and MUST have the `"vectorSize"` property undefined or set to its default value of 1. Each index in this accessor corresponds to an item in the mesh that the blend shape morph target applies to, such as a vertex position, normal direction value, or another attribute, and MUST NOT exceed the number of items in the targeted accessor.
 
 ### Offsets
 

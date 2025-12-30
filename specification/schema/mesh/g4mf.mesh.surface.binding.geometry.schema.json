@@ -1,0 +1,26 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.mesh.surface.binding.geometry.schema.json",
+	"title": "G4MF Mesh Surface Binding Geometry Decomposition",
+	"type": "object",
+	"description": "Defines how binding values are associated with a specific geometry's decomposed elements.",
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
+	"properties": {
+		"accessor": {
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains indices into this binding's values. Each element corresponds to a decomposed element at the specified dimension."
+		},
+		"dimension": {
+			"type": "integer",
+			"description": "The dimensional level to decompose to. 0 for vertices, 1 for edges, 2 for polygons, 3 for volumes, and so on. MUST NOT be greater than `index` + 2.",
+			"minimum": 0,
+			"default": 0
+		},
+		"index": {
+			"type": "integer",
+			"description": "The index into the mesh surface's geometry array that this binding references.",
+			"minimum": 0
+		}
+	},
+	"required": ["accessor", "index"]
+}

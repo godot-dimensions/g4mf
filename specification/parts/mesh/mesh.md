@@ -47,31 +47,40 @@ This is a reference to an accessor in the G4MF file's document-level `"accessors
 
 ## Mesh Surface Properties
 
-| Property              | Type      | Description                                                                             | Default            |
-| --------------------- | --------- | --------------------------------------------------------------------------------------- | ------------------ |
-| **simplexes**         | `integer` | The index of the accessor that contains the simplex indices for this surface.           | No simplexes       |
-| **edges**             | `integer` | The index of the accessor that contains the edge indices for this surface.              | No edges           |
-| **material**          | `integer` | The index of the material to use for this surface.                                      | No material        |
-| **normals**           | `integer` | The index of the accessor that contains per-vertex-instance normals for this surface.   | Flat normals       |
-| **polytopeSimplexes** | `boolean` | If `true`, allow importing the simplexes as complex polytopes instead of simplexes.     | `false`            |
-| **textureMap**        | `integer` | The texture space coordinates of the surface's vertex instances (usually simplexes).    | No texture mapping |
-| **topology**          | `object`  | Optional extended topology data for this surface.                                       | No topology data   |
+| Property              | Type        | Description                                                                           | Default            |
+| --------------------- | ----------- | ------------------------------------------------------------------------------------- | ------------------ |
+| **edges**             | `integer`   | The index of the accessor that contains the edge indices for this surface, if any.    | No edges           |
+| **geometry**          | `integer[]` | Hierarchical geometry data for this surface, if any.                                  | No geometry data   |
+| **material**          | `integer`   | The index of the material to use for this surface, if any.                            | No material        |
+| **normals**           | `object`    | A binding that defines the normals for this surface, if any.                          | Flat normals       |
+| **polytopeSimplexes** | `boolean`   | If `true`, allow importing the simplexes as complex polytopes instead of simplexes.   | `false`            |
+| **seams**             | `integer`   | The list of which border geometry items are marked as seams, if any.                  | No seams           |
+| **simplexes**         | `integer`   | The index of the accessor that contains the simplex indices for this surface, if any. | No simplexes       |
+| **textureMap**        | `object`    | A binding that defines the texture map for this surface, if any.                      | No texture mapping |
 
 ### Simplexes
 
-The `"simplexes"` property is an integer index that references an accessor containing the simplex cell indices for this surface. If not defined, the surface does not have explicit simplex cells, and may be a wireframe-only surface, or simplexes may be calculated from the `"topology"` data if needed (simplexes not explicitly defined in the G4MF file MUST NOT be used to determine vertex instances for normals, texture mapping, or other per-vertex data).
+The `"simplexes"` property is an integer index that references an accessor containing the simplex cell indices for this surface. If not defined, the surface does not have explicit simplex cells, and may be a wireframe-only surface, or simplexes may be calculated from the `"geometry"` data if needed.
 
 This property defines only ready-to-render simplex cell data. Each component in the accessor is an integer that refers to a vertex in the mesh's vertices accessor of the surface. The number of vertices per simplex is determined by the dimension of the model: 3D models have triangular simplex cells (3 vertices per simplex), 4D models have tetrahedral simplex cells (4 vertices per simplex), and so on. The only exception to this pattern is 2D models, which use triangular simplex cells. Simplexes are not defined for dimensions below 2. Optionally, multiple simplexes may be combined into larger star-shaped polytopes by setting the `"polytopeSimplexes"` property to `true`, enabling applications to treat multiple simplexes as part of the same polytope if needed without adding additional data.
 
 This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer component type, and MUST have the `"vectorSize"` property set to the number of vertices per simplex cell as determined by the dimension of the model. Each primitive number component in the accessor is an index of a vertex in the mesh's vertices accessor, and each index MUST NOT exceed the bounds of the mesh's vertices accessor.
 
-This property is not used to represent general hierarchical geometry. For example, in a 4D model, if two 3D simplexes share a 2D face, this simplex data does not contain information about this sharing, making it difficult to perform operations that require knowledge of the topological structure of the mesh, such as subdivision or smoothing. Such information could be reconstructed from these simplexes, but it would be computationally expensive to do so, and potentially lossy. For the purposes of interchange between DCC applications, consider defining the `"topology"` property in addition to the `"simplexes"` property, which allows for more complex hierarchical geometry data to be defined, and also defining boundary normals and seams. See [G4MF Mesh Topology](topology.md) for more information.
+This property is not used to represent general hierarchical geometry. For example, in a 4D model, if two 3D simplexes share a 2D face, this simplex data does not contain information about this sharing, making it difficult to perform operations that require knowledge of the topological structure of the mesh, such as subdivision or smoothing. Such information could be reconstructed from these simplexes, but it would be computationally expensive to do so, and potentially lossy. For the purposes of interchange between DCC applications, consider defining the `"geometry"` property in addition to the `"simplexes"` property, which allows for more complex hierarchical geometry data to be defined, and also defining boundary normals and seams. See [G4MF Mesh Topology](topology.md) for more information.
 
 ### Edges
 
 The `"edges"` property is an integer index that references an accessor containing the edge indices for this surface. If not defined, the surface does not have explicit edges, but edges may be calculated from the simplexes if needed for visibility.
 
 This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of an integer component type, and MUST have the `"vectorSize"` property set to 2. Each primitive number component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. Every two primitive number components in the accessor form an edge, so the accessor MUST have an even number of components, as already enforced by the `"vectorSize"` property being set to 2.
+
+### Geometry
+
+The `"geometry"` property is an array of integers, each of which is an index that references an accessor containing complex hierarchical geometry data for this surface. This property is optional, and if not defined, the surface does not have hierarchical geometry data.
+
+The `"geometry"` property requires the `"edges"` property to be defined, because edges are used as the basic building blocks for the first level of hierarchical geometry data. If `"geometry"` is defined, but not `"edges"`, the file is invalid.
+
+See [G4MF Mesh Topology](topology.md) for more information about hierarchical geometry.
 
 ### Material
 
@@ -83,11 +92,13 @@ See [G4MF Material](material.md) for more information about materials.
 
 ### Normals
 
-The `"normals"` property is an integer index that references an accessor containing per-vertex-instance normals for this surface. If not defined, the surface has flat normals.
+The `"normals"` property is a binding object that defines the normals for this surface. If not defined, the surface has flat normals.
 
-Normals can be used to define the surface's shading, such as smooth shading or flat shading. The default behavior is to use flat normals, meaning that all vertex instances in a simplex cell have the same normal as the simplex cell itself. See [Calculating Cell Normals](#calculating-cell-normals) for more information about how to calculate normals for simplex cells.
+Normals can be used to define the surface's shading, such as smooth shading or flat shading. The default behavior is to use flat normals, meaning that all corners in a simplex cell have the same normal as the simplex cell itself. See [Calculating Cell Normals](#calculating-cell-normals) for more information about how to calculate normals for simplex cells.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST be of a floating-point component type, and MUST have the `"vectorSize"` property set to the same value as the `"vectorSize"` of the mesh's vertices accessor. The amount of vectors in the accessor MUST be equal to the amount of vertex instances in the simplexes of this surface, which is the amount of component integers in the `"simplexes"` accessor. For example, for 3D meshes, this is the amount of triangular simplex cells multiplied by 3. For 4D meshes, this is the amount of tetrahedral simplex cells multiplied by 4, and so on. If the surface does not have simplexes, but has edges, then the amount of vectors in the accessor MUST be equal to the amount of component integers in the `"edges"` accessor, which is the amount of edges multiplied by 2. See [Vertex Instances](#vertex-instances) for more information about vertex instances, which are used by normals.
+The `"values"` accessor within the normals binding contains the normal directions, which MUST have a floating-point `componentType`, MUST have a `vectorSize` equal to the dimension of the mesh (3 for a 3D mesh, 4 for a 4D mesh, and so on), and the normal vectors MUST be normalized within the margin of floating-point precision errors.
+
+The binding's index properties (such as `"vertices"`, `"edges"`, `"simplexes"`, or `"geometry"` decompositions) control how the normal values are associated with mesh elements. See [G4MF Mesh Surface Bindings](bindings.md) for more information.
 
 ### Polytope Simplexes
 
@@ -101,35 +112,25 @@ Applications may ignore this flag to always import as individual simplexes, or m
 
 Note: This only supports star-shaped polytopes with a simply connected topology where there exists a point on or within the polytope from which all vertices can be seen. See the Wikipedia article on star-shaped polygons: https://en.wikipedia.org/wiki/Star-shaped_polygon
 
+### Seams
+
+The `"seams"` property is an integer that references an accessor containing the list of which border geometry items are marked as seams. If not defined, the surface does not have seams.
+
+The `"seams"` property requires the `"edges"` property to be defined, because seams are defined on border geometry items, which are either edges, or higher-dimensional geometry items that depend on edges. If `"seams"` is defined, but not `"edges"`, the file is invalid.
+
+See [G4MF Mesh Topology](topology.md) for more information about seams.
+
 ### Texture Map
 
-The `"textureMap"` property is an integer index that references an accessor containing the per-vertex-instance texture map data for the mesh surface's vertex instances. If not defined, the surface does not have per-vertex-instance texture mapping.
+The `"textureMap"` property is a binding object that defines the texture map for this surface. If not defined, the surface does not have texture mapping.
 
-A texture map, also known as a UV map, UVW map, or texture coordinate map, is a mapping from the indices of the vertex instances to the texture space coordinates. Per vertex data applies to a surface's vertex instances, which depend on the surface's `"simplexes"` and `"edges"` properties. See [Vertex Instances](#vertex-instances) for more information on how vertex instances are defined.
+A texture map, also known as a UV map, UVW map, or texture coordinate map, contains texture coordinates, and information on how those coordinates bind to domains. The `"values"` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually on a range of 0.0 to 1.0.
 
 The texture coordinates are usually on a range of 0.0 to 1.0. For 3D meshes, the texture coordinates usually refer to a 2D texture. For 4D meshes, the texture coordinates usually refer to a 3D texture. However, any dimension of texture coordinates is allowed. A 4D mesh may use a 2D texture, though this is discouraged and not very useful because it will look untextured from certain angles, or a 4D texture, mapping the 4D vertices in the same dimension as the texture coordinates. This property is intended to be used together with the `"texture"` property, but may be used without it, such as when defining a texture map for an untextured surface.
 
-Texture map transforms, such as those supplied by `KHR_texture_transform` in glTF™, are not supported in G4MF. Instead, any texture transforms present in an application, such as scaling or translation, MUST be baked into the texture coordinates in the accessor when exporting the G4MF file. If dynamic texture transforms are required, such as for animation purposes, they may be defined by an extension, as long as the actual texture coordinates in the texture map properties have the current transforms baked in at export time.
+Texture map transforms, such as those supplied by `KHR_texture_transform` in glTF™, are not supported in the base specification of G4MF. Instead, any texture transforms present in an application, such as scaling or translation, MUST be baked into the texture coordinates in the accessor when exporting the G4MF file. If dynamic texture transforms are required, such as for animation purposes, they may be defined by an extension, as long as the actual texture coordinates in the texture map properties have the current transforms baked in at export time.
 
-This is a reference to an accessor in the G4MF file's document-level `"accessors"` array. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its `"vectorSize"` property set to the dimension of the texture space. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances in the surface.
-
-### Topology
-
-The `"topology"` property is an object that contains optional extended topology data, which defines how the mesh surface is hierarchically structured in terms of its geometry and connectivity. If not defined, the surface does not have this data available.
-
-See [G4MF Mesh Topology](topology.md) for more information about this property.
-
-## Vertex Instances
-
-Each mesh surface has a set of simplex vertex instances, implicitly defined how the surface's simplex properties use the vertices. Vertex instances may be used to define normal vectors, and may be used by materials to define per-vertex-instance data, such as colors or texture coordinates, for a mesh surface. Blender calls vertex instances "corners".
-
-Mesh surface simplex vertex instances are defined as the following:
-
-- If a mesh surface has the `"simplexes"` property defined, then the vertex instances are the usages of the vertices in the simplexes. For example, in a 4D model with tetrahedral simplex cells, each simplex cell has 4 vertex instances.
-- If a mesh surface does not have the `"simplexes"` property defined, but does have the `"edges"` property defined, then the vertex instances are the usages of the vertices in the edges. Each edge always has 2 vertex instances, one for each end of the edge.
-- If a mesh surface does not have the `"simplexes"` or `"edges"` properties defined, then the vertex instances are the mesh vertices themselves, allowing for point cloud materials to be used on meshes without any defined geometry.
-- The `"topology"` property cannot be used to determine the vertex instances for a mesh surface's simplexes. Items inside `"topology"` have their own separate definition of topology vertex instances defined by boundary geometry items.
-- Extensions may define other ways to determine the vertex instances for a mesh surface.
+The binding's index properties (such as `"vertices"`, `"edges"`, `"simplexes"`, or `"geometry"` decompositions) control how the texture coordinate values are associated with mesh elements. See [G4MF Mesh Surface Bindings](bindings.md) for more information.
 
 ## Calculating Cell Normals
 
@@ -143,7 +144,15 @@ To calculate the perpendicular vector, you may use the functions defined in the 
 
 It is recommended to pre-compute the simplex cell normals before rendering and store them in memory, since calculating them can be expensive, especially for higher dimensions. However, since this information is recoverable from the simplexes, it would be redundant to store in G4MF.
 
-For non-simplex polytope cells such as those defined in the `"topology"` property, the same calculation method applies, with the vertices sourced from boundary geometry items. However, the order of the vertices used to calculate the vectors is determined in a more complex way. See [G4MF Mesh Topology](topology.md) for more information about how to determine the order of vertices for boundary geometry items.
+For non-simplex polytope cells such as those defined in the `"geometry"` property, the same calculation method applies, with the vertices sourced from boundary geometry items. However, the order of the vertices used to calculate the vectors is determined in a more complex way. See [G4MF Mesh Topology](topology.md) for more information about how to determine the order of vertices for boundary geometry items.
+
+## Mesh Surface Bindings
+
+Mesh surface bindings define how data values are associated with mesh elements such as vertices, edges, simplexes, and geometry items. Bindings are used by the `"normals"` and `"textureMap"` properties of mesh surfaces, and by the `"binding"` and `"textureMap"` properties of material channels.
+
+A binding contains a `"values"` property that references an accessor containing the actual data values (such as normal directions or texture coordinates). These values are then sampled based on the index properties that map mesh elements to entries in the values array.
+
+See [G4MF Mesh Surface Bindings](bindings.md) for more information.
 
 ## JSON Schema
 

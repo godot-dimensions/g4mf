@@ -6,6 +6,10 @@
 	"description": "A material channel defines a specific property of a material, such as its base color, normal map, emission properties, etc. All properties are optional; an empty JSON object is a valid material channel, but prefer omitting the channel if unused.",
 	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
+		"elementMap": {
+			"$ref": "g4mf.mesh.surface.binding.schema.json",
+			"description": "A binding that associates channel values to mesh surface elements through indices. Use `values` to store the channel data (colors, normals, etc.) and populate the binding's index properties (such as `vertices`, `edges`, `simplexes`, or `geometry` decompositions) to control whether the data is per-vertex, per-edge, per-simplex, or per-geometry element."
+		},
 		"factor": {
 			"type": "array",
 			"description": "The modulate factor, also known as the value or single base color. For `baseColor`, this is the RGB(A) color value for the channel in linear color space. If used together with other properties, this acts as a modulate which is per-component multiplied with the other properties. The color is represented as an array of usually three or four numbers, each usually in the range 0.0 to 1.0, but may go above 1.0 for overbright colors.",
@@ -13,29 +17,13 @@
 				"type": "number"
 			}
 		},
-		"perEdge": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-edge color data for this channel. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-edge colors. If defined, the amount of edge colors MUST match or exceed the amount of edges in all surfaces that use this channel."
-		},
-		"perSimplex": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-simplex color data for this channel. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-simplex colors. If defined, the amount of simplex cell colors MUST match or exceed the amount of simplex cells in all surfaces that use this channel."
-		},
-		"perVertex": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-vertex color data for this channel. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. If not defined, the channel does not have per-vertex colors. If defined, the amount of vertex colors MUST match or exceed the amount of vertices in all surfaces that use this channel."
-		},
 		"texture": {
 			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
 			"description": "The index of the texture used by the texture map. This references a texture defined in the G4MF document-level `textures` array. If not defined, the channel does not have a texture, but a texture map may still be defined and used by extensions."
 		},
 		"textureMap": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-vertex-instance texture map data for this channel, overriding the mesh surface's texture map. A texture map, also known as a UV map or UVW map, is a mapping from the vertex instances to the texture coordinates. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space, which is the same as the dimension of `texture` if defined. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances of all surfaces that use this material. If not defined, the channel does not have per-vertex-instance texture maps."
-		},
-		"topologyTextureMap": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-topology-vertex-instance texture map data for this channel, overriding the mesh surface topology's texture map. A texture map, also known as a UV map or UVW map, is a mapping from the vertex instances to the texture coordinates. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space, which is the same as the dimension of `texture` if defined. The amount of vector elements in the accessor MUST match or exceed the amount of vertex instances of all topology objects of all surfaces that use this material. If not defined, the channel does not have per-topology-vertex-instance texture maps."
+			"$ref": "g4mf.mesh.surface.binding.schema.json",
+			"description": "The texture map data of this material channel, overriding the mesh surface. A texture map, also known as a UV map or UVW map, contains texture coordinates, and information on how those coordinates bind to domains. The `values` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually on a range of 0.0 to 1.0."
 		}
 	}
 }

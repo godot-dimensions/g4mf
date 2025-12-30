@@ -8,15 +8,15 @@
 	"properties": {
 		"edges": {
 			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the edge indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. If not defined, the surface does not have explicit edges, but edges may be calculated from the simplex cells if needed. If defined, may be used as the foundation of the data in `topology`."
+			"description": "The index of the accessor that contains the edge indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. The `vectorSize` of the edges accessor MUST be set to 2 (the amount of vertices per edge). If not defined, the surface does not have explicit edges, but edges may be calculated from the simplex cells if needed. If defined, may be used as the foundation of the data in `topology`."
 		},
 		"material": {
 			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
 			"description": "The index of the material used by this surface. This references a material defined in the G4MF document-level `materials` array. If not defined, the surface should use a default material."
 		},
 		"normals": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-vertex-instance normals for this surface. If not defined, flat shading is assumed, meaning that all vertex instances in a simplex cell have the same normal as the simplex cell itself."
+			"$ref": "g4mf.mesh.surface.binding.schema.json",
+			"description": "The normal map data of this mesh surface. The `values` accessor within the normals binding contains the normal directions, which MUST have a floating-point `componentType`, MUST have a `vectorSize` equal to the dimension of the mesh (3 for a 3D mesh, 4 for a 4D mesh, and so on), and the normal vectors MUST be normalized within the margin of floating-point precision errors. If not defined, flat shading is assumed, meaning that all vertices in a simplex cell have the same normal as the simplex cell itself."
 		},
 		"polytopeSimplexes": {
 			"type": "boolean",
@@ -25,18 +25,29 @@
 		},
 		"simplexes": {
 			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the simplex cell indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. If not defined, the surface does not have explicit simplex cells, and may be a wireframe-only surface, or may be calculated from the geometry data if needed."
+			"description": "The index of the accessor that contains the simplex cell indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. The `vectorSize` of the simplexes accessor MUST be set to the amount of vertices per simplex cell (3 for triangles of 3D meshes, 4 for tetrahedra of 3D meshes, and so on). If not defined, the surface does not have explicit simplex cells, and may be a wireframe-only surface, or may be calculated from the geometry data if needed."
 		},
 		"textureMap": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
-			"description": "The index of the accessor that contains the per-vertex-instance texture map data for the mesh surface's vertex instances. A texture map, also known as a UV map or UVW map, is a mapping from the vertex instances to the texture coordinates. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space."
+			"$ref": "g4mf.mesh.surface.binding.schema.json",
+			"description": "The texture map data of this mesh surface. A texture map, also known as a UV map or UVW map, contains texture coordinates, and information on how those coordinates bind to domains. The `values` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually on a range of 0.0 to 1.0."
 		},
-		"topology": {
-			"$ref": "g4mf.mesh.surface.topology.schema.json"
+		"geometry": {
+			"type": "array",
+			"description": "The indices of the accessors that contain hierarchical geometry data for this surface, allowing the preservation of polytope mesh topology. The accessor referred to by geometry index 0 defines N-gons made of edges, the accessor referred to by geometry index 1 defines N-hedra made of N-gons, and so on for higher dimensions. For an N-dimensional mesh, the accessor at index (N-4) contains (N-2)-dimensional border geometry items, the accessor at index (N-3) contains (N-1)-dimensional boundary geometry items, and the accessor at index (N-2) contains N-dimensional volumetric geometry items.",
+			"items": {
+				"$ref": "../g4mf_id.schema.json"
+			},
+			"minItems": 1,
+			"uniqueItems": true
+		},
+		"seams": {
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the list of which border geometry items are marked as seams. Border geometry items are defined as one dimension lower than boundary geometry items. For 3D meshes, this refers to 1D edges defined in the mesh surface `edges`, which border the 2D faces at `geometry` index 0. For 4D meshes, this refers to 2D faces defined in `geometry` at index 0, which border the 3D boundary cells at index 1. For 5D meshes, this refers to 3D cells defined in `geometry` at index 1, which border the 4D boundary cells at index 2."
 		}
 	},
 	"dependentRequired": {
-		"topology": ["edges"],
-		"polytopeSimplexes": ["simplexes"]
+		"geometry": ["edges"],
+		"polytopeSimplexes": ["simplexes"],
+		"seams": ["edges"]
 	}
 }

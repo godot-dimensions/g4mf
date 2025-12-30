@@ -1,0 +1,42 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.mesh.surface.binding.schema.json",
+	"title": "G4MF Mesh Surface Binding",
+	"type": "object",
+	"description": "Mesh surface bindings define how data is associated with mesh elements such as vertices, edges, and simplexes. For example, the tetrahedra of a 4D mesh surface may have texture map coordinates, normals, colors, or other data associated with each corner of the tetrahedra. Bindings define an array of data, and indices which sample that data for specific mesh elements.",
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
+	"properties": {
+		"edges": {
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains indices into this binding's values corresponding to the edges of the mesh surface. If defined, this MUST point to a valid accessor, which MUST have an integer `componentType`, MUST have a `vectorSize` of 2 (matching the mesh surface's edges accessor), and MUST have the same number of elements as the mesh surface's edges accessor. Each component in the accessor is an index into this binding's values array. This property is only valid if the mesh surface defines edges."
+		},
+		"geometry": {
+			"type": "array",
+			"description": "An array of geometry decomposition objects that define how binding values are associated with specific geometry's decomposed polytope elements of the mesh surface. Usually, this will have one item referring to vertex instances of boundary geometry items, meaning for a 3D mesh surface, `index` will be set to 0 (the 2D faces), and for a 4D mesh surface, `index` will be set to 1 (the 3D cells).",
+			"items": {
+				"$ref": "g4mf.mesh.surface.binding.geometry.schema.json"
+			}
+		},
+		"perEdge": {
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains indices into this binding's values corresponding to each edge of the mesh surface. If defined, this MUST point to a valid accessor, which MUST have an integer `componentType`, MUST have a `vectorSize` of 1, and MUST have the same number of elements as the mesh surface's edges accessor (half the number of component indices). Each component in the accessor is an index into this binding's values array. This property is only valid if the mesh surface defines edges."
+		},
+		"perSimplex": {
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains indices into this binding's values corresponding to each simplex cell of the mesh surface. If defined, this MUST point to a valid accessor, which MUST have an integer `componentType`, MUST have a `vectorSize` of 1, and MUST have the same number of elements as the mesh surface's simplexes accessor (the number of simplex cells). Each component in the accessor is an index into this binding's values array. This property is only valid if the mesh surface defines simplexes."
+		},
+		"simplexes": {
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains indices into this binding's values corresponding to the simplexes of the mesh surface. If defined, this MUST point to a valid accessor, which MUST have an integer `componentType`, MUST have a `vectorSize` matching the mesh surface's simplexes accessor (3 for the triangles of a 3D mesh, 4 for the tetrahedra of a 4D mesh, and so on), and MUST have the same number of elements as the mesh surface's simplexes accessor. Each component in the accessor is an index into this binding's values array. This property is only valid if the mesh surface defines simplexes."
+		},
+		"values": {
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains the values associated with this binding. The type and structure of the values depend on the specific use case of the binding. For example, the texture mapping of a 3D mesh surface would typically use a floating-point accessor with a `vectorSize` of 2 or 3, the texture mapping of a 4D mesh surface would typically use a floating-point accessor with a `vectorSize` of 3 or 4, the vertex normals of a 5D mesh would use a floating-point accessor with a `vectorSize` of 5, and so on."
+		},
+		"vertices": {
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"description": "The index of the accessor that contains indices into this binding's values corresponding to the vertices shared between all mesh surfaces. If defined, this MUST point to a valid accessor, which MUST have an integer `componentType`, MUST have a `vectorSize` of 1, and MUST have the same number of elements as the mesh's vertices accessor. Each component in the accessor is an index into this binding's values array. This property is always valid because the `vertices` property of the mesh is required."
+		}
+	},
+	"required": ["values"]
+}
