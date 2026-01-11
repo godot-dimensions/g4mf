@@ -4,7 +4,7 @@
 	"title": "G4MF Shape",
 	"type": "object",
 	"description": "A shape in G4MF is a pure geometric object defined by an enumerated type and a set of size parameters. Shapes are useful for things like physics calculations, but are not expected to be directly used for rendering.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"curves": {
 			"type": "array",
@@ -14,7 +14,7 @@
 			}
 		},
 		"heights": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
 			"description": "The index of the accessor storing the heightmap data, if any."
 		},
 		"length": {
@@ -24,7 +24,7 @@
 			"default": 1.0
 		},
 		"mesh": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
 			"description": "The index of the mesh to use for a mesh-based shape."
 		},
 		"size": {

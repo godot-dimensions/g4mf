@@ -4,7 +4,7 @@
 	"title": "G4MF Bone",
 	"type": "object",
 	"description": "A bone in a skeleton, representing a segment of a skeletal structure used for animation and posing of 3D models.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../../g4mf_item.schema.json" }],
 	"properties": {
 		"length": {
 			"type": "number",
@@ -17,7 +17,7 @@
 			"exclusiveMinimum": 0.0
 		},
 		"shape": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../../g4mf_id.schema.json" }],
 			"description": "The index of the shape referenced by this bone, which may be used for visualization, hit registration, ragdoll physics, or any other use case. If not defined, the bone does not specify a shape, and any shape may be inferred by the application. If defined, the `length` property MUST also be defined.",
 			"default": -1
 		}

@@ -4,27 +4,27 @@
 	"title": "G4MF Mesh Surface Topology Data",
 	"type": "object",
 	"description": "Topology data for a mesh surface, which defines how the mesh surface is hierarchically structured in terms of its geometry and connectivity. Useful for DCC applications, but not required for runtime applications like game engines.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"geometry": {
 			"type": "array",
 			"description": "The indices of the accessors that contain hierarchical geometry data for this surface, allowing the preservation of mesh topology.",
 			"items": {
-				"$ref": "g4mf_id.schema.json"
+				"$ref": "../g4mf_id.schema.json"
 			},
 			"minItems": 1,
 			"uniqueItems": true
 		},
 		"normals": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the per-boundary-vertex-instance normals for this surface. If not defined and `geometry` is defined, the geometry has flat normals. For 3D meshes, this refers to vertex instances on 2D faces defined in `geometry`. For 4D meshes, this refers to vertex instances on 3D boundary cells defined in `geometry`. For 5D meshes, this refers to vertex instances on 4D boundary cells defined in `geometry`."
 		},
 		"seams": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the list of which border geometry items are marked as seams. For 3D meshes, this refers to 1D edges defined in the mesh surface `edges`, which border 2D faces. For 4D meshes, this refers to 2D faces defined in `geometry`, which border 3D cells. For 5D meshes, this refers to 3D cells defined in `geometry`, which border 4D cells."
 		},
 		"textureMap": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the per-vertex-instance texture map data for the topology's vertex instances. A texture map, also known as a UV map or UVW map, is a mapping from the vertex instances to the texture coordinates. The accessor MUST have a floating-point component type, and values are usually on a range of 0.0 to 1.0. The accessor MUST have its vector size set to the dimension of the texture space."
 		}
 	},

@@ -4,7 +4,7 @@
 	"title": "G4MF Shape Curve Taper",
 	"type": "object",
 	"description": "A shape curve taper defines a tapering position of a shape curve.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"radii": {
 			"type": "array",

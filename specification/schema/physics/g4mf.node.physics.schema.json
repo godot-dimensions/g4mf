@@ -4,7 +4,7 @@
 	"title": "G4MF Node Physics",
 	"type": "object",
 	"description": "Physics properties for a G4MF node.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"motion": {
 			"$ref": "g4mf.node.physics.motion.schema.json"

@@ -4,10 +4,10 @@
 	"title": "G4MF Node Physics Collider",
 	"type": "object",
 	"description": "Parameters describing a trigger volume used for detecting physics objects.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"shape": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
 			"description": "The id of the shape referenced by this node.",
 			"default": -1
 		},
@@ -15,7 +15,7 @@
 			"type": "array",
 			"description": "For compound triggers, the set of descendant glTF nodes with a trigger property that make up this compound trigger.",
 			"items": {
-				"$ref": "g4mf_id.schema.json"
+				"$ref": "../g4mf_id.schema.json"
 			},
 			"uniqueItems": true
 		}

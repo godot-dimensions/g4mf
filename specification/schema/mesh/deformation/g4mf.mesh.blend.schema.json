@@ -4,7 +4,7 @@
 	"title": "G4MF Mesh Deformation Blend Properties",
 	"type": "object",
 	"description": "Blend shapes, also known as morph targets, define how a mesh can be deformed by displacing its vertex positions and other attributes. This schema contains an array of blend shapes and the amount of how much each shape is activated.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../../g4mf_item.schema.json" }],
 	"properties": {
 		"amounts": {
 			"type": "array",

@@ -4,7 +4,7 @@
 	"title": "G4MF Shape Curve",
 	"type": "object",
 	"description": "A shape curve defines a rounded part of a shape.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"radii": {
 			"type": "array",

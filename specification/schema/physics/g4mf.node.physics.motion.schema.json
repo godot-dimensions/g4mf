@@ -4,7 +4,7 @@
 	"title": "G4MF Node Physics Motion",
 	"type": "object",
 	"description": "Parameters describing how a node's transform should be driven by physics simulation.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"type": {
 			"type": "string",

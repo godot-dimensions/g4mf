@@ -4,7 +4,7 @@
 	"title": "G4MF Mesh Deformation Blend Shape",
 	"type": "object",
 	"description": "A blend shape, also known as a morph target, defines how a mesh can be deformed by displacing its vertex positions and other attributes.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../../g4mf_item.schema.json" }],
 	"properties": {
 		"normal": {
 			"allOf": [{ "$ref": "g4mf.mesh.blend.shape.target.schema.json" }],

@@ -4,14 +4,14 @@
 	"title": "G4MF Mesh Deformation Blend Shape Morph Target",
 	"type": "object",
 	"description": "The indices of which items this blend shape morph target applies to, and how much displacement should be applied to each of those items.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../../g4mf_item.schema.json" }],
 	"properties": {
 		"indices": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../../g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the indices for the mesh deformation blend shape morph target."
 		},
 		"offsets": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../../g4mf_id.schema.json" }],
 			"description": "The index of the accessor that contains the offsets or displacements for the mesh deformation blend shape morph target."
 		}
 	},

@@ -4,13 +4,13 @@
 	"title": "G4MF Node Skeleton",
 	"type": "object",
 	"description": "Skeletons define the root of a hierarchy of bones used for skeletal animation.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../../g4mf_item.schema.json" }],
 	"properties": {
 		"joints": {
 			"type": "array",
 			"description": "An array of G4MF node indices that represent the bones in the skeleton used for controlling joints of skinned meshes.",
 			"items": {
-				"$ref": "g4mf_id.schema.json"
+				"$ref": "../../g4mf_id.schema.json"
 			}
 		}
 	}

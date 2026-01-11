@@ -4,7 +4,7 @@
 	"title": "G4MF Material",
 	"type": "object",
 	"description": "A material defines the appearance of a mesh surface.",
-	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"baseColor": {
 			"$ref": "g4mf.material.channel.schema.json",
