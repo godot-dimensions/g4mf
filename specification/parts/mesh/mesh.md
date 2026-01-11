@@ -2,7 +2,9 @@
 
 ## Overview
 
-G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of multiple surfaces, each of which may have a separate material. Mesh surfaces have vertices, and may contain edge indices, simplex cell indices, and more, each of which points to an accessor that encodes the data (see [G4MF Data Storage](data.md)).
+G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of multiple surfaces, each of which may have a separate material. Mesh surfaces have vertices, and may contain edge indices, simplex cell indices, and more, each of which points to an accessor that encodes the data (see [G4MF Data Storage](../data.md)).
+
+Meshes may be instanced by nodes in the scene hierarchy to provide visible geometry for those nodes. See [G4MF Node Mesh Instances](mesh_instance.md) for more information about mesh instances on nodes.
 
 ## Example
 
@@ -75,7 +77,7 @@ This is a reference to an accessor in the G4MF file's document-level `"accessors
 
 The `"material"` property is an integer index that references a material in the document-level `"materials"` array. If not defined, the surface does not have a material.
 
-This is a reference to a material in the G4MF file's document-level `"materials"` array. The material MUST be defined in the array, and the index MUST NOT exceed the bounds of the materials array. If not defined, the surface does not have a material, and should be rendered with a default material.
+This is a reference to a material in the G4MF file's document-level `"materials"` array. The material MUST be defined in the array, and the index MUST NOT exceed the bounds of the materials array. If not defined and not overridden by mesh instances, the surface does not have a material, and should be rendered with a default material.
 
 See [G4MF Material](material.md) for more information about materials.
 

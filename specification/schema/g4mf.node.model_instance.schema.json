@@ -1,0 +1,39 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.node.model_instance.schema.json",
+	"title": "G4MF Node Model Instance",
+	"type": "object",
+	"description": "A model instance is a reference to a model that is instantiated as a node in the scene hierarchy. If not defined on a node, the node is not an instance of a model.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"materialOverrides": {
+			"type": "object",
+			"description": "A map of unique material names to property overrides for materials within the referenced model. Each key is a material name, and the value contains properties that override or extend the corresponding material. When applied, the override properties are merged with the original material properties, and the result MUST be valid according to the material schema.",
+			"additionalProperties": {
+				"$ref": "mesh/g4mf.material.schema.json"
+			}
+		},
+		"model": {
+			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"description": "The index of the model that this node references. This is a reference to a model in the G4MF file's models array. This property is required for a model instance."
+		},
+		"nodeAdditionalChildren": {
+			"type": "object",
+			"description": "A map of unique node names to arrays of host node indices to append as additional children to those nodes in the model instance. Each key is the name of a node in the referenced model, and each value is an array of G4MF node IDs referencing nodes in the host file that will be added as children after the model's own children.",
+			"additionalProperties": {
+				"type": "array",
+				"items": {
+					"allOf": [{ "$ref": "g4mf_id.schema.json" }]
+				}
+			}
+		},
+		"nodeOverrides": {
+			"type": "object",
+			"description": "A map of node names to property overrides for nodes within the referenced model. Each key is a node name, and the value contains properties that override or extend the corresponding node. When applied, the override properties are merged with the original node properties, and the result MUST be valid according to the node schema, including mutual exclusivity rules.",
+			"additionalProperties": {
+				"$ref": "g4mf.node.schema.json"
+			}
+		}
+	},
+	"required": ["model"]
+}

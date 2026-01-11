@@ -1,0 +1,29 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.node.mesh_instance.schema.json",
+	"title": "G4MF Node Mesh Instance",
+	"type": "object",
+	"description": "A mesh instance is a reference to a mesh that is attached to a node in the scene hierarchy. If not defined on a node, the node is not a mesh instance node.",
+	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
+	"properties": {
+		"blendAmounts": {
+			"type": "array",
+			"description": "How much each blend shape is activated; the amount of influence each blend shape has on this mesh instance mesh. This is typically a value on the range of 0.0 to 1.0, where 0.0 means no influence and 1.0 means full influence, but may also go beyond this range for exaggerated or inverted effects. The size of this array must match the number of items in the mesh's blend `shapes`, or if `blendAmounts` is not explicitly defined, `blendAmounts` is defined to be the same as the mesh's blend `amounts`. See `g4mf.mesh.blend.schema.json`.",
+			"items": {
+				"type": "number"
+			}
+		},
+		"materials": {
+			"type": "array",
+			"description": "The indices of the material overrides that this mesh instance uses. These are references to materials in the G4MF file's `materials` array. These are overrides for the materials assigned to the mesh surfaces of the `mesh`. If not defined, the mesh's default materials are used.",
+			"items": {
+				"$ref": "../g4mf_id.schema.json"
+			}
+		},
+		"mesh": {
+			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"description": "The index of the mesh that this node references. This is a reference to a mesh in the G4MF file's meshes array. This property is required for a mesh instance."
+		}
+	},
+	"required": ["mesh"]
+}

@@ -33,13 +33,11 @@
 			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
 			"description": "The index of the light that this node references. This is a reference to a light in the G4MF file's lights array. If not defined, this node is not a light source."
 		},
-		"mesh": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The index of the mesh that this node references. This is a reference to a mesh in the G4MF file's meshes array. If not defined, this node is not a mesh node."
+		"meshInstance": {
+			"$ref": "mesh/g4mf.node.mesh_instance.schema.json"
 		},
-		"model": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
-			"description": "The index of the model that this node references. This is a reference to a model in the G4MF file's models array. If not defined, this node is not a model node."
+		"modelInstance": {
+			"$ref": "g4mf.node.model_instance.schema.json"
 		},
 		"physics": {
 			"$ref": "physics/g4mf.node.physics.schema.json"
@@ -83,24 +81,24 @@
 			{ "required": ["basis", "scale"] },
 			{ "required": ["bone", "camera"] },
 			{ "required": ["bone", "light"] },
-			{ "required": ["bone", "mesh"] },
-			{ "required": ["bone", "model"] },
+			{ "required": ["bone", "meshInstance"] },
+			{ "required": ["bone", "modelInstance"] },
 			{ "required": ["bone", "physics"] },
 			{ "required": ["bone", "skeleton"] },
 			{ "required": ["camera", "light"] },
-			{ "required": ["camera", "mesh"] },
-			{ "required": ["camera", "model"] },
+			{ "required": ["camera", "meshInstance"] },
+			{ "required": ["camera", "modelInstance"] },
 			{ "required": ["camera", "physics"] },
 			{ "required": ["camera", "skeleton"] },
-			{ "required": ["light", "mesh"] },
-			{ "required": ["light", "model"] },
+			{ "required": ["light", "meshInstance"] },
+			{ "required": ["light", "modelInstance"] },
 			{ "required": ["light", "physics"] },
 			{ "required": ["light", "skeleton"] },
-			{ "required": ["mesh", "model"] },
-			{ "required": ["mesh", "physics"] },
-			{ "required": ["mesh", "skeleton"] },
-			{ "required": ["model", "physics"] },
-			{ "required": ["model", "skeleton"] },
+			{ "required": ["meshInstance", "modelInstance"] },
+			{ "required": ["meshInstance", "physics"] },
+			{ "required": ["meshInstance", "skeleton"] },
+			{ "required": ["modelInstance", "physics"] },
+			{ "required": ["modelInstance", "skeleton"] },
 			{ "required": ["physics", "skeleton"] }
 		]
 	}

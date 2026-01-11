@@ -19,7 +19,7 @@ The following example defines.
 
 The `"amounts"` property is an array of numbers that specifies how much each blend shape is activated. If not defined, all amounts are implicitly set to `0.0`.
 
-Each value typically ranges from `0.0` to `1.0`, where `0.0` means no influence and `1.0` means full influence, but values can exceed this range for exaggerated effects, or use negative values for inverted effects. The size of this array must match the number of items in the `shapes` array, or if `amounts` is not explicitly defined, `amounts` is implicitly defined to be the same size as `shapes` filled with all values set to `0.0`.
+Blend amounts are also known as weights or activations. Each value typically ranges from `0.0` to `1.0`, where `0.0` means no influence and `1.0` means full influence, but values can exceed this range for exaggerated effects, or use negative values for inverted effects. The size of this array must match the number of items in the `shapes` array, or if `amounts` is not explicitly defined, `amounts` is implicitly defined to be the same size as `shapes` filled with all values set to `0.0`.
 
 ### Shapes
 
