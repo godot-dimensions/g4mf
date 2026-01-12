@@ -9,3 +9,15 @@ repos:
         language: python
         entry: python .github/workflows/file_format.py
         types_or: [text]
+
+      - id: check-markdown-links
+        name: check-markdown-links
+        language: python
+        entry: python .github/workflows/check_markdown_links.py
+        types: [markdown]
+
+      - id: check-schema-refs
+        name: check-schema-refs
+        language: python
+        entry: python .github/workflows/check_schema_refs.py
+        types: [json]

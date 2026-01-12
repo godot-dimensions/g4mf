@@ -14,7 +14,7 @@ Note that G4MF requires that all named items in the file have unique names. This
 
 ## Properties
 
-These properties are the same as defined for all [G4MF File References](core.md#file-references), but are listed here for clarity and to elaborate on the descriptions.
+These properties are the same as defined for all [G4MF File References](../core.md#file-references), but are listed here for clarity and to elaborate on the descriptions.
 
 | Property       | Type      | Description                                                         | Default               |
 | -------------- | --------- | ------------------------------------------------------------------- | --------------------- |

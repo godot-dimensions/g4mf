@@ -4,7 +4,7 @@
 
 G4MF stores the visible geometry of objects inside of meshes. Each mesh is made of multiple surfaces, each of which may have a separate material. Mesh surfaces have vertices, and may contain edge indices, simplex cell indices, and more, each of which points to an accessor that encodes the data (see [G4MF Data Storage](../data.md)).
 
-Meshes may be instanced by nodes in the scene hierarchy to provide visible geometry for those nodes. See [G4MF Node Mesh Instances](mesh_instance.md) for more information about mesh instances on nodes.
+Meshes may be instanced by nodes in the scene hierarchy to provide visible geometry for those nodes. See [G4MF Node Mesh Instances](node_mesh_instance.md) for more information about mesh instances on nodes.
 
 ## Example
 
@@ -29,7 +29,7 @@ See [G4MF Blend Shape Mesh Deformation](blend.md) for more information about ble
 
 The `"skin"` property is an object that defines the skinning information used for skeletons. This property is optional and defaults to no skinning.
 
-See [G4MF Skinning Mesh Deformation](skin.md) for more information about skinning.
+See [G4MF Skeleton Skinned Mesh Deformation](skeleton.md) for more information about skinning.
 
 ### Surfaces
 
@@ -139,7 +139,7 @@ For dimensions other than 3D, we need to generalize this concept. Instead of ref
 
 To generalize this to 4D, we need three vectors. For a simplex cell, use the vectors from vertex 0 to vertex 1, from vertex 0 to vertex 2, and from vertex 0 to vertex 3. Then we need to pass these vectors into a function that returns a unique 4D vector that is perpendicular to all three of them. More generally, for N dimensions, we get N-1 vectors from vertex 0 to vertex N, then pass them into a function that returns a unique N-dimensional vector that is perpendicular to all of them. This is then used to calculate a dot product with the camera's local Z axis in the same way as in 3D (camera forward in G4MF is defined as -Z, like glTF™).
 
-To calculate the perpendicular vector, you may use the functions defined in the [Calculating Perpendicular Vectors section of the G4MF Math specification](math.md#calculating-perpendicular-vectors).
+To calculate the perpendicular vector, you may use the functions defined in the [Calculating Perpendicular Vectors section of the G4MF Math specification](../math.md#calculating-perpendicular-vectors).
 
 It is recommended to pre-compute the simplex cell normals before rendering and store them in memory, since calculating them can be expensive, especially for higher dimensions. However, since this information is recoverable from the simplexes, it would be redundant to store in G4MF.
 

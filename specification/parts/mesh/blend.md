@@ -96,6 +96,6 @@ This is a reference to an accessor in the G4MF file's document-level `"accessors
 
 ## JSON Schema
 
-- See [g4mf.mesh.blend.schema.json](../../schema/mesh/g4mf.mesh.blend.schema.json) for the mesh blend properties JSON schema.
+- See [g4mf.mesh.blend.schema.json](../../schema/mesh/deformation/g4mf.mesh.blend.schema.json) for the blend shape properties JSON schema.
 - See [g4mf.mesh.blend.shape.schema.json](../../schema/mesh/deformation/g4mf.mesh.blend.shape.schema.json) for the blend shape properties JSON schema.
 - See [g4mf.mesh.blend.shape.target.schema.json](../../schema/mesh/deformation/g4mf.mesh.blend.shape.target.schema.json) for the blend shape target properties JSON schema
