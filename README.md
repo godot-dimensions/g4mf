@@ -44,6 +44,8 @@ Additionally, there are many fine-detail differences between G4MF and glTF™:
 - G4MF materials have channels that generalize the glTF™ concept of separate material properties. For example, glTF™ base color uses `"baseColorFactor"` and `"baseColorTexture"`, the latter of which has a textureInfo which defines a texture `"index"` and a `"texCoord"` index. G4MF materials have channels like `"baseColor"` with these properties unified under it.
 - G4MF textures may have multiple images, which provides an explicit order of precedence for texture fallbacks. glTF™ textures only have one image, which extensions can override, but there is no explicit conflict resolution between extensions.
 - G4MF lights require taking into account the scale of the node they are attached to, while glTF™ lights require ignoring the scale of the node they are attached to.
+- G4MF lights are stored directly on nodes, while glTF™ lights are stored in a top-level array and referenced by nodes.
+- G4MF cameras are stored directly on nodes, while glTF™ cameras are stored in a top-level array and referenced by nodes.
 - G4MF physics shapes provide a more general and expanded list of shapes when compared to glTF™.
 - G4MF accessors have a `"componentType"` string that holds values like `"uint8"`, `"int16"`, `"float32"`, etc. glTF™ accessors have a `"componentType"` property whose values are OpenGL™-specific enumerations like `5121`, `5122`, `5126`, etc. G4MF's approach is more human-readable and extensible, while glTF™'s approach requires humans to reference a table of enumerations to understand the values.
 - G4MF accessors have a `"vectorSize"` integer, generalizing the glTF™ accessor concept of `"SCALAR"`, `"VEC2"`, `"VEC3"`, and `"VEC4"` to any size.

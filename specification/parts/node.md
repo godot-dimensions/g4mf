@@ -36,21 +36,21 @@ The following example defines a 4-dimensional G4MF file with a root node at inde
 
 ## Properties
 
-| Property     | Type        | Description                                                 | Default                   |
-| ------------ | ----------- | ----------------------------------------------------------- | ------------------------- |
-| **children** | `integer[]` | The indices of the child nodes of this node.                | `[]` (empty array)        |
-| **visible**  | `boolean`   | Whether the node is visible or not (affects rendering).     | `true`                    |
-| **position** | `number[]`  | The position of the node, relative to its parent node.      | Zero vector               |
-| **basis**    | `number[]`  | The basis of the node, relative to its parent node.         | Identity matrix           |
-| **rotor**    | `number[]`  | The rotation of the node, relative to its parent node.      | Identity rotor            |
-| **scale**    | `number[]`  | The scale of the node, relative to its own local rotation.  | Scale of one              |
-| **bone**     | `object`    | If this node is a skeleton bone, the bone properties.       | `undefined` (no bone)     |
-| **camera**   | `object`    | If this node is a camera, the camera properties.            | `undefined` (no camera)   |
-| **light**    | `integer`   | If this node is a light, the index of the light properties. | `-1` (no light)           |
-| **mesh**     | `integer`   | If this node is a mesh instance, the index of the mesh.     | `-1` (no mesh)            |
-| **model**    | `integer`   | If this node is a model instance, the index of the model.   | `-1` (no model)           |
-| **physics**  | `object`    | If this node is a physics object, the physics properties.   | `undefined` (no physics)  |
-| **skeleton** | `object`    | If this node is a skeleton, the skeleton properties.        | `undefined` (no skeleton) |
+| Property     | Type        | Description                                                | Default                   |
+| ------------ | ----------- | ---------------------------------------------------------- | ------------------------- |
+| **children** | `integer[]` | The indices of the child nodes of this node.               | `[]` (empty array)        |
+| **visible**  | `boolean`   | Whether the node is visible or not (affects rendering).    | `true`                    |
+| **position** | `number[]`  | The position of the node, relative to its parent node.     | Zero vector               |
+| **basis**    | `number[]`  | The basis of the node, relative to its parent node.        | Identity matrix           |
+| **rotor**    | `number[]`  | The rotation of the node, relative to its parent node.     | Identity rotor            |
+| **scale**    | `number[]`  | The scale of the node, relative to its own local rotation. | Scale of one              |
+| **bone**     | `object`    | If this node is a skeleton bone, the bone properties.      | `undefined` (no bone)     |
+| **camera**   | `object`    | If this node is a camera, the camera properties.           | `undefined` (no camera)   |
+| **light**    | `object`    | If this node is a light, the light properties.             | `undefined` (no light)    |
+| **mesh**     | `integer`   | If this node is a mesh instance, the index of the mesh.    | `-1` (no mesh)            |
+| **model**    | `integer`   | If this node is a model instance, the index of the model.  | `-1` (no model)           |
+| **physics**  | `object`    | If this node is a physics object, the physics properties.  | `undefined` (no physics)  |
+| **skeleton** | `object`    | If this node is a skeleton root, the skeleton properties.  | `undefined` (no skeleton) |
 
 ### Children
 
@@ -136,7 +136,7 @@ See [G4MF Camera](camera.md) for more information about cameras.
 
 #### Light
 
-The `"light"` property is an integer index of a G4MF light. If not specified, the default value is `-1`, meaning the node is not a light.
+The `"light"` property is an object that defines the light properties for this node. If not specified, the default value is `undefined`, meaning the node is not a light.
 
 The `"light"` property MUST NOT be used together with the `"bone"`, `"camera"`, `"mesh"`, `"model"`, `"physics"`, or `"skeleton"` properties on the same node.
 
@@ -176,9 +176,9 @@ See [G4MF Node Physics](physics/node_physics.md) for more information about phys
 
 #### Skeleton
 
-The `"skeleton"` property is an object that defines the skeleton properties for this node. If not specified, the default value is `undefined`, meaning the node is not a skeleton.
+The `"skeleton"` property is an object that defines the skeleton root properties for this node. If not specified, the default value is `undefined`, meaning the node is not a skeleton root.
 
-The `"skeleton"` property is used to define the root of a hierarchy of bones used for skeletal animation. Skinned meshes MAY be added as direct children of the skeleton node to be animated by the skeleton.
+The `"skeleton"` property is used to define the root of a hierarchy of bones used for skeletal animation. Skinned meshes MAY be added as direct children of the skeleton root node to be animated by the skeleton.
 
 The `"skeleton"` property MUST NOT be used together with the `"bone"`, `"camera"`, `"light"`, `"mesh"`, `"model"`, or `"physics"` properties on the same node.
 

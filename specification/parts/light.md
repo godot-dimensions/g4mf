@@ -2,9 +2,11 @@
 
 ## Overview
 
-G4MF allows for defining lights in the scene using the `"lights"` array to define light properties, and referencing them by index in the `"light"` property of a node. Each light object in the array is one of the `"directional"`, `"point"`, or `"spot"` types, and may have further properties depending on the light type, specifically `"range"` for point and spot lights, and `"coneInnerAngle"` and `"coneOuterAngle"` for spot lights. All lights have a `"color"` and an `"intensity"` property, with the intensity unit changing depending on the type of light. Additional light types may be defined by extensions by extending the base light object.
+G4MF allows for defining lights in the scene using nodes with the `"light"` property defined. Each light is one of the `"directional"`, `"point"`, or `"spot"` types. Additional light types may be defined by extensions by extending the base light object. Lights are only active if the node is visible in the scene tree, meaning that the node itself is visible and all of its ancestor nodes are also visible.
 
-Implementations may choose to ignore lights if they are not supported or not desired. Instead, implementations may use unshaded rendering, angle-dependent shading, lighting from the environment, lights provided by the engine or application, or any other method of rendering the model.
+All lights have a `"color"` and an `"intensity"` property, with the intensity unit changing depending on the type of light (see [Intensity](#intensity)). Point and spot lights may have the `"range"` property defined to limit how far the light reaches, and spot lights may have the `"coneInnerAngle"` and `"coneOuterAngle"` properties defined to control the shape of the light cone.
+
+Lights defined in G4MF files are optional. Implementations may choose to ignore lights if they are not supported or not desired. Instead, implementations may use unshaded rendering, angle-dependent shading, lighting from the environment, lights provided by the engine or application, or any other method of rendering the model.
 
 ## Example
 
@@ -12,17 +14,14 @@ This example defines a red spot light with a range of 10 meters used on a node. 
 
 ```json
 {
-	"lights": [
-		{
-			"type": "spot",
-			"color": [1.0, 0.0, 0.0],
-			"range": 10.0
-		}
-	],
 	"nodes": [
 		{
 			"name": "MySpotLight",
-			"light": 0,
+			"light": {
+				"type": "spot",
+				"color": [1.0, 0.0, 0.0],
+				"range": 10.0
+			}
 		}
 	]
 }
@@ -59,13 +58,13 @@ The color is defined in linear color space. The color is represented as an array
 
 The `"coneInnerAngle"` property is a number that defines the inner angle radius of the light cone in radians. If not specified, the default is `0.0`.
 
-This property is only used for spot lights. Inside the cone inner angle, the intensity of the light is maximal. Between the cone inner angle and the cone outer angle, the intensity of the light is interpolated.
+This property is only used for spot lights, or custom light types defined by extensions. Inside the cone inner angle, the intensity of the light is maximal. Between the cone inner angle and the cone outer angle, the intensity of the light is interpolated.
 
 ### Cone Outer Angle
 
 The `"coneOuterAngle"` property is a number that defines the outer angle radius of the light cone in radians. If not specified, the default is `0.7853981633974483` radians (45 degrees).
 
-This property is only used for spot lights. Beyond the cone outer angle, the intensity of the light is zero. Between the cone inner angle and the cone outer angle, the intensity of the light is interpolated.
+This property is only used for spot lights, or custom light types defined by extensions. Beyond the cone outer angle, the intensity of the light is zero. Between the cone inner angle and the cone outer angle, the intensity of the light is interpolated.
 
 TODO: Currently, the cone angles use the angular radius like Godot and glTF™, but the Web Audio API uses the angular diameter. These are not consistent with each other, so we can't be consistent with all of them either way. It's still up for debate if we should switch to the angular diameter, or if we should keep the angular radius. Which is more useful, which is more common?
 
@@ -73,7 +72,7 @@ TODO: Currently, the cone angles use the angular radius like Godot and glTF™, 
 
 The `"intensity"` property is a number that defines the intensity of the light. If not specified, the default is `1000.0`.
 
-The intensity unit depends on the type of light. Point and spot lights use lumens per radial unit (radian for 2D models, steradian for 3D models, choradian for 4D models, etc), while directional lights use lumens per surface unit (meter for 2D models, square meter for 3D models, cubic meter for 4D models, etc). The final light emitted is the product of the color and the intensity.
+The intensity unit depends on the type of light. Point and spot lights use lumens per radial unit (radian for 2D models, steradian for 3D models, choradian for 4D models, etc), while directional lights use lumens per surface unit (meter for 2D models, square meter for 3D models, cubic meter for 4D models, etc). Custom light types defined by extensions may define any way to interpret this value. The final light emitted is the product of the color and the intensity.
 
 The intensity MUST scale up with the uniform scale of the node the light is attached to, in order to ensure that a scaled model keeps the same light intensity relative to itself. For a 3D model, a uniform scale of 2.0 should scale up the intensity by 4.0. For a 4D model, a uniform scale of 2.0 should scale up the intensity by 8.0.
 
@@ -81,8 +80,8 @@ The intensity MUST scale up with the uniform scale of the node the light is atta
 
 The `"range"` property is a number that defines the range of the light in meters. If not specified, the default is `Infinity`.
 
-The range is only used for point and spot lights. The range defines the distance from the light source beyond which the light intensity is zero. The range MUST scale up with the uniform scale of the node the light is attached to, in order to ensure that a scaled model keeps the same light range relative to itself. For a uniform scale of 2.0, the range should be scaled up by 2.0.
+The range is only used for point and spot lights, or custom light types defined by extensions. The range defines the distance from the light source beyond which the light intensity is zero. The range MUST scale up with the uniform scale of the node the light is attached to, in order to ensure that a scaled model keeps the same light range relative to itself. For a uniform scale of 2.0, the range should be scaled up by 2.0.
 
 ## JSON Schema
 
-See [g4mf.light.schema.json](../schema/g4mf.light.schema.json) for the G4MF Light properties JSON schema.
+See [g4mf.node.light.schema.json](../schema/g4mf.node.light.schema.json) for the G4MF Light properties JSON schema.

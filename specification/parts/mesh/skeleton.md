@@ -2,11 +2,11 @@
 
 ## Overview
 
-G4MF allows meshes to be deformed using skins controlled by skeletons, also known as rigging, armatures, or skeletal meshes.
+G4MF allows meshes to be deformed using skins controlled by skeletons, also known as rigging, armatures, skeletal meshes, or skinned meshes.
 
 A skinned mesh is defined as being used by a skeleton if both of these conditions are met:
 
-- The mesh is a direct child G4MF node with the `"skeleton"` property defined.
+- The mesh is used on a node that is a direct child of a node with the `"skeleton"` property defined.
 - The mesh has the `"skin"` property defined.
 
 ## Example
@@ -79,9 +79,9 @@ All skeleton bones MUST have the `"bone"` property defined, even if it is an emp
 
 ### Skeleton
 
-The `"skeleton"` property is an object that defines the skeleton properties for this node. If not specified, the default value is `undefined`, meaning that the node is not a skeleton.
+The `"skeleton"` property is an object that defines the skeleton properties for this node. If not specified, the default value is `undefined`, meaning that the node is not a skeleton root.
 
-All skeletons MUST have the `"skeleton"` property defined, even if it is an empty object. A node is a skeleton if and only if the `"skeleton"` property is defined; the absence of the `"skeleton"` property indicates that the node is not a skeleton. All descendant bone nodes of the skeleton, which form a contiguous chain of bone parenting to the skeleton node, are considered part of the skeleton. The `"skeleton"` property MAY have the `"joints"` property defined when it is used for skinned meshes, which defines the bones used for controlling the joints of skinned meshes. Additional properties MAY be added to skeletons by extensions.
+All skeletons root nodes MUST have the `"skeleton"` property defined, even if it is an empty object. A node is a skeleton root if and only if the `"skeleton"` property is defined; the absence of the `"skeleton"` property indicates that the node is not a skeleton root. All descendant bone nodes of the skeleton, which form a contiguous chain of bone parenting to the skeleton root node, are considered part of the skeleton. The `"skeleton"` property MAY have the `"joints"` property defined when it is used for skinned meshes, which defines the bones used for controlling the joints of skinned meshes. Additional properties MAY be added to skeletons by extensions.
 
 ## Node Bone Properties
 

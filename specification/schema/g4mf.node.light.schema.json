@@ -1,9 +1,9 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "g4mf.light.schema.json",
+	"$id": "g4mf.node.light.schema.json",
 	"title": "G4MF Light",
 	"type": "object",
-	"description": "A material channel defines a specific property of a material, such as its base color, normal map, emission properties, etc. All properties are optional; an empty JSON object is a valid material channel, but prefer omitting the channel if unused.",
+	"description": "A light node provides illumination to the scene from a specific location with specific properties.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
 		"type": {
@@ -16,11 +16,15 @@
 				},
 				{
 					"const": "point",
-					"description": "A point light emits light in all directions from a single point in space, the node's local origin."
+					"description": "A point light emits light in all directions from a single point in space, the node's local origin. Point lights are also known as omni lights or omnidirectional lights."
 				},
 				{
 					"const": "spot",
 					"description": "A spot light emits light in a cone shape from a single point in space, the node's local origin, in the node's local -Z direction."
+				},
+				{
+					"type": "string",
+					"description": "Other light types may be defined by extensions."
 				}
 			],
 			"default": "point"

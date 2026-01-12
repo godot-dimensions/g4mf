@@ -36,15 +36,6 @@
 			"minItems": 0,
 			"uniqueItems": true
 		},
-		"lights": {
-			"type": "array",
-			"description": "An array of zero or more lights. Each light defines a light source in the scene.",
-			"items": {
-				"$ref": "g4mf.light.schema.json"
-			},
-			"minItems": 0,
-			"uniqueItems": true
-		},
 		"materials": {
 			"type": "array",
 			"description": "An array of zero or more materials. Each material defines the appearance of a mesh surface.",
