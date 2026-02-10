@@ -47,16 +47,16 @@ This is a reference to an accessor in the G4MF file's document-level `"accessors
 
 ## Mesh Surface Properties
 
-| Property              | Type        | Description                                                                           | Default            |
-| --------------------- | ----------- | ------------------------------------------------------------------------------------- | ------------------ |
-| **edges**             | `integer`   | The index of the accessor that contains the edge indices for this surface, if any.    | No edges           |
-| **geometry**          | `integer[]` | Hierarchical geometry data for this surface, if any.                                  | No geometry data   |
-| **material**          | `integer`   | The index of the material to use for this surface, if any.                            | No material        |
-| **normals**           | `object`    | A binding that defines the normals for this surface, if any.                          | Flat normals       |
-| **polytopeSimplexes** | `boolean`   | If `true`, allow importing the simplexes as complex polytopes instead of simplexes.   | `false`            |
-| **seams**             | `integer`   | The list of which border geometry items are marked as seams, if any.                  | No seams           |
-| **simplexes**         | `integer`   | The index of the accessor that contains the simplex indices for this surface, if any. | No simplexes       |
-| **textureMap**        | `object`    | A binding that defines the texture map for this surface, if any.                      | No texture mapping |
+| Property              | Type        | Description                                                                            | Default            |
+| --------------------- | ----------- | -------------------------------------------------------------------------------------- | ------------------ |
+| **edges**             | `integer`   | The index of the accessor that contains the edge indices for this surface, if any.     | No edges           |
+| **geometry**          | `integer[]` | Hierarchical geometry data for this surface, if any.                                   | No geometry data   |
+| **material**          | `integer`   | The index of the material to use for this surface, if any.                             | No material        |
+| **normals**           | `object`    | A binding that defines the normals for this surface, if any.                           | Flat normals       |
+| **polytopeSimplexes** | `boolean`   | If `true`, allow importing the simplexes as complex polytopes instead of simplexes.    | `false`            |
+| **seams**             | `integer`   | The index of the accessor for which border geometry items are marked as seams, if any. | No seams           |
+| **simplexes**         | `integer`   | The index of the accessor that contains the simplex indices for this surface, if any.  | No simplexes       |
+| **textureMap**        | `object`    | A binding that defines the texture map for this surface, if any.                       | No texture mapping |
 
 ### Simplexes
 
