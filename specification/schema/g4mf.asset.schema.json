@@ -44,6 +44,10 @@
 			"description": "An optional link to the G4MF specification that the file adheres to. This is intended for informational purposes when manually inspecting a file, and SHOULD NOT be used by implementations for any functional purpose.",
 			"default": ""
 		},
+		"thumbnail": {
+			"type": "integer",
+			"description": "The index of the texture containing the thumbnail image(s) for this file. This MUST be a 2D texture. Sampling, filtering, and wrapping properties do not apply to the thumbnail."
+		},
 		"version": {
 			"type": "string",
 			"description": "The version of the G4MF file format. This is intended for informational purposes. When defined, it MUST be in the format `MAJOR.MINOR` or `MAJOR.MINOR.PATCH`."

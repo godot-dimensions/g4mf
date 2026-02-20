@@ -25,6 +25,8 @@ At a minimum, the G4MF JSON data MUST contain `"asset"` with `"dimension"` defin
 | **extensionsUsed**        | `string[]` | An array of extensions used in the file.                                  | `[]` No used extensions.     |
 | **extensionDependencies** | `object`   | An object mapping extensions to arrays of extensions that they depend on. | `{}` No dependencies.        |
 | **generator**             | `string`   | The name of the application that generated the file.                      | `""` (empty string)          |
+| **specification**         | `string`   | An optional link to the G4MF specification that the file adheres to.      | `""` (empty string)          |
+| **thumbnail**             | `integer`  | The index of the texture containing the thumbnail image for this file.    | No thumbnail.                |
 | **version**               | `string`   | The version of the G4MF specification used to generate the file.          | `""` (empty string)          |
 
 ### Dimension
@@ -70,6 +72,12 @@ This property is highly recommended to be set to a human-readable name of the ap
 The `"specification"` property is a string that defines an optional link to the G4MF specification that the file adheres to. This property is optional and defaults to an empty string.
 
 This property is intended for informational purposes when manually inspecting a file, and SHOULD NOT be used by implementations for any functional purpose. A URI to a website is recommended, such as `"https://github.com/godot-dimensions/g4mf"`, but any string is allowed.
+
+### Thumbnail
+
+The `"thumbnail"` property is an integer that defines the index of the texture containing the thumbnail image(s) for this file. This property is optional, with the default being that there is no thumbnail.
+
+If specified, the texture index MUST point to a valid texture in the file, and that texture MUST be a 2D texture. Multiple images within the texture serve only as fallbacks, with no cutting or layering behavior. Sampling, filtering, and wrapping properties do not apply to the thumbnail and are ignored for purposes of the thumbnail, but MAY be defined if the texture is also used for other purposes.
 
 ### Version
 
