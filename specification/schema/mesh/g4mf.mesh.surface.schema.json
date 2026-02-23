@@ -7,11 +7,11 @@
 	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"edges": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains the edge indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. The `vectorSize` of the edges accessor MUST be set to 2 (the amount of vertices per edge). If not defined, the surface does not have explicit edges, but edges may be calculated from the simplex cells if needed. If defined, may be used as the foundation of the data in `topology`."
 		},
 		"material": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The index of the material used by this surface. This references a material defined in the G4MF document-level `materials` array. If not defined, the surface should use a default material."
 		},
 		"normals": {
@@ -24,7 +24,7 @@
 			"default": false
 		},
 		"simplexes": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains the simplex cell indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. The `vectorSize` of the simplexes accessor MUST be set to the amount of vertices per simplex cell (3 for triangles of 3D meshes, 4 for tetrahedra of 3D meshes, and so on). If not defined, the surface does not have explicit simplex cells, and may be a wireframe-only surface, or may be calculated from the geometry data if needed."
 		},
 		"textureMap": {
@@ -35,13 +35,13 @@
 			"type": "array",
 			"description": "The indices of the accessors that contain hierarchical geometry data for this surface, allowing the preservation of polytope mesh topology. The accessor referred to by geometry index 0 defines N-gons made of edges, the accessor referred to by geometry index 1 defines N-hedra made of N-gons, and so on for higher dimensions. For an N-dimensional mesh, the accessor at index (N-4) contains (N-2)-dimensional border geometry items, the accessor at index (N-3) contains (N-1)-dimensional boundary geometry items, and the accessor at index (N-2) contains N-dimensional volumetric geometry items.",
 			"items": {
-				"$ref": "../g4mf_id.schema.json"
+				"$ref": "../g4mf_index.schema.json"
 			},
 			"minItems": 1,
 			"uniqueItems": true
 		},
 		"seams": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains the list of which border geometry items are marked as seams. Border geometry items are defined as one dimension lower than boundary geometry items. For 3D meshes, this refers to 1D edges defined in the mesh surface `edges`, which border the 2D faces at `geometry` index 0. For 4D meshes, this refers to 2D faces defined in `geometry` at index 0, which border the 3D boundary cells at index 1. For 5D meshes, this refers to 3D cells defined in `geometry` at index 1, which border the 4D boundary cells at index 2."
 		}
 	},

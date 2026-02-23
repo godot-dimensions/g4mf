@@ -23,14 +23,14 @@
 			"type": "array",
 			"description": "The indices of this node's children.",
 			"items": {
-				"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+				"allOf": [{ "$ref": "g4mf_index.schema.json" }],
 				"minimum": 1
 			},
 			"uniqueItems": true,
 			"minItems": 1
 		},
 		"light": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "g4mf_index.schema.json" }],
 			"description": "The index of the light that this node references. This is a reference to a light in the G4MF file's lights array. If not defined, this node is not a light source."
 		},
 		"meshInstance": {

@@ -7,7 +7,7 @@
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
 		"buffer": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "g4mf_index.schema.json" }],
 			"description": "The index of the buffer that contains the data for this buffer view. This is a reference to a buffer in the G4MF file's document-level `buffers` array.",
 			"default": 0
 		},

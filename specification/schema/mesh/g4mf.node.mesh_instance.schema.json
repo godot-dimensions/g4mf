@@ -17,11 +17,11 @@
 			"type": "array",
 			"description": "The indices of the material overrides that this mesh instance uses. These are references to materials in the G4MF file's `materials` array. These are overrides for the materials assigned to the mesh surfaces of the `mesh`. If not defined, the mesh's default materials are used.",
 			"items": {
-				"$ref": "../g4mf_id.schema.json"
+				"$ref": "../g4mf_index.schema.json"
 			}
 		},
 		"mesh": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The index of the mesh that this node references. This is a reference to a mesh in the G4MF file's meshes array. This property is required for a mesh instance."
 		}
 	},

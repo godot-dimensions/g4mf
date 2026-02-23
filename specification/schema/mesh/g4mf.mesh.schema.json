@@ -22,7 +22,7 @@
 			"uniqueItems": true
 		},
 		"vertices": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains the vertex data for this mesh. This property is required."
 		}
 	},

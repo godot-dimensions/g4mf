@@ -14,15 +14,15 @@
 			}
 		},
 		"groups": {
-			"allOf": [{ "$ref": "../../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains the group indices which influence the corresponding vertices. The size must match the number of indices in `vertices` and `weights`."
 		},
 		"vertices": {
-			"allOf": [{ "$ref": "../../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains the indices of skinned vertices, with multiple indices for each vertex if it is influenced by multiple groups. The size must match the number of indices in `groups` and `weights`."
 		},
 		"weights": {
-			"allOf": [{ "$ref": "../../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains the weights for how strongly each group influences the corresponding vertex. The size must match the number of indices in `groups` and `vertices`."
 		}
 	},

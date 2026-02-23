@@ -7,7 +7,7 @@
 	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"shape": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The id of the shape referenced by this node.",
 			"default": -1
 		}

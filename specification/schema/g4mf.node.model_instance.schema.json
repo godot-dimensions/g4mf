@@ -14,7 +14,7 @@
 			}
 		},
 		"model": {
-			"allOf": [{ "$ref": "g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "g4mf_index.schema.json" }],
 			"description": "The index of the model that this node references. This is a reference to a model in the G4MF file's models array. This property is required for a model instance."
 		},
 		"nodeAdditionalChildren": {
@@ -23,7 +23,7 @@
 			"additionalProperties": {
 				"type": "array",
 				"items": {
-					"allOf": [{ "$ref": "g4mf_id.schema.json" }]
+					"allOf": [{ "$ref": "g4mf_index.schema.json" }]
 				}
 			}
 		},

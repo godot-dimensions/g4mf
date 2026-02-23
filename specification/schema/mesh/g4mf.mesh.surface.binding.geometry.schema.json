@@ -7,7 +7,7 @@
 	"allOf": [{ "$ref": "../g4mf_item.schema.json" }],
 	"properties": {
 		"accessor": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains indices into this binding's values. Each element corresponds to a decomposed element at the specified dimension."
 		},
 		"dimension": {

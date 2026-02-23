@@ -18,7 +18,7 @@
 			}
 		},
 		"texture": {
-			"allOf": [{ "$ref": "../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The index of the texture used by the texture map. This references a texture defined in the G4MF document-level `textures` array. If not defined, the channel does not have a texture, but a texture map may still be defined and used by extensions."
 		},
 		"textureMap": {

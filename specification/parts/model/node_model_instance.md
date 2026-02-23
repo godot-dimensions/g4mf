@@ -37,7 +37,7 @@ Each model is a [G4MF File Reference](../core.md#file-references) which points t
 
 The `"nodeAdditionalChildren"` property is an object that allows appending host nodes as children of specific nodes within the referenced model. If not defined, the model instance uses only the children defined by the source model.
 
-Each key in the `"nodeAdditionalChildren"` object is the name of a node in the source model, and the value is an array of [G4MF IDs](../core.md#ids) indices referencing nodes in the host G4MF file. These nodes are appended to the end of the children list of the corresponding node during instantiation. This property is additive only and does not replace or remove the source model's children. To replace the children entirely, use `"nodeOverrides"` to set the `"children"` array. To remove only some child nodes from the instance, set that node's override to `null` in `"nodeOverrides"`.
+Each key in the `"nodeAdditionalChildren"` object is the name of a node in the source model, and the value is an array of [G4MF Integer Index Identifiers](../core.md#integer-index-identifiers) indices referencing nodes in the host G4MF file. These nodes are appended to the end of the children list of the corresponding node during instantiation. This property is additive only and does not replace or remove the source model's children. To replace the children entirely, use `"nodeOverrides"` to set the `"children"` array. To remove only some child nodes from the instance, set that node's override to `null` in `"nodeOverrides"`.
 
 ### Node Overrides
 
@@ -66,7 +66,7 @@ When override properties are merged, the resulting combined object MUST satisfy 
 
 When merging override properties, the following rules apply:
 
-- All [G4MF IDs](../core.md#ids) (indices) in override properties refer to the document-level arrays of the host G4MF file, not the referenced model file. For example, if a model contains a mesh instance node, and the model instance overrides the material to use index `0`, then that refers to the first material in the host G4MF file's `"materials"` array, not the model file's materials.
+- All [G4MF Integer Index Identifiers](../core.md#integer-index-identifiers) (indices) in override properties refer to the document-level arrays of the host G4MF file, not the referenced model file. For example, if a model contains a mesh instance node, and the model instance overrides the material to use index `0`, then that refers to the first material in the host G4MF file's `"materials"` array, not the model file's materials.
 
 - All non-null object types have their items merged recursively. This includes the overridden object itself, implying that partial overrides are valid and expected. For example, if a model contains a node with `"physics": { "motion": { "type": "dynamic" } }`, and a model instance contains an override with `"physics": { "motion": { "mass": 5.0 } }`, then the resulting node will have `"physics": { "motion": { "type": "dynamic", "mass": 5.0 } }`.
 

@@ -7,11 +7,11 @@
 	"allOf": [{ "$ref": "../../g4mf_item.schema.json" }],
 	"properties": {
 		"indices": {
-			"allOf": [{ "$ref": "../../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains the indices for the mesh deformation blend shape morph target."
 		},
 		"offsets": {
-			"allOf": [{ "$ref": "../../g4mf_id.schema.json" }],
+			"allOf": [{ "$ref": "../../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains the offsets or displacements for the mesh deformation blend shape morph target."
 		}
 	},

@@ -1,7 +1,7 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "g4mf_id.schema.json",
-	"title": "G4MF Identifier",
+	"$id": "g4mf_index.schema.json",
+	"title": "G4MF Integer Index Identifier",
 	"description": "An integer index used to identify an object in a G4MF file. This is used to reference objects in arrays, such as nodes, meshes, materials, and textures. When defined, the index MUST be valid in the range of the array it is referencing. An index of -1 MAY be used by extensions or parsers to indicate that a field does not point to an object by default, but this MUST NOT be written to a G4MF file.",
 	"type": "integer",
 	"minimum": 0
