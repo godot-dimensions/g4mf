@@ -98,9 +98,11 @@ The G4MF bipedal humanoid skeleton is designed to be minimally different from ot
 - VRM Humanoid Bones https://github.com/vrm-c/vrm-specification/blob/master/specification/VRMC_vrm-1.0/humanoid.md#list-of-humanoid-bones
   - Schema https://github.com/vrm-c/vrm-specification/blob/master/specification/VRMC_vrm-1.0/schema/VRMC_vrm.humanoid.humanBones.schema.json
 
-## Viseme Blend Shape Naming
+## Viseme Blend Shapes
 
 Visemes, short for "visual phonemes", are blend shapes that represent the visual aspect of phonemes during human speech. They are used for lip syncing, the process of matching a character's mouth movements to spoken words.
+
+### Viseme Blend Shape Naming
 
 The following viseme names are defined by G4MF, as a superset of common viseme sets found in other standards linked below:
 
@@ -127,7 +129,7 @@ The following viseme names are defined by G4MF, as a superset of common viseme s
 
 Each example word corresponds to the listed phonemes in order. Some sounds may be merged in common English accents, in which cases a language or accent is specified in the table, otherwise the examples are based on General American English as spoken in the 21st century. For RR, those sounds are allophonic in English and most languages, therefore only one example word is provided, but the specific choice may vary by accent. For a reference on what each phoneme sounds like, see the "IPA Chart" link in the "Viseme References" section below.[^1]
 
-Usage rules:
+### Viseme Blend Shape Usage Rules
 
 - If a blend shape (morph target) exists for one of these listed visemes, it MUST have its name set to the corresponding name from the table above in order to be used as that viseme in an application's lip syncing. The names are case-sensitive. This ensures that applications can reliably identify and use the visemes by their names.
 
@@ -139,13 +141,15 @@ Usage rules:
 
 - Visemes may be used for purposes other than lip syncing. For example, "VisemeWW" may be used as part of a "pog champ" facial expression.
 
-The G4MF viseme blend shape naming is designed to be close to other existing standards. For convenience, here are some other standards and how to convert them to G4MF, with names from those standards quoted in `"`, and the names from G4MF in backticks:
+### Viseme Name Conversion
+
+The G4MF viseme blend shape naming is designed to be close to other existing standards. For convenience, here are some other standards and how to convert them to G4MF, with names from those standards quoted in `"`, and the names from G4MF in backticks (formatted as code):
 
 - To convert from VRM lip sync visemes: Capitalize the viseme names, and add the `Viseme` prefix, then the names match.
 
 - To convert from MPEG-4 FBA visemes: Replace "E" with `EE`, capitalize the viseme names, and add the `Viseme` prefix, then the names match.
 
-- To convert from VRChat visemes: Replace "e" with `EE`, replace "i" with `IH`, replace "o" with `OH`, replace `u` with `OU`, capitalize the viseme names, and add the `Viseme` prefix, then the names match.
+- To convert from VRChat visemes: Replace "e" with `EE`, replace "i" with `IH`, replace "o" with `OH`, replace "u" with `OU`, capitalize the viseme names, and add the `Viseme` prefix, then the names match.
 
 - To convert from Meta Horizon visemes: Replace "E" with `EE`, replace "I" with `IH`, replace "O" with `OH`, replace "U" with `OU`, capitalize the viseme names, and add the `Viseme` prefix, then the names match. Meta Horizon matches VRChat except for capitalization.
 
@@ -158,11 +162,13 @@ The G4MF viseme blend shape naming is designed to be close to other existing sta
 - VRM Lip Sync https://github.com/vrm-c/vrm-specification/blob/master/specification/VRMC_vrm-1.0/expressions.md#lip-sync-procedural
 - ARPAbet Phoneme Set https://en.wikipedia.org/wiki/ARPABET and http://www.speech.cs.cmu.edu/cgi-bin/cmudict
 
-## Face Tracking Blend Shape Naming
+## Face Tracking Blend Shapes
 
 Face tracking is the process of using a camera to track a person's facial movements, and applying those movements to a character/avatar's face. While visemes are used for lip syncing to audio, face tracking is used to mimic a much broader range of facial expressions. The `Face*` blend shapes defined by G4MF are intended to be used for this purpose, though they can also be used to adjust the mesh around the eyes when using eye tracking, or used for manual animation.
 
 The standards for face tracking vary widely, unlike skeleton rigs and visemes which are relatively consistent. G4MF's face tracking blend shape names are designed to be a superset of all common face tracking standards. Since "Unified Expressions" is already a comprehensive standard that includes the functionality of all other common standards, G4MF's face tracking blend shape names are based on Unified Expressions, except with a `Face` prefix added to each name for clarity, and also the list of names has been alphabetized.
+
+### Face Tracking Blend Shape Naming
 
 The following table includes columns for many common face tracking standards, and how they map to G4MF's face tracking blend shape names. `~` indicates an indirect non-1-to-1 mapping, which is described in the Unified Expressions documentation.
 
@@ -255,7 +261,7 @@ The following table includes columns for many common face tracking standards, an
 
 This table lacks some of the nuances described in the Unified Expressions documentation for how these map to other standards. For more detailed documentation on each of these blend shapes, read the Unified Expressions documentation linked below.
 
-Usage rules:
+### Face Tracking Blend Shape Usage Rules
 
 - If a blend shape (morph target) exists for one of these listed face tracking shapes, it MUST have its name set to the corresponding name from the table above in order to be used as that shape in an application's face tracking. The names are case-sensitive. This ensures that applications can reliably identify and use the face tracking shapes by their names.
 
