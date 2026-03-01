@@ -62,6 +62,10 @@
 				{
 					"const": "ray",
 					"description": "A ray shape, defining a one-way line segment. The ray points in the local -Y direction from the local origin."
+				},
+				{
+					"type": "string",
+					"description": "An extension-defined shape type."
 				}
 			],
 			"default": "general"
