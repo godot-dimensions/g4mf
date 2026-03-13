@@ -36,6 +36,15 @@
 			"minItems": 0,
 			"uniqueItems": true
 		},
+		"files": {
+			"type": "array",
+			"description": "An array of zero or more file references. Each item is a reference to self-contained file data, which may have any MIME type / media type. This includes image files, audio files, video files, text files, other model files, and any other type of file, except for buffers which are defined separately.",
+			"items": {
+				"$ref": "g4mf_file_ref.schema.json"
+			},
+			"minItems": 0,
+			"uniqueItems": true
+		},
 		"materials": {
 			"type": "array",
 			"description": "An array of zero or more materials. Each material defines the appearance of a mesh surface.",
@@ -52,15 +61,6 @@
 				"$ref": "mesh/g4mf.mesh.schema.json"
 			},
 			"minItems": 0
-		},
-		"models": {
-			"type": "array",
-			"description": "An array of zero or more models. Each model is a reference to self-contained data, such as another G4MF file, an OFF file, a glTF file, an OCIF file, or any other format.",
-			"items": {
-				"$ref": "g4mf_file_ref.schema.json"
-			},
-			"minItems": 0,
-			"uniqueItems": true
 		},
 		"nodes": {
 			"type": "array",

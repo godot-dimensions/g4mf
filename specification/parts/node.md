@@ -48,7 +48,7 @@ The following example defines a 4-dimensional G4MF file with a root node at inde
 | **camera**        | `object`    | If this node is a camera, the camera properties.           | `undefined` (no camera)   |
 | **light**         | `object`    | If this node is a light, the light properties.             | `undefined` (no light)    |
 | **meshInstance**  | `object`    | If this node is a mesh instance, the mesh properties.      | `undefined` (no mesh)     |
-| **modelInstance** | `integer`   | If this node is a model instance, the index of the model.  | `undefined` (no model)    |
+| **modelInstance** | `object`    | If this node is a model instance, the model properties.    | `undefined` (no model)    |
 | **physics**       | `object`    | If this node is a physics object, the physics properties.  | `undefined` (no physics)  |
 | **skeleton**      | `object`    | If this node is a skeleton root, the skeleton properties.  | `undefined` (no skeleton) |
 

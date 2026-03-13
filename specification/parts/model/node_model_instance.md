@@ -2,7 +2,7 @@
 
 ## Overview
 
-G4MF allows referencing external model files. These model files may then be instanced on 0 or more nodes in the scene hierarchy using the `"modelInstance"` property on nodes. Each model instance MAY specify overrides for nodes and materials within the referenced model, allowing for per-instance customization.
+G4MF allows referencing external model files. These model files may then be instanced on 0 or more nodes in the scene hierarchy using the `"modelInstance"` property on nodes. Each model instance MAY specify overrides for nodes and materials within the referenced model, allowing for per-instance customization. Model file references exist in the same document-level `"files"` array as all other file references, such as image files, and are referenced by index.
 
 See [G4MF Model File Reference](model_file_ref.md) for the details of the data within each model.
 
@@ -15,7 +15,7 @@ The following example defines.
 | Property                   | Type      | Description                                                                      | Default                      |
 | -------------------------- | --------- | -------------------------------------------------------------------------------- | ---------------------------- |
 | **materialOverrides**      | `object`  | A map of unique material names to overrides for materials within the model.      | `{}` No material overrides.  |
-| **model**                  | `integer` | The index of the model that this node references.                                | Required, no default.        |
+| **file**                   | `integer` | The index of the model file that this node references.                           | Required, no default.        |
 | **nodeAdditionalChildren** | `object`  | A map of unique node names to arrays of host node indices to append as children. | `{}` No additional children. |
 | **nodeOverrides**          | `object`  | A map of unique node names to overrides for nodes within the model.              | `{}` No node overrides.      |
 
@@ -27,11 +27,11 @@ Each key in the `"materialOverrides"` object is the name of a material in the so
 
 See [G4MF Material](../mesh/material.md) for more information about materials, and see [Override Mechanism](#override-mechanism) below for details on how overrides are applied.
 
-### Model
+### File
 
-The `"model"` property is an integer index that references a model in the document-level `"models"` array. This property is required and has no default value.
+The `"file"` property is an integer index that references a model file in the document-level `"files"` array. This property is required and has no default value.
 
-Each model is a [G4MF File Reference](../core.md#file-references) which points to a file containing the model data, with valid target files being anything that can be instantiated as a node or hierarchy of nodes, such as another G4MF file. See [G4MF Model File Reference](model_file_ref.md) for the details of the properties found on each model, which are referred to by index in each model instance.
+Each model is a [G4MF File Reference](../core.md#file-references) which points to a file containing the model data, with valid target files being anything that can be instantiated as a node or hierarchy of nodes, such as another G4MF file. Only files that can be instantiated as a tree of nodes are valid targets for the model instance's `"file"` property. See [G4MF Model File Reference](model_file_ref.md) for the details of the properties found on each model file, which are referred to by index here in each model instance.
 
 ### Node Additional Children
 

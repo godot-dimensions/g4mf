@@ -2,7 +2,7 @@
 
 ## Overview
 
-G4MF textures are N-dimensional images with an optional sampler, which may be referenced by the `"texture"` property in material channels, or used for any other purpose. Multiple images may be used to define high-dimensional textures, such as 3D textures, and optionally provide fallback images of different formats.
+G4MF textures are N-dimensional images with an optional sampler, which may be referenced by the `"texture"` property in material channels, or used for any other purpose. Multiple image files may be used to define high-dimensional textures, such as 3D textures, and optionally provide fallback images of different formats.
 
 ## Example
 
@@ -10,24 +10,26 @@ The following example defines.
 
 ## Texture Properties
 
-| Property        | Type        | Description                                             | Default                |
-| --------------- | ----------- | ------------------------------------------------------- | ---------------------- |
-| **images**      | `object[]`  | An array of zero or more images that this texture uses. | `[]` (no images)       |
-| **placeholder** | `number[]`  | The color to use when no images are available.          | Required, no default.  |
-| **sampler**     | `object`    | The sampler settings used for the texture.              | `{}` (default sampler) |
-| **size**        | `integer[]` | The size or resolution of the texture in pixels.        | Required, no default.  |
+| Property        | Type        | Description                                                  | Default                |
+| --------------- | ----------- | ------------------------------------------------------------ | ---------------------- |
+| **files**       | `integer[]` | An array of zero or more image files that this texture uses. | `[]` (no image files)  |
+| **placeholder** | `number[]`  | The color to use when no image files are available.          | Required, no default.  |
+| **sampler**     | `object`    | The sampler settings used for the texture.                   | `{}` (default sampler) |
+| **size**        | `integer[]` | The size or resolution of the texture in pixels.             | Required, no default.  |
 
-### Images
+### Files
 
-The `"images"` property is an array of objects that defines the images used by the texture. If not specified or empty, the texture has no images.
+The `"files"` property is an array of integer indices that reference the image files used by the texture. If not specified or empty, the texture has no image files.
 
-Each image is a [G4MF File Reference](core.md#file-references) which references image data stored in a file or in a buffer view, and MUST declare its MIME type using the `"mimeType"` property. File names SHOULD use snake case and all lowercase letters to avoid case sensitivity issues across platforms, such as `my_texture.png`. If a texture has one image and it is stored in a file, the texture SHOULD have its name property set to the name of the file, excluding the file extension. For example, `{ "images": [{ "mimeType": "image/png", "uri": "my_texture.png" }], "name": "my_texture" }`. This is recommended for the purposes of clarity and semantic preservation during embedding, but any name is allowed, including no name at all.
+Each entry is an integer index which references a [G4MF File Reference](core.md#file-references) in the G4MF's `"files"` array. Each of those references image data stored in a file or in a buffer view, and MUST declare its MIME type using the `"mimeType"` property. File names SHOULD use snake case and all lowercase letters to avoid case sensitivity issues across platforms, such as `my_texture.png`.
 
-The file reference's URI may be relative to the G4MF file's location, or alternatively, may be a web address, or any other valid URI format. If the URI starts with `https://`, it is treated as a web address and indicates the model is located there. Implementations may cache and reuse downloaded models as they see fit. If the URI starts with any other scheme, it uses that protocol. If the URI does not contain `://`, it is treated as a relative path to the G4MF file's location.
+The file reference's URI may be relative to the G4MF file's location, or alternatively, may be a web address, or any other valid URI format. If the URI starts with `https://`, it is treated as a web address and indicates the image file is located there. Implementations may cache and reuse downloaded image files as they see fit. If the URI starts with any other scheme, it uses that protocol. If the URI does not contain `://`, it is treated as a relative path to the G4MF file's location.
 
-Images SHOULD NOT contain embedded color space profiles (ICC profiles) or other metadata that alters the visual appearance of the image. This is to ensure that the image is displayed consistently in applications that do not support color spaces or other visual-affecting metadata.
+If a texture has one image and it is stored in a file, the texture SHOULD have its name property set to the name of the file, excluding the file extension. For example, if the document-level `"files"` array looks like `"files": [{ "mimeType": "image/png", "uri": "my_texture.png" }]`, then the texture using that image would look like `{ "files": [0], "name": "my_texture" }`. This is recommended for the purposes of clarity and semantic preservation, but any name is allowed, including no name at all.
 
-Images may use any format that supports being imported as a grid of pixels, particularly MIME types starting with `image/`. This means the MIME type is not limited to a specific set of values, but may be any valid MIME type. Implementations are highly encouraged to support at least the PNG, JPEG, and WebP formats (`image/png`, `image/jpeg`, and `image/webp`). When a media type is registered with IANA, the `"mimeType"` MUST match the media type string as registered with IANA. When a media type is not registered with IANA, any placeholder name may be used pending registration.
+Image files SHOULD NOT contain embedded color space profiles (ICC profiles) or other metadata that alters the visual appearance of the image. This is to ensure that the image is displayed consistently in applications that do not support color spaces or other visual-affecting metadata.
+
+Image files may use any format that supports being imported as a grid of pixels, particularly MIME types starting with `image/`. This means the MIME type is not limited to a specific set of values, but may be any valid MIME type. Implementations are highly encouraged to support at least the PNG, JPEG, and WebP formats (`image/png`, `image/jpeg`, and `image/webp`). When a media type is registered with IANA, the `"mimeType"` MUST match the media type string as registered with IANA. When a media type is not registered with IANA, any placeholder name may be used pending registration.
 
 For more information on MIME types, see the list of IANA media types: https://www.iana.org/assignments/media-types/media-types.xhtml#image
 
@@ -35,9 +37,9 @@ See [Assembling High-Dimensional Textures](#assembling-high-dimensional-textures
 
 ### Placeholder
 
-The `"placeholder"` property is an array of numbers that defines the color to use when no images are available. This property is required and has no default value.
+The `"placeholder"` property is an array of numbers that defines the color to use when no image files are available. This property is required and has no default value.
 
-This value is NOT a modulate color applied to the texture. It is only used when the texture cannot fill the given pixels due to no images being available, such as when the `"images"` array is empty, all image formats are unsupported, or there is not enough image data to fill the texture.
+This value is NOT a modulate color applied to the texture. It is only used when the texture cannot fill the given pixels due to no image files being available, such as when the texture's `"files"` array is empty, all image formats are unsupported, or there is not enough image data to fill the texture.
 
 This value is a floating-point color on the range of 0.0 to 1.0, in linear color space as described in [G4MF Coordinate System Colors](coordinate_system.md#colors). If using this value to fill in pixel values with a different target color space, the values MUST be converted to the target color space before being used. For example, a linear value of 1.0 corresponds to 255 in traditional 8-bit integer image formats, while the linear value 0.5 may correspond to 127 (or 128) in linear 8-bit integer image formats, 187 (or 188) in non-linear sRGB 8-bit integer image formats, or 0.7354 in non-linear sRGB floating-point image formats.
 
@@ -88,7 +90,7 @@ Here are several examples of how to represent high-dimensional textures:
 
 Image pixels may be split and stacked, but MUST NOT be stitched together. For example, a 2D texture with a size of `[64, 64]` MUST NOT be represented by 4 images with a size of 32x32 pixels each. If this invalid data existed, it MUST fail validation because 32 is not a multiple of 64, and all images must have their dimension as a whole number multiple of the texture size. The only valid way to represent a 2D texture is with a single 2D image with the same size as the texture, plus optionally fallback images as defined below.
 
-Note that, in addition to assembling textures from an images, an alternative is to use a procedural texture, such as a noise texture, or a texture generated from a shader. Such things may be defined in G4MF extensions, which would specify the noise algorithm or shader language to use. The G4MF base specification itself focuses on the base cases that are portable, widely supported, and will stand the test of time. Shaders may only work in some applications, and shading languages may evolve over time; the same applies to noise algorithms and other procedural texture techniques.
+Note that, in addition to assembling textures from images, an alternative is to use a procedural texture, such as a noise texture, or a texture generated from a shader. Such things may be defined in G4MF extensions, which would specify the noise algorithm or shader language to use. The G4MF base specification itself focuses on the base cases that are portable, widely supported, and will stand the test of time. Shaders may only work in some applications, and shading languages may evolve over time; the same applies to noise algorithms and other procedural texture techniques, therefore, these are not defined in the base G4MF specification.
 
 ## Fallback Images For Textures
 
@@ -96,11 +98,11 @@ In addition to slicing and stacking images together, G4MF allows defining fallba
 
 For example, a 3D texture with a size of `[64, 64, 64]` may be represented by 2 images: a WebP image with a size of 512x512 pixels, and a fallback JPEG image with a size of 512x512 pixels. When reading the texture, one of these three things happen depending on what the application supports:
 
-- If the application supports WebP, it reads the WebP image, then slices and stacks it into a 64x64x64 grid of pixels. Since these pixels fill the entire texture, no further items are read from the `"images"` array.
-- If the application does not support WebP, it skips the WebP image due to an unsupported format as indicated by the MIME type. Then it moves on to the next image, the JPEG image. If the application supports JPEG, it then uses its pixels to fill the 64x64x64 grid of pixels, which then fills the entire texture. Since these pixels fill the entire texture, no further items are read from the `"images"` array (there are none in this example, but still, a filled texture means no attempt is made to check for more images).
+- If the application supports WebP, it reads the WebP image, then slices and stacks it into a 64x64x64 grid of pixels. Since these pixels fill the entire texture, no further items are read from the texture's `"files"` array.
+- If the application does not support WebP, it skips the WebP image due to an unsupported format as indicated by the MIME type. Then it moves on to the next image, the JPEG image. If the application supports JPEG, it then uses its pixels to fill the 64x64x64 grid of pixels, which then fills the entire texture. Since these pixels fill the entire texture, no further items are read from the texture's `"files"` array (there are none in this example, but still, a filled texture means no attempt is made to check for more images).
 - If the application does not support WebP and does not support JPEG, it skips both images due to unsupported formats as indicated by the MIME types. Then it uses a default empty texture filled with the `"placeholder"` color on all pixels.
 
-The same pattern happens for any number of images in the `"images"` array. For example, a 3D texture with a size of `[64, 64, 64]` may be represented by 1 OpenEXR image with a size of 4096x4096 pixels, 1 KTX2 image with a size of 64x64x64 pixels, 4 WebP images with a size of 256x256 pixels each, 64 PNG images with a size of 64x64 pixels each, and 8 JPEG images with a size of 256x128 pixels each. Applications read the images in order, grabbing the first pixels from the first supported images. In this example, this means that the OpenEXR image is given first priority if supported, then the KTX2 image, then the WebP images, then the PNG images, and finally the JPEG images.
+The same pattern happens for any number of images in the `"files"` array. For example, a 3D texture with a size of `[64, 64, 64]` may be represented by 1 OpenEXR image with a size of 4096x4096 pixels, 1 KTX2 image with a size of 64x64x64 pixels, 4 WebP images with a size of 256x256 pixels each, 64 PNG images with a size of 64x64 pixels each, and 8 JPEG images with a size of 256x128 pixels each. Applications read the images in order, grabbing the first pixels from the first supported images. In this example, this means that the OpenEXR image is given first priority if supported, then the KTX2 image, then the WebP images, then the PNG images, and finally the JPEG images.
 
 This way of defining fallback images is clearer than when compared to glTF™. The base glTF™ specification supports PNG and JPEG images, and extensions may define additional image formats, using PNG or JPEG as a fallback. However, if multiple image format extensions are used, such as KTX2 and WebP on the same texture, the behavior of which image is the first choice and which is the fallback is not clearly defined. G4MF avoids this ambiguity by explicitly placing all images in order of priority.
 

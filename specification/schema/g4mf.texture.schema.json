@@ -6,16 +6,16 @@
 	"description": "A texture is an N-dimensional image with an optional sampler, which may be referenced by a material channel's `texture` property. Multiple images may be used to define high-dimensional textures, such as 3D textures, and optionally provide fallback images of different formats.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
-		"images": {
+		"files": {
 			"type": "array",
-			"description": "An array of zero or more images that this texture uses. Each image is a reference to image data stored in a file or in a buffer view.",
+			"description": "An array of zero or more integer index references to images that this texture uses. Each entry is an integer index which references a file in the G4MF's `files` array.",
 			"items": {
-				"$ref": "g4mf_file_ref.schema.json"
+				"$ref": "g4mf_index.schema.json"
 			}
 		},
 		"placeholder": {
 			"type": "array",
-			"description": "The placeholder color to use when no images are available. This is used when the texture cannot fill the given pixels due to no images being available, such as when the `images` array is empty, all image formats are unsupported, or there is not enough image data to fill the texture.",
+			"description": "The placeholder color to use when no image files are available. This is used when the texture cannot fill the given pixels due to no files being available, such as when the `files` array is empty, all image formats are unsupported, or there is not enough image data to fill the texture.",
 			"items": {
 				"type": "number"
 			},

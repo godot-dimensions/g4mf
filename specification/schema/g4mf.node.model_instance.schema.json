@@ -13,9 +13,9 @@
 				"$ref": "mesh/g4mf.material.schema.json"
 			}
 		},
-		"model": {
+		"file": {
 			"allOf": [{ "$ref": "g4mf_index.schema.json" }],
-			"description": "The index of the model that this node references. This is a reference to a model in the G4MF file's models array. This property is required for a model instance."
+			"description": "The index of the model file that this node references. This is an integer index which references a model file in the G4MF's `files` array. This property is required for a model instance."
 		},
 		"nodeAdditionalChildren": {
 			"type": "object",
@@ -35,5 +35,5 @@
 			}
 		}
 	},
-	"required": ["model"]
+	"required": ["file"]
 }
