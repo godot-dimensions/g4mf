@@ -61,22 +61,22 @@ The geometry decomposition objects in the `"geometry"` property define how bindi
 | Property      | Type      | Description                                                                    | Default               |
 | ------------- | --------- | ------------------------------------------------------------------------------ | --------------------- |
 | **accessor**  | `integer` | The index of the accessor that contains indices into this binding's values.    | Required, no default. |
-| **dimension** | `integer` | The dimensional level to decompose to. MUST NOT be greater than `index` + 2.   | `0` (0D vertices)     |
+| **decompose** | `integer` | The dimensional level to decompose to. MUST NOT be greater than `index` + 2.   | `0` (0D vertices)     |
 | **index**     | `integer` | The index into the mesh surface's geometry array that this binding references. | Required, no default. |
 
 ### Accessor
 
-The `"accessor"` property is an integer index that references an accessor containing indices into this binding's values. Each element corresponds to a decomposed element at the specified dimension. This property is required and has no default value.
+The `"accessor"` property is an integer index that references an accessor containing indices into this binding's values. Each element corresponds to a decomposed element at the specified decompose dimension. This property is required and has no default value.
 
-### Dimension
+### Decompose
 
-The `"dimension"` property is an integer that defines the dimensional level to decompose to. This property is optional and defaults to 0.
+The `"decompose"` property is an integer that defines the dimensional level to decompose to. This property is optional and defaults to 0.
 
-When dimension is set to 0, this means to decompose down to vertices (corners), and each item in the accessor corresponds to a corner of the geometry item. When dimension is set to 1, this means to decompose down to edges, and each item in the accessor corresponds to an edge of the geometry item. When dimension is set to 2, this means to decompose down to polygons, and each item in the accessor corresponds to a polygon of the geometry item, and so on.
+When decompose is set to 0, this means to decompose down to vertices (corners), and each item in the accessor corresponds to a corner of the geometry item. When decompose is set to 1, this means to decompose down to edges, and each item in the accessor corresponds to an edge of the geometry item. When decompose is set to 2, this means to decompose down to polygons, and each item in the accessor corresponds to a polygon of the geometry item, and so on.
 
 The value MUST NOT be greater than `index` + 2, because a geometry item at index N has dimension N+2, and it cannot be decomposed into elements of higher dimension than itself. For example, a 3D polyhedron (geometry index 1, dimension 3) can be decomposed into vertices (0), edges (1), polygons (2), or itself (3), but not into 4D polytopes. In other words, a cube contains vertices, edges, faces, and one volume (itself), but zero hypercubes or beyond.
 
-For example, to store per-corner data for 3D mesh faces (geometry index 0), set `"index"` to 0 and `"dimension"` to 0. To store one value per entire face, set `"index"` to 0 and `"dimension"` to 2.
+For example, to store per-corner data for 3D mesh faces (geometry index 0), set `"index"` to 0 and `"decompose"` to 0. To store one value per entire face, set `"index"` to 0 and `"decompose"` to 2.
 
 ### Index
 
