@@ -66,7 +66,9 @@ The geometry decomposition objects in the `"geometry"` property define how bindi
 
 ### Accessor
 
-The `"accessor"` property is an integer index that references an accessor containing indices into this binding's values. Each element corresponds to a decomposed element at the specified decompose dimension. This property is required and has no default value.
+The `"accessor"` property is an integer index that references an accessor containing indices into this binding's values. This property is required and has no default value.
+
+The data in this accessor behaves the same as the mesh surface's geometry items. Meaning, the first number is the amount of members in the first cell, followed by those members, then the amount of members in the second cell, followed by those members, and so on. The amounts are technically redundant in that they can be reproduced from the geometry items, but this structure allows for more efficient loading. The members are indices into the binding's values, and each element corresponds to a decomposed element at the specified decompose dimension.
 
 ### Decompose
 
