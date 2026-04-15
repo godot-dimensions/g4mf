@@ -24,49 +24,49 @@ After the file header, the file consists of a series of one or more chunks. Each
     - The byte sequence `0x42 0x4C 0x4F 0x42`, the ASCII string "BLOB". This indicates the chunk contains binary blob data, usually the data of a buffer.
       - When interpreted as a little-endian unsigned 32-bit integer, this is `0x424F4C42`.
   - Implementations MAY define additional chunk types, but this is usually not needed. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value. Note: This does not need to match the magic number used by the data format itself, if any.
-- A 4-byte chunk compression format indicator.
+- A 4-byte chunk encoding indicator.
   - In the base specification, this MUST be one of the following:
-    - The byte sequence `0x00 0x00 0x00 0x00`, or zero. This indicates the chunk is not compressed.
+    - The byte sequence `0x00 0x00 0x00 0x00`, or zero. This indicates the chunk is plainly encoded, meaning not compressed or encrypted.
     - The byte sequence `0x5A 0x73 0x74 0x64`, the ASCII string "Zstd". This indicates the chunk is compressed using the Zstandard compression format.
       - When interpreted as a little-endian unsigned 32-bit integer, this is `0x6474735A`.
       - The chunk data MUST also include Zstd's own magic number `0x28 0xB5 0x2F 0xFD` at the start of the data, it cannot be omitted.
-  - The byte sequence `0xFF 0xFF 0xFF 0xFF` is reserved as an error value, and MUST NOT be used as a compression format indicator, or else the file is invalid.
-  - If the chunk represents the data of a buffer, this MUST match the `"compression"` property in the G4MF JSON data for that buffer, with the property undefined for uncompressed data.
-  - Implementations MUST support the uncompressed format. Implementations MAY choose to implement any or none of the other compression formats, refusing to load such files.
-  - Implementations MAY define additional compression formats. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value. Note: This does not need to match the magic number used by the compression format itself.
+  - The byte sequence `0xFF 0xFF 0xFF 0xFF` is reserved as an error value, and MUST NOT be used as an encoding indicator, or else the file is invalid.
+  - If the chunk represents the data of a buffer, this MUST match the `"encoding"` property in the G4MF JSON data for that buffer, with the property undefined for plainly encoded data.
+  - Implementations MUST support the plainly encoded format. Implementations MAY choose to implement any or none of the other encoding formats, refusing to load any files with unsupported encodings, such as compression or encryption.
+  - Implementations MAY define additional encoding formats. The byte sequence selected SHOULD be a somewhat-human-readable magic sequence of printable ASCII characters, but may be any value. Note: This does not need to match the magic number used by the encoding format itself, if any.
 - A 8-byte chunk data size number.
   - This MUST be equal to the size in bytes of the chunk data, excluding the chunk header, and excluding any padding after the chunk data.
   - This value is a little-endian unsigned 64-bit integer, with the most significant bit set to zero. The maximum chunk data size is 2^63 - 33 bytes (an additional 32 bytes are subtracted for the file and chunk headers).
-  - If the chunk is compressed, this value is the size of the compressed data, not the uncompressed data. However, the `"byteLength"` field in the JSON data refers to the uncompressed size of the data.
+  - If the chunk is encoded differently, such as compressed or encrypted, this value is the size of the encoding data, not the plain data within. However, the `"byteLength"` field in the JSON data refers to the plainly encoded size of the data after decoding, such as decompression or decryption.
 - The data in each chunk immediately follows the chunk header, and is of the size in bytes indicated by the chunk data size number.
 
-Every chunk header MUST be aligned to a 16-byte boundary. This means that whenever a chunk has another chunk after it, the chunk on the left MUST have padding placed after the data (not included in the chunk data size) to the next 16-byte boundary (if already at the boundary, there is no padding). The final chunk in the file does not need padding after it. Padding is usually null `0x00` bytes for binary blobs or compressed chunks, but space `0x20` characters SHOULD be used for padding uncompressed JSON data. The 8-byte chunk data size number MUST NOT include this padding, it only includes the used bytes of the chunk data.
+Every chunk header MUST be aligned to a 16-byte boundary. This means that whenever a chunk has another chunk after it, the chunk on the left MUST have padding placed after the data (not included in the chunk data size) to the next 16-byte boundary (if already at the boundary, there is no padding). The final chunk in the file does not need padding after it. Padding is usually null `0x00` bytes for binary blobs or non-plainly-encoded chunks, but space `0x20` characters SHOULD be used for padding plainly encoded JSON data. The 8-byte chunk data size number MUST NOT include this padding, it only includes the used bytes of the chunk data.
 
-The G4MF file header magic number, chunk header type indicators, and chunk header compression format indicators are all [FourCC](https://en.wikipedia.org/wiki/FourCC) codes. This allows for easy identification of the headers if a human inspects the file in a hex editor. Implementations MAY choose to display these values to the user as plain text, such as by showing the compression format indicator in an error message when the compression format is unsupported.
+The G4MF file header magic number, chunk header type indicators, and chunk header encoding indicators are all [FourCC](https://en.wikipedia.org/wiki/FourCC) codes. This allows for easy identification of the headers if a human inspects the file in a hex editor. Implementations MAY choose to display these values to the user as plain text, such as by showing the encoding indicator in an error message when the encoding format is unsupported.
 
-The first chunk in the file MUST be a JSON chunk containing the G4MF JSON data that conforms to the main G4MF schema `g4mf.schema.json`. If the file has binary blob chunks containing G4MF buffers, they MUST be the following chunks in the file. The G4MF JSON data's buffers array refer to these chunks, such that the buffer at index 0 uses the second chunk if `"uri"` is not defined in that buffer, the buffer at index 1 uses the third chunk if `"uri"` is not defined in that buffer, and so on. This means the `"uri"` property takes precedence over the chunk, so it should be absent in order to use the chunk's bytes. The G4MF JSON buffer's `"byteLength"` always refers to the uncompressed size of the data, but the chunk's data size refers to the compressed size of the data if the chunk is compressed.
+The first chunk in the file MUST be a JSON chunk containing the G4MF JSON data that conforms to the main G4MF schema `g4mf.schema.json`. If the file has binary blob chunks containing G4MF buffers, they MUST be the following chunks in the file. The G4MF JSON data's buffers array refer to these chunks, such that the buffer at index 0 uses the second chunk if `"uri"` is not defined in that buffer, the buffer at index 1 uses the third chunk if `"uri"` is not defined in that buffer, and so on. This means the `"uri"` property takes precedence over the chunk, so it should be absent in order to use the chunk's bytes. The G4MF JSON buffer's `"byteLength"` always refers to the plainly encoded size of the data, excluding any compression or encryption, but the binary chunk's data size refers to the encoded size of the data, including any compression or encryption.
 
 All chunks used by buffers MUST immediately follow the first JSON chunk, before any custom chunks. All buffers using chunks MUST be contiguous from the start, so for example, it is not allowed for buffer 0 to use a URI and buffer 1 to use a chunk. The first buffer containing `"uri"` indicates that no buffers beyond that point may use chunks, and any buffers after that point MUST use URIs. The behavior of additional custom chunks not used by buffers is undefined, and may be used for any purpose.
 
-Binary G4MF files smaller than 32 bytes are invalid, because that is the minimum size of the file header and the first chunk header. The minimum possible size of a valid uncompressed G4MF binary file is 57 bytes, which is 32 bytes for the headers and 25 bytes for the minimal JSON data of `{"asset":{"dimension":4}}`. However, such a file contains no data, and is not useful.
+Binary G4MF files smaller than 32 bytes are invalid, because that is the minimum size of the file header and the first chunk header. The minimum possible size of a valid plainly encoded G4MF binary file is 57 bytes, which is 32 bytes for the headers and 25 bytes for the minimal JSON data of `{"asset":{"dimension":4}}`. However, such a file contains no data, and is not useful.
 
 Following all of the above rules, the data layout of a G4MF binary file can be summarized as follows:
 
-| Offset in bytes | Size in bytes | Description                                       | Valid values                                     |
-| --------------- | ------------- | ------------------------------------------------- | ------------------------------------------------ |
-| 0               | 4             | The binary G4MF file header's magic number.       | Constant `G4MF` or `0x47 0x34 0x4D 0x46`         |
-| 4               | 4             | The binary G4MF file header's version number.     | Constant based on the spec version               |
-| 8               | 8             | The binary G4MF file size in bytes.               | Between 32 and 2^63 - 1                          |
-| 16              | 4             | The first chunk's chunk type.                     | Constant `JSON` or `0x4A 0x53 0x4F 0x4E`         |
-| 20              | 4             | The first chunk's compression format.             | Constant `0x00000000` for uncompressed           |
-| 24              | 8             | The first chunk's size in bytes.                  | Between 0 and 2^63 - 33                          |
-| 32              | N             | The first chunk's data, the G4MF JSON data.       | UTF-8 encoded JSON excluding control characters  |
-| 32 + N          | P1            | (optional) Padding if a second chunk exists.      | 0 to 15 null bytes or spaces to 16-byte boundary |
-| 32 + N + P1     | 4             | (optional) The second chunk's type.               | Constant `BLOB` or `0x42 0x4C 0x4F 0x42`         |
-| 36 + N + P1     | 4             | (optional) The second chunk's compression format. | Constant `0x00000000` for uncompressed           |
-| 40 + N + P1     | 8             | (optional) The second chunk's size in bytes.      | Between 0 and 2^63 - (48 + N + P1)               |
-| 48 + N + P1     | M             | (optional) The second chunk's data.               | Binary blob data                                 |
-| 48 + N + M + P1 | P2            | (optional) Padding if a third chunk exists.       | 0 to 15 null bytes or spaces to 16-byte boundary |
+| Offset in bytes | Size in bytes | Description                                       | Valid values                                       |
+| --------------- | ------------- | ------------------------------------------------- | -------------------------------------------------- |
+| 0               | 4             | The binary G4MF file header's magic number.       | Constant `G4MF` or `0x47 0x34 0x4D 0x46`           |
+| 4               | 4             | The binary G4MF file header's version number.     | Constant based on the spec version                 |
+| 8               | 8             | The binary G4MF file size in bytes.               | Between 32 and 2^63 - 1                            |
+| 16              | 4             | The first chunk's chunk type.                     | Constant `JSON` or `0x4A 0x53 0x4F 0x4E`           |
+| 20              | 4             | The first chunk's encoding indicator.             | Constant `0x00000000` for plain, or another format |
+| 24              | 8             | The first chunk's size in bytes.                  | Between 0 and 2^63 - 33                            |
+| 32              | N             | The first chunk's data, the G4MF JSON data.       | UTF-8 encoded JSON excluding control characters    |
+| 32 + N          | P1            | (optional) Padding if a second chunk exists.      | 0 to 15 null bytes or spaces to 16-byte boundary   |
+| 32 + N + P1     | 4             | (optional) The second chunk's type.               | Constant `BLOB` or `0x42 0x4C 0x4F 0x42`           |
+| 36 + N + P1     | 4             | (optional) The second chunk's encoding indicator. | Constant `0x00000000` for plain, or another format |
+| 40 + N + P1     | 8             | (optional) The second chunk's size in bytes.      | Between 0 and 2^63 - (48 + N + P1)                 |
+| 48 + N + P1     | M             | (optional) The second chunk's data.               | Binary blob data                                   |
+| 48 + N + M + P1 | P2            | (optional) Padding if a third chunk exists.       | 0 to 15 null bytes or spaces to 16-byte boundary   |
 
 More chunks may follow the second chunk, including additional BLOB chunks for buffers, or any other chunk type.
 

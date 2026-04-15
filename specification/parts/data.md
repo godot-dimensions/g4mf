@@ -14,37 +14,39 @@ Buffers are the top-level data storage unit in G4MF. They are used to store many
 
 For text-based G4MF, this often takes the form of a `.bin` file next to the `.g4tf` file, or embedded base64-encoded data. For binary G4MF, this is usually the binary chunk of data at the end of the file, but this may also be a separate file. Most files only need one buffer for all the binary blob data in the file, but multiple buffers are allowed if the file is needed to be split into multiple files, such as if there is a file size limit.
 
-For binary `.g4b` G4MF files, buffers usually have their data stored in binary blob chunks at the end of the file, after the G4MF JSON. For such buffers, the `"uri"` property is not used and should be omitted. The `"byteLength"` property is the uncompressed size of the data in bytes, while the chunk's data size is the compressed size if the chunk is compressed. See [G4MF Binary File Format](binary_file_format.md) for more details.
+For binary `.g4b` G4MF files, buffers usually have their data stored in binary blob chunks at the end of the file, after the G4MF JSON. For such buffers, the `"uri"` property is not used and should be omitted. The `"byteLength"` property is the plainly encoded size of the data in bytes, while the chunk's data size is the encoded size if the chunk is encoded (such as compressed or encrypted). See [G4MF Binary File Format](binary_file_format.md) for more details.
 
 ### Properties
 
 | Property        | Type      | Description                                                       | Default                                          |
 | --------------- | --------- | ----------------------------------------------------------------- | ------------------------------------------------ |
-| **byteLength**  | `integer` | The uncompressed length of the buffer in bytes.                   | Required, no default.                            |
-| **compression** | `string`  | The compression algorithm used for the buffer data.               | Uncompressed if not specified.                   |
+| **byteLength**  | `integer` | The decoded length of the buffer in bytes.                        | Required, no default.                            |
+| **encoding**    | `string`  | The encoding used for the buffer data.                            | Plainly encoded if not specified.                |
 | **uri**         | `string`  | The relative URI to an external file, or a base64-encoded string. | Required except G4B buffers with data in chunks. |
 
 #### Byte Length
 
-The `"byteLength"` property is an integer number defining the uncompressed length of the buffer in bytes. This property is required.
+The `"byteLength"` property is an integer number defining the decoded length of the buffer in bytes. This property is required.
 
 This property MUST NOT be negative. The actual size of the buffer data MAY be a few bytes larger than the declared length, in which case the extra bytes are unused, but the actual size MUST NOT be smaller than the declared length.
 
-When data is compressed, this property refers to the uncompressed size of the data. The compressed size of the data is determined by the chunk size in binary G4MF files, the file length of external buffer files, or the string content of base64-encoded data URIs.
+When data is encoded differently, such as compressed or encrypted, this property refers to the decoded size of the data. The encoded size of the data is determined by the chunk size in binary G4MF files, the file length of external buffer files, or the string content of base64-encoded data URIs.
 
-#### Compression
+#### Encoding
 
-The `"compression"` property is a string that defines the compression algorithm used for the buffer data. This property is optional and defaults to uncompressed if not specified.
+The `"encoding"` property is a string that defines the encoding format used for the buffer data. This property is optional and defaults to plainly encoded if not specified.
 
-Valid compression values are strings representing [FourCC](https://en.wikipedia.org/wiki/FourCC) codes. This allows for easy identification of the headers if a human inspects the file in a hex editor. Implementations MAY choose to display these values to the user as plain text, such as by showing the compression format indicator in an error message when the compression format is unsupported.
+Valid encoding values are strings representing [FourCC](https://en.wikipedia.org/wiki/FourCC) codes. This allows for easy identification of the headers if a human inspects the file in a hex editor. Implementations MAY choose to display these values to the user as plain text, such as by showing the encoding in an error message when the encoding format is unsupported.
 
-This value MUST be a string matching the binary compression format indicator magic number, as defined in [G4MF Binary File Format](binary_file_format.md). Each string MUST be 4 characters after any escaping, convertible to a sequence of 4 numbers between `0x00` and `0xFF`. All control characters MUST be escaped to comply with the JSON specification for strings, and all non-ASCII characters MUST also be escaped, including those below `0x20` or above `0x7E` (other characters may also optionally be escaped, but these are required to be escaped). For example, the string `"Zstd"` indicates Zstandard compression, which corresponds to the byte sequence `0x5A 0x73 0x74 0x64`, or `0x6474735A` as a little-endian unsigned 32-bit integer, in the chunk compression type indicator magic number of a binary G4MF (`.g4b`) file. Uncompressed data MUST NOT have this property set, and for buffers in binary blob chunks, the compression format indicator magic number of uncompressed chunks MUST be set to `0x00000000` (four zero bytes).
+This value MUST be a string matching the binary encoding indicator, as defined in [G4MF Binary File Format](binary_file_format.md). Each string MUST be 4 characters after any escaping, convertible to a sequence of 4 numbers between `0x00` and `0xFF`. All control characters MUST be escaped to comply with the JSON specification for strings, and all non-ASCII characters MUST also be escaped, including those below `0x20` or above `0x7E` (other characters may also optionally be escaped, but these are required to be escaped).
 
-When compressed data is stored in a separate file or a data URI, `"compression"` is the only way to indicate that the data is compressed, and the file size or data URI string content determines the compressed size of the data. When compressed data is stored in a binary blob chunk at the end of the file, both `"compression"` and the binary file's compression format indicator magic number MUST be set to the same value, and the binary file's chunk size is the compressed size of the data. If there is a mismatch between the `"compression"` property and the binary file's compression format indicator magic number, the file is invalid.
+For example, the string `"Zstd"` indicates Zstandard compression. This corresponds to the byte sequence `0x5A 0x73 0x74 0x64`, or `0x6474735A` as a little-endian unsigned 32-bit integer, in the chunk encoding indicator of a binary G4MF (`.g4b`) file. Plainly encoded data MUST NOT have this property set, and for buffers in binary blob chunks, the encoding indicator of plainly encoded chunks MUST be set to `0x00000000` (four zero bytes).
+
+When encoded data is stored in a separate file or a data URI, `"encoding"` is the only way to indicate that the data is encoded, and the file size or data URI string content determines the encoding size of the data, including any compression or encryption. When encoded data is stored in a binary blob chunk at the end of the file, both `"encoding"` and the binary file's encoding indicator MUST be set to the same value, and the binary file's chunk size is the encoded size of the data, including any compression or encryption. If there is a mismatch between the `"encoding"` property and the binary file's encoding indicator, the file is invalid. In both cases, the `"byteLength"` property is the decoded size of the data in bytes, excluding any compression or encryption.
 
 #### URI
 
-The `"uri"` property is a string that may either be a URI to an external file, or a base64-encoded string. This property is required, except for buffer index 0 in binary G4MF files, which refers to the binary blob data chunk at the end of the file.
+The `"uri"` property is a string that may either be a URI to an external file, or a base64-encoded string. This property is required, except for buffers in binary G4MF files whose data is stored in binary blob chunks.
 
 The URI may be relative to the G4MF file's location, or alternatively, may be a web address, or any other valid URI format. If the URI starts with `https://`, it is treated as a web address and indicates the buffer file is located there. Implementations may cache and reuse downloaded buffer files as they see fit. If the URI starts with any other scheme, it uses that protocol. If using a base64-encoded string, it MUST be a data URI, which starts with the MIME type data prefix `data:application/octet-stream;base64,` and is followed by the base64-encoded data. If the URI does not contain `://` and is not a data URI, it is treated as a relative path to the G4MF file's location.
 

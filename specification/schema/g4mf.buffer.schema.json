@@ -3,17 +3,17 @@
 	"$id": "g4mf.buffer.schema.json",
 	"title": "G4MF Buffer",
 	"type": "object",
-	"description": "A buffer is a chunk of raw binary data. Buffer data may be stored in one of three ways: in an external file, in a base64-encoded string, or in the case of binary G4MF files (`.glb`), the buffer at index 0 is used for the data chunk after the JSON at the end of the file. As an analogy, if a buffer view is a partition and an accessor is a file system, then a buffer is the whole disk.",
+	"description": "A buffer is a chunk of raw binary data. Buffer data may be stored in one of three ways: in an external file, in a base64-encoded string, or in the case of binary G4MF files (`.g4b`), the buffer at index 0 is used for the data chunk after the JSON at the end of the file. As an analogy, if a buffer view is a partition and an accessor is a file system, then a buffer is the whole disk.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
 		"byteLength": {
 			"type": "integer",
-			"description": "The length of the buffer in bytes. MUST NOT be negative. The actual size of the buffer data MAY be a few bytes larger than the declared length, in which case the extra bytes are unused, but MUST NOT be smaller. If the data is compressed, this refers to the uncompressed size. This property is required.",
+			"description": "The length of the buffer in bytes. MUST NOT be negative. The actual size of the buffer data MAY be a few bytes larger than the declared length, in which case the extra bytes are unused, but MUST NOT be smaller. If the data has a different encoding, such as compressed or encrypted, this refers to the decoded size. This property is required.",
 			"minimum": 0
 		},
-		"compression": {
+		"encoding": {
 			"type": "string",
-			"description": "The compression algorithm used for the buffer data. MUST be a 4-byte string matching the binary compression format indicator magic number. For example, `Zstd` for Zstandard compression. If not specified, the buffer is uncompressed."
+			"description": "The encoding format used for the buffer data. MUST be a 4-byte string matching the binary encoding indicator magic number. For example, `Zstd` for Zstandard compression. If not specified, the buffer is plainly encoded."
 		},
 		"uri": {
 			"type": "string",
