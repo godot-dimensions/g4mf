@@ -10,17 +10,17 @@
 			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
 			"description": "The index of the accessor that contains indices into this binding's values. Each element corresponds to a decomposed element at the specified dimension."
 		},
-		"decompose": {
+		"decomposeDimension": {
 			"type": "integer",
-			"description": "The dimensional level to decompose to. 0 for vertices, 1 for edges, 2 for polygons, 3 for volumes, and so on. MUST NOT be greater than `index` + 2.",
+			"description": "The dimensional level to decompose to. 0 for vertices, 1 for edges, 2 for polygons, 3 for cells, 4 for hypervolumes, and so on. MUST NOT be greater than `geometryDimension`.",
 			"minimum": 0,
 			"default": 0
 		},
-		"index": {
+		"geometryDimension": {
 			"type": "integer",
-			"description": "The index into the mesh surface's geometry array that this binding references.",
+			"description": "The dimension of geometry elements that this binding references. 0 for vertices, 1 for edges, 2 for polygons, 3 for cells, 4 for hypervolumes, and so on. MUST NOT be less than `decomposeDimension`.",
 			"minimum": 0
 		}
 	},
-	"required": ["accessor", "index"]
+	"required": ["accessor", "geometryDimension"]
 }

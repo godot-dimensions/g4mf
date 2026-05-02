@@ -98,7 +98,7 @@ Normals can be used to define the surface's shading, such as smooth shading or f
 
 The `"values"` accessor within the normals binding contains the normal directions, which MUST have a floating-point `componentType`, MUST have a `vectorSize` equal to the dimension of the mesh (3 for a 3D mesh, 4 for a 4D mesh, and so on), and the normal vectors MUST be normalized within the margin of floating-point precision errors.
 
-The binding's index properties (such as `"vertices"`, `"edges"`, `"simplexes"`, or `"geometry"` decompositions) control how the normal values are associated with mesh elements. See [G4MF Mesh Surface Bindings](bindings.md) for more information.
+The binding's index properties (such as `"simplexes"`, `"perSimplex"`, or `"geometry"` decompositions) control how the normal values are associated with mesh elements. See [G4MF Mesh Surface Bindings](bindings.md) for more information.
 
 ### Polytope Simplexes
 
@@ -130,13 +130,13 @@ The texture coordinates are usually on a range of 0.0 to 1.0. For 3D meshes, the
 
 Texture map transforms, such as those supplied by `KHR_texture_transform` in glTF™, are not supported in the base specification of G4MF. Instead, any texture transforms present in an application, such as scaling or translation, MUST be baked into the texture coordinates in the accessor when exporting the G4MF file. If dynamic texture transforms are required, such as for animation purposes, they may be defined by an extension, as long as the actual texture coordinates in the texture map properties have the current transforms baked in at export time.
 
-The binding's index properties (such as `"vertices"`, `"edges"`, `"simplexes"`, or `"geometry"` decompositions) control how the texture coordinate values are associated with mesh elements. See [G4MF Mesh Surface Bindings](bindings.md) for more information.
+The binding's index properties (such as `"simplexes"`, `"perSimplex"`, or `"geometry"` decompositions) control how the texture coordinate values are associated with mesh elements. See [G4MF Mesh Surface Bindings](bindings.md) for more information.
 
 ## Calculating Cell Normals
 
 In 3D rendering, winding order is used to determine which side of a triangle is the front or back. This is then used to decide if the triangle should be rendered or culled. The typical convention in right-handed coordinate systems like with OpenGL™ and glTF™ is to use a counter-clockwise winding order for meshes whose global basis has a positive determinant, and a clockwise winding order for meshes whose global basis has a negative determinant.
 
-For dimensions other than 3D, we need to generalize this concept. Instead of referring to a visual winding order, we need to define orientation mathematically. The 3D rule is generalized by calculating the vector from vertex 0 to vertex 1, and the vector from vertex 0 to vertex 2, then taking the cross product of those two vectors. The resulting vector can have the dot product calculated with the camera's local Z axis to determine if the triangle is facing the camera or not. For meshes attacehed to nodes with positive determinant transforms, the resulting vector should point towards the viewer in the same direction as the camera's local Z axis, and for negative determinants, the resulting vector should point away from the viewer in the opposite direction as the camera's local Z axis.
+For dimensions other than 3D, we need to generalize this concept. Instead of referring to a visual winding order, we need to define orientation mathematically. The 3D rule is generalized by calculating the vector from vertex 0 to vertex 1, and the vector from vertex 0 to vertex 2, then taking the cross product of those two vectors. The resulting vector can have the dot product calculated with the camera's local Z axis to determine if the triangle is facing the camera or not. For meshes attached to nodes with positive determinant transforms, the resulting vector should point towards the viewer in the same direction as the camera's local Z axis, and for negative determinants, the resulting vector should point away from the viewer in the opposite direction as the camera's local Z axis.
 
 To generalize this to 4D, we need three vectors. For a simplex cell, use the vectors from vertex 0 to vertex 1, from vertex 0 to vertex 2, and from vertex 0 to vertex 3. Then we need to pass these vectors into a function that returns a unique 4D vector that is perpendicular to all three of them. More generally, for N dimensions, we get N-1 vectors from vertex 0 to vertex N, then pass them into a function that returns a unique N-dimensional vector that is perpendicular to all of them. This is then used to calculate a dot product with the camera's local Z axis in the same way as in 3D (camera forward in G4MF is defined as -Z, like glTF™).
 

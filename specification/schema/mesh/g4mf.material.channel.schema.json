@@ -8,7 +8,7 @@
 	"properties": {
 		"elementMap": {
 			"$ref": "g4mf.mesh.surface.binding.schema.json",
-			"description": "A binding that associates channel values to mesh surface elements through indices. Use `values` to store the channel data (colors, normals, etc.) and populate the binding's index properties (such as `vertices`, `edges`, `simplexes`, or `geometry` decompositions) to control whether the data is per-vertex, per-edge, per-simplex, or per-geometry element."
+			"description": "A binding that associates channel values to mesh surface elements through indices. Use `values` to store the channel data (colors, normals, etc.) and populate the binding's index properties (such as `simplexes`, `perSimplex`, or `geometry` decompositions) to control whether the data is per-simplex corner, per-simplex, or per-geometry element."
 		},
 		"factor": {
 			"type": "array",

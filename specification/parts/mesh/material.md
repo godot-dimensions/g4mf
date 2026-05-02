@@ -60,7 +60,7 @@ The default is a rough material with no texture, which means the surface has an 
 
 The `"elementMap"` property is a binding object that associates channel values to mesh surface elements through indices. If not defined, the channel does not have per-element data.
 
-Use `"values"` to store the channel data (color values, normal values), and associate that data with parts of the mesh using the binding's index properties. For example, with the `baseColor` channel, `"simplexes"` allows per-index coloring in each simplex cell (corners), `"perSimplex"` allows one color per entire simplex cell, `"vertices"` allows coloring the vertices shared between multiple cells, `"geometry"` allows coloring polytope elements or their decompositions, and so on.
+Use `"values"` to store the channel data (color values, normal values), and associate that data with parts of the mesh using the binding's index properties. For example, with the `baseColor` channel, `"simplexes"` allows per-index coloring in each simplex cell (corners), `"perSimplex"` allows one color per entire simplex cell, `"geometry"` allows coloring polytope elements or their decompositions, and extensions may allow for even more types of bindings.
 
 See [G4MF Mesh Surface Bindings](bindings.md) for more information on how bindings work.
 
@@ -86,7 +86,7 @@ The `"textureMap"` property is a binding object that overrides the mesh surface'
 
 A texture map, also known as a UV map, UVW map, or texture coordinate map, contains texture coordinates, and information on how those coordinates bind to domains. The `"values"` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually on a range of 0.0 to 1.0.
 
-The binding's index properties (such as `"vertices"`, `"edges"`, `"simplexes"`, or `"geometry"` decompositions) control how the texture coordinate values are associated with mesh elements. See [G4MF Mesh Surface Bindings](bindings.md) for more information.
+The binding's index properties (such as `"simplexes"`, `"perSimplex"`, or `"geometry"` decompositions) control how the texture coordinate values are associated with mesh elements. See [G4MF Mesh Surface Bindings](bindings.md) for more information.
 
 Texture map transforms, such as those supplied by `KHR_texture_transform` in glTF™, are not supported in G4MF. Instead, any texture transforms present in an application, such as scaling or translation, MUST be baked into the texture coordinates in the accessor when exporting the G4MF file. If dynamic texture transforms are required, such as for animation purposes, they may be defined by an extension, as long as the actual texture coordinates in the texture map properties have the current transforms baked in at export time.
 
