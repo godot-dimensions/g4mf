@@ -1,0 +1,47 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf_transform.schema.json",
+	"title": "G4MF Transform",
+	"type": "object",
+	"description": "The base schema for transformable G4MF objects, such as nodes.",
+	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
+	"properties": {
+		"basis": {
+			"type": "array",
+			"description": "A square matrix representing the basis of the node's local transform relative to its parent. The matrix is stored in column-major order. MUST NOT be used with `rotor` or `scale`.",
+			"items": {
+				"type": "number"
+			}
+		},
+		"position": {
+			"type": "array",
+			"description": "The node's local position relative to its parent in meters.",
+			"items": {
+				"type": "number"
+			}
+		},
+		"rotor": {
+			"type": "array",
+			"description": "The node's rotation relative to its parent as a rotor. A rotor starts with a scalar part, a bivector part, and may optionally be followed by the rest of the even subalgebra. The scalar part is the first element at index 0, and the bivector parts come next. Within each part, elements are stored in a dimensionally-increasing order. MUST NOT be used with `basis`.",
+			"items": {
+				"type": "number",
+				"minimum": -1.0,
+				"maximum": 1.0
+			}
+		},
+		"scale": {
+			"type": "array",
+			"description": "The node's scale relative to its own local rotation as a unitless multiplier. Must be positive. May be a single number for uniform scale, or an N-dimensional vector for non-uniform scale. MUST NOT be used with `basis`.",
+			"items": {
+				"type": "number",
+				"exclusiveMinimum": 0.0
+			}
+		}
+	},
+	"not": {
+		"anyOf": [
+			{ "required": ["basis", "rotor"] },
+			{ "required": ["basis", "scale"] }
+		]
+	}
+}

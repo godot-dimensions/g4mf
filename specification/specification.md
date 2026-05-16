@@ -13,7 +13,9 @@ The core foundational data schemas underlying G4MF are described in [G4MF Core](
 G4MF is designed to be extensible. All G4MF JSON objects inherit the `g4mf_item.schema.json` schema, which allows for `"extensions"`, `"extras"`, and `"name"` properties.
 
 - The `"extensions"` property is an object, where each key is the name of an extension, and the value is a JSON object containing the extension data. Extensions are used when a formal specification exists, and the data inside conforms to a well-defined schema outside of the core G4MF specification.
+
   - Each extension name MUST be in the form of a registered prefix assigned to a group or organization, followed by an underscore, followed by the name of the extension. This ensures that extension names are unique, and avoids conflicts with other extensions.
+
 - The `"extras"` property is an object, where each key may be any string, and each value may be any JSON value. Extras are used when a formal specification does not exist, such as for custom application-specific data. Users may use any keys and values they want, with no restrictions, and no guarantees of data consistency, interoperability, or conflict avoidance.
 
 ## Properties
@@ -66,6 +68,8 @@ The core building block of a G4MF scene is a hierarchy of zero or more nodes. Ea
 The node at index 0 is the root node. All other nodes in the file are either descendants of the root node, or are not used. Nodes not used in the core scene hierarchy MAY be used by extensions. G4MF files may also contain zero nodes, in which case the file is not a scene, but a collection of data, such as a 4D mesh.
 
 For convenience, the details of how nodes work are described in a separate file: [G4MF Node](parts/node.md).
+
+For convenience, the details of how transforms work are described in a separate file: [G4MF Transform](parts/transform.md).
 
 ### Lights
 

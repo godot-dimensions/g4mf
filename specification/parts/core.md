@@ -4,7 +4,7 @@
 
 This file describes the core foundational data schemas underlying the Good 4D Model Format (G4MF). These structures are used generally everywhere in G4MF files, not just in specific parts.
 
-All schemas that start with `g4mf_` (underscore) are the basic core foundational data schemas, while `g4mf.` (dot) built on top of these to define more complex structures. All of these are part of the core G4MF specification, but the `g4mf_` schemas described here are the core of the core.
+All schemas that start with `g4mf_` (underscore) are the basic core foundational data schemas, while `g4mf.` (dot) built on top of these to define more complex structures. All of these are part of the core G4MF specification, but the `g4mf_` schemas described here are the core of the core. See also the separate [G4MF Transform](transform.md) file for the core transform properties, primarily used for nodes.
 
 ## Integer Index Identifiers
 
