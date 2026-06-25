@@ -3,13 +3,17 @@
 	"$id": "g4mf.buffer.schema.json",
 	"title": "G4MF Buffer",
 	"type": "object",
-	"description": "A buffer is a chunk of raw binary data. Buffer data may be stored in one of three ways: in an external file, in a base64-encoded string, or in the case of binary G4MF files (`.g4b`), the buffer at index 0 is used for the data chunk after the JSON at the end of the file. As an analogy, if a buffer view is a partition and an accessor is a file system, then a buffer is the whole disk.",
+	"description": "A buffer is a chunk of raw binary data. Buffer data may be stored in one of three ways: in an external file, in a base64-encoded string, or in the case of binary G4MF files (`.g4b`), buffers may explicitly refer to chunks by index. As an analogy, if a buffer view is a partition and an accessor is a file system, then a buffer is the whole disk.",
 	"allOf": [{ "$ref": "g4mf_item.schema.json" }],
 	"properties": {
 		"byteLength": {
 			"type": "integer",
 			"description": "The length of the buffer in bytes. MUST NOT be negative. The actual size of the buffer data MAY be a few bytes larger than the declared length, in which case the extra bytes are unused, but MUST NOT be smaller. If the data has a different encoding, such as compressed or encrypted, this refers to the decoded size. This property is required.",
 			"minimum": 0
+		},
+		"chunk": {
+			"type": "integer",
+			"description": "The index of the chunk containing the buffer data. This is only applicable for binary G4MF files (`.g4b`) where the buffer data is stored in chunks. This property MUST NOT be defined for buffers in text-based G4MF files (`.g4tf`)."
 		},
 		"encoding": {
 			"type": "string",
@@ -20,5 +24,5 @@
 			"description": "The URI of the buffer. This may either be a URI to an external file, a protocol such as a web address, or a base64-encoded string with the prefix `data:mimetype;base64,` where mimetype is the MIME type of the data, usually `application/octet-stream`, so the header would be `data:application/octet-stream;base64,` followed by the base64-encoded data. If the URI is set and does not contain `://`, it is treated as a relative path to the G4MF file's location. For a binary G4MF file, buffers with data stored in chunks MUST NOT have a URI defined."
 		}
 	},
-	"required": ["byteLength"]
+	"oneOf": [{ "required": ["byteLength", "chunk"] }, { "required": ["byteLength", "uri"] }]
 }
