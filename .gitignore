@@ -4,4 +4,6 @@
 *.uid
 
 # System/tool specific ignores
+._*
 .DS_Store
+~*
