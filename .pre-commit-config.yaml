@@ -1,3 +1,9 @@
+# Configuration file for pre-commit: https://pre-commit.com/
+# To use pre-commit locally on your machine:
+# - Install with `pip install pre-commit` once on your machine.
+# - Run `pre-commit install` once in the root of this repository.
+# - Run `pre-commit run --all-files` to check all files.
+
 default_language_version:
   python: python3
 

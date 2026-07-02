@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Basic file formatting checker.
+Validates that all files use UTF-8 encoding, have no BOM, and have LF line endings.
+SPDX license identifier: CC0-1.0
+"""
+
 import sys
 
 if len(sys.argv) < 2:

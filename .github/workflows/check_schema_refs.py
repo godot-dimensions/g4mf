@@ -4,6 +4,7 @@
 """
 JSON Schema reference checker for G4MF specification.
 Validates that all $ref properties in JSON schemas point to existing schema files.
+SPDX license identifier: CC0-1.0
 """
 
 import json
