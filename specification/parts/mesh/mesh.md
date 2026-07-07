@@ -37,6 +37,8 @@ The `"surfaces"` property is an array of objects, each of which defines a surfac
 
 Surfaces define the visible geometry of the mesh. They may be wireframe-only, may have simplex cells defined, or may have more complex geometry data defined. Each surface may have its own material. Surfaces are known as "Material Slots" in Unity and Blender, and are known as "Mesh Primitives" in glTF™.
 
+Surfaces are intended as semantic authoring units. Exporters SHOULD NOT split up surfaces merely to satisfy renderer draw-call limits, index-size limits, or GPU batching preferences. Importers MAY split, merge, or batch surfaces internally for rendering. G4MF is an interchange format, and does not impose limits for the sake of being GPU-friendly.
+
 All surfaces in a mesh share the same vertices, which are defined by the `"vertices"` property. This allows for deduplication of vertex data across surfaces. This also allows for mesh deforming operations such as skeletal skinning and blend shapes (morph targets) to operate on a single shared set of vertices.
 
 ### Vertices
