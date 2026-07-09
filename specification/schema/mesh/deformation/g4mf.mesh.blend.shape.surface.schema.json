@@ -1,0 +1,23 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "g4mf.mesh.blend.shape.surface.schema.json",
+	"title": "G4MF Mesh Deformation Blend Shape Surface",
+	"type": "object",
+	"description": "Per-surface blend shape data for a mesh, allowing for normals and texture maps to be deformed.",
+	"allOf": [{ "$ref": "../../g4mf_item.schema.json" }],
+	"properties": {
+		"normal": {
+			"allOf": [{ "$ref": "g4mf.mesh.blend.shape.target.schema.json" }],
+			"description": "The offset or displacement of the normal direction values for the given surface's `normals.values` accessor. Normals MUST be re-normalized before rendering after applying all blend shapes for a mesh."
+		},
+		"surface": {
+			"allOf": [{ "$ref": "../../g4mf_index.schema.json" }],
+			"description": "The index of the surface that this blend shape morph target surface applies to. This index refers to the order of surfaces in the mesh's `surfaces` array."
+		},
+		"textureMap": {
+			"allOf": [{ "$ref": "g4mf.mesh.blend.shape.target.schema.json" }],
+			"description": "The offset or displacement of the texture map's texture space coordinate values for the given surface's `textureMap.values` accessor."
+		}
+	},
+	"required": ["surface"]
+}

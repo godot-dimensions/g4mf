@@ -6,6 +6,8 @@ G4MF stores the visible geometry of objects inside of meshes. Each mesh is made 
 
 Meshes may be instanced by nodes in the scene hierarchy to provide visible geometry for those nodes. See [G4MF Node Mesh Instances](node_mesh_instance.md) for more information about mesh instances on nodes.
 
+G4MF separates base mesh geometry from deformation systems. The `"blend"` and `"skin"` properties are optional deformation overlays on top of the base mesh. Implementations that do not support blend shapes or skinning MAY ignore these properties and load the base mesh without deformation.
+
 ## Example
 
 The following example defines.
