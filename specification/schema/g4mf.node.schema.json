@@ -23,8 +23,7 @@
 			"minItems": 1
 		},
 		"light": {
-			"allOf": [{ "$ref": "g4mf_index.schema.json" }],
-			"description": "The index of the light that this node references. This is a reference to a light in the G4MF file's lights array. If not defined, this node is not a light source."
+			"$ref": "g4mf.node.light.schema.json"
 		},
 		"meshInstance": {
 			"$ref": "mesh/g4mf.node.mesh_instance.schema.json"

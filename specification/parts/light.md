@@ -2,9 +2,9 @@
 
 ## Overview
 
-G4MF allows for defining lights in the scene using nodes with the `"light"` property defined. Each light is one of the `"directional"`, `"point"`, or `"spot"` types. Additional light types may be defined by extensions by extending the base light object. Lights are only active if the node is visible in the scene tree, meaning that the node itself is visible and all of its ancestor nodes are also visible.
+G4MF allows for defining lights in the scene using nodes with the `"light"` property defined. Each light is one of the `"directional"`, `"omni"`, or `"spot"` types; the latter two are known as punctual or point lights. Additional light types may be defined by extensions by extending the base light object, which MAY either set a custom value in the `"type"` property, or store a fallback value in the property. Lights are only active if the node is visible in the scene tree, meaning that the node itself is visible and all of its ancestor nodes are also visible.
 
-All lights have a `"color"` and an `"intensity"` property, with the intensity unit changing depending on the type of light (see [Intensity](#intensity)). Point and spot lights may have the `"range"` property defined to limit how far the light reaches, and spot lights may have the `"coneInnerAngle"` and `"coneOuterAngle"` properties defined to control the shape of the light cone.
+All lights have a `"color"` and an `"intensity"` property, with the intensity unit changing depending on the type of light (see [Intensity](#intensity)). Omni and spot lights may have the `"range"` property defined to limit how far the light reaches, and spot lights may have the `"coneInnerAngle"` and `"coneOuterAngle"` properties defined to control the shape of the light cone.
 
 Lights defined in G4MF files are optional. Implementations may choose to ignore lights if they are not supported or not desired. Instead, implementations may use unshaded rendering, angle-dependent shading, lighting from the environment, lights provided by the engine or application, or any other method of rendering the model.
 
@@ -31,7 +31,7 @@ This example defines a red spot light with a range of 10 meters used on a node. 
 
 | Property           | Type        | Description                                                            | Default              |
 | ------------------ | ----------- | ---------------------------------------------------------------------- | -------------------- |
-| **type**           | `string`    | The type of light, as a string-based enum.                             | `"point"`            |
+| **type**           | `string`    | The type of light, as a string-based enum.                             | `"omni"`             |
 | **color**          | `number[3]` | The RGB color value for the light, usually on the range 0.0 to 1.0.    | `[1.0, 1.0, 1.0]`    |
 | **coneInnerAngle** | `number`    | The inner angle radius of the light cone in radians.                   | `0.0`                |
 | **coneOuterAngle** | `number`    | The outer angle radius of the light cone in radians.                   | `0.7853981633974483` |
@@ -43,10 +43,10 @@ This example defines a red spot light with a range of 10 meters used on a node. 
 The `"type"` property is a string-based enum that defines the type of light. The following types are defined in the base specification:
 
 - `"directional"`: A directional light is like sunlight, it emits light in the node's local -Z direction.
-- `"point"`: A point light emits light in all directions from a single point in space, the node's local origin.
+- `"omni"`: An omni light emits light in all directions (omnidirectional) from a single point in space, the node's local origin.
 - `"spot"`: A spot light emits light in a cone shape from a single point in space, the node's local origin, in the node's local -Z direction.
 
-Additional light types may be defined by extensions by extending the base light object. If not specified, the default is `"point"`.
+Additional light types may be defined by extensions by extending the base light object. If not specified, the default is `"omni"`.
 
 ### Color
 
@@ -72,7 +72,7 @@ TODO: Currently, the cone angles use the angular radius like Godot and glTF™, 
 
 The `"intensity"` property is a number that defines the intensity of the light. If not specified, the default is `1000.0`.
 
-The intensity unit depends on the type of light. Point and spot lights use lumens per radial unit (radian for 2D models, steradian for 3D models, choradian for 4D models, etc), while directional lights use lumens per surface unit (meter for 2D models, square meter for 3D models, cubic meter for 4D models, etc). Custom light types defined by extensions may define any way to interpret this value. The final light emitted is the product of the color and the intensity.
+The intensity unit depends on the type of light. Omni and spot lights use lumens per radial unit (radian for 2D models, steradian for 3D models, choradian for 4D models, etc), while directional lights use lumens per surface unit (meter for 2D models, square meter for 3D models, cubic meter for 4D models, etc). Custom light types defined by extensions may define any way to interpret this value. The final light emitted is the product of the color and the intensity.
 
 The intensity MUST scale up with the uniform scale of the node the light is attached to, in order to ensure that a scaled model keeps the same light intensity relative to itself. For a 3D model, a uniform scale of 2.0 should scale up the intensity by 4.0. For a 4D model, a uniform scale of 2.0 should scale up the intensity by 8.0.
 
@@ -80,7 +80,7 @@ The intensity MUST scale up with the uniform scale of the node the light is atta
 
 The `"range"` property is a number that defines the range of the light in meters. If not specified, the default is `Infinity`.
 
-The range is only used for point and spot lights, or custom light types defined by extensions. The range defines the distance from the light source beyond which the light intensity is zero. The range MUST scale up with the uniform scale of the node the light is attached to, in order to ensure that a scaled model keeps the same light range relative to itself. For a uniform scale of 2.0, the range should be scaled up by 2.0.
+The range is only used for omni and spot lights, or custom light types defined by extensions. The range defines the distance from the light source beyond which the light intensity is zero. The range MUST scale up with the uniform scale of the node the light is attached to, in order to ensure that a scaled model keeps the same light range relative to itself. For a uniform scale of 2.0, the range should be scaled up by 2.0.
 
 ## JSON Schema
 
