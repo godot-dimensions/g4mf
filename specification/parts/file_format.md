@@ -103,3 +103,21 @@ Following all of the above rules, the data layout of a typical G4MF binary file 
 More chunks may follow the second chunk, including additional BLOB chunks for buffers, or any other chunk type.
 
 For the file size number, and the size of all chunks, the most significant bit is reserved for future use, and MUST be set to zero. Implementations MUST reject files or chunks where this bit is set to one. This allows for future expansion of the specification to support larger files, such as 128-bit file sizes or beyond, without breaking compatibility, in a similar manner to how UTF-8 extends ASCII. Restricting the file size to 63 bits also permits using signed 64-bit integers, which is important for many programming languages without unsigned integer types, and allows using -1 as a sentinel value for "unknown size" in code that processes G4MF files.
+
+## Alternative File Extensions
+
+The `.g4tf` and `.g4b` file extensions are the standard extensions, and may be used to represent models of any dimension, not just 4-dimensional models as the "4" in the name might suggest.
+
+In some cases, it is highly desired to split up files by dimension, such as when software determines file handling purely by extension. For example, Godot Engine registers importers based on file extensions.
+
+Therefore, only in cases where all parties working with the files agree on a dimension-specific convention, alternative file extensions with different numbers MAY be used, such as to give a hint for the dimensionality of the models. For example, a 2-dimensional model could use `.g2tf` or `.g2b`, a 3-dimensional model could use `.g3tf` or `.g3b`, a 5-dimensional model could use `.g5tf` or `.g5b`, and so on. However, applications SHOULD also support the standard `.g4tf` and `.g4b` extensions for loading such models with 2, 3, 5, or other dimensionalities.
+
+This allowance ONLY applies to file extensions, and not to any other aspect. It MUST be the case that a `.g2tf` file can be renamed to `.g4tf` and be a valid text G4MF, a `.g3b` file can be renamed to `.g4b` and be a valid binary G4MF, and so on for all dimensions.
+
+For binary G4MF files, the magic number at the start of the file MUST still be the standard G4MF magic number "G4MF", the byte sequence `0x47 0x34 0x4D 0x46`. Binary files that start with "G3MF" are not valid G4MF files. This ensures that users can perform a trivial file rename to fit with the needs of their application, without needing to modify the file contents. For example, if a 5D model is stored as `.g5b`, and an application can read 5D models from `.g4b`, then the file extension can be changed to `.g4b` to allow that application to read the file.
+
+Note that any choice of file extension is only a hint, and should not be used as an authoritative indicator of dimension. The only way to determine the actual dimensionality of a model is by parsing the G4MF JSON data, and reading the `"dimension"` field in the `"asset"` object.
+
+Dimensionality hints are not the only consideration for choosing an alternate file extension. In some cases, it may be desired to suffix JSON files with `.json` for proper handling. Therefore, only in cases where all parties agree, `.g4tf.json` (and/or dimension-specific variants) MAY be used.
+
+Any other non-standard file extensions not mentioned here MAY be used, and are allowed as long as all parties working with the files agree on their usage. For maximum compatibility, it is recommended to stick with the standard extensions `.g4tf` and `.g4b`.
