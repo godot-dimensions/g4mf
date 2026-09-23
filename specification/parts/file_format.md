@@ -1,6 +1,38 @@
-# G4MF Binary File Format
+# G4MF File Format
 
-G4MF files may be stored in a JSON-based text format (`.g4tf`) or a binary format (`.g4b`, known as "binary G4MF" or "G4MF Binary File Format"). With the text format, binary blobs of data may either be base64-encoded within the JSON, or referenced as external files. The binary format is a more compact representation of the same data within a self-contained file, which appends binary blobs of data in chunks, usually after the JSON data.
+There is no such thing as a `.g4mf` file. The name "G4MF" describes the overall specification and contents, not a specific storage layout. G4MF files can be stored either in the JSON-based text format with the `.g4tf` extension, or in the binary format with the `.g4b` extension.
+
+## Text File Format
+
+G4MF files may be stored in a JSON-based text format with the `.g4tf` file extension, known as "text G4MF" or "G4MF Text File Format".
+
+With the text format, buffers may only refer to their data with the `"uri"` property. This data may be stored in the form of a base64-encoded data URI within the JSON, referenced as external files via a relative path, or any other URI scheme supported by the software.
+
+Text G4MF files MUST NOT contain a byte-order mark (BOM), NUL bytes, or carriage returns (CR). Text G4MF files MUST NOT contain any other control characters, including but not limited to Unicode `0x00` through `0x1F`, and `0x7F` through `0x9F`, except for tab `0x09` and line feed `0x0A`. These only apply to the final encoding, individual strings may contain escaped versions of these.
+
+Text G4MF files MUST end in a single line feed (LF) character, with no extra trailing blank lines. Text G4MF files MUST NOT contain trailing whitespace on any line, meaning that a LF character may not be preceded by a space or a tab.
+
+A text G4MF file MUST be simultaneously a valid JSON file, a valid UTF-8 text file, and a valid POSIX-compliant text file (see note on `{LINE_MAX}` below). This is unlike the text version of glTF™ which only needs to be valid JSON and UTF-8, and is otherwise a byte stream, with no guarantees of being readable as a text file. Text G4MF files are required to be POSIX-compliant text files.
+
+### Line Length Compliance
+
+Various standards and transmission protocols impose limits on line lengths in text files. POSIX limits text file line lengths to a system-defined maximum, `{LINE_MAX}`. Since this varies by system, for the purposes of validating text G4MF files, `{LINE_MAX}` should be considered to be infinite or endless, and therefore ignored.
+
+IANA-compliant text files (7-bit or 8-bit encoding) are limited to 998 octets per line, ready for transport via text protocols that impose 998 octet limits. If a file has lines exceeding this limit, IANA would consider the file to be binary, not text.
+
+Text G4MF files are RECOMMENDED to follow the IANA line length restriction, with one exception: Long strings may cause lines to exceed the 998-octet line length limit. Otherwise, it would not be possible to encode long strings, particularly important for large base64-encoded data URIs. Exporters SHOULD insert line breaks between JSON tokens to try and keep lines within 998 octets.
+
+Additionally, IANA defines text files as having lines delimited by CRLF, while the line endings of G4MF are LF (`0x0A`) only. Carriage returns may need to be inserted when transmitting over protocols that expect CRLF line endings. This is a trivial and lossless transformation, which can be performed automatically on each end, in order to support IANA-compliant text file transmission.
+
+Following the line length recommendation ensures that text G4MF files without long strings remain IANA-compliant text files except for the line endings. In files with large data URIs, keeping line lengths low for most of the file allows the file to be converted into a compliant form by replacing the data URIs with external file paths, assuming all other strings are already within the recommended limit.
+
+Furthermore, limiting line lengths makes it easier to view and edit text G4MF files in text editors, a nice benefit even without considering specific hard limits required for compliance with standards. A text G4MF file SHOULD NOT be a several-megabyte blob of JSON shoved onto one line.
+
+## Binary File Format
+
+G4MF files may be stored in a binary format with the `.g4b` file extension, known as "binary G4MF" or "G4MF Binary File Format".
+
+With the binary format, binary blobs of data may be stored in the same ways as in text G4MF, a `"uri"` property with a data URI or path to external file. Additionally, the binary format allows for buffer data to be stored in chunks, and referenced by buffers using the `"chunk"` property. Chunk-stored data is a much more compact representation of the same data, and is highly recommended. Binary G4MF files with base64-encoded data URIs are valid, but strongly discouraged.
 
 The binary format begins with a 16-byte file header, which contains the following fields:
 

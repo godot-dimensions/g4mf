@@ -117,11 +117,11 @@ G4MF shapes define mathematical shapes used for physics and other use cases. Eac
 
 For convenience, the details of how shapes work are described in a separate file: [G4MF Shape](parts/physics/shape.md).
 
-## Binary File Format
+## File Formats
 
-G4MF files may be stored in a JSON-based text format (`.g4tf`) or a binary format (`.g4b`). With the text format, binary blobs of data may either be base64-encoded within the JSON, or referenced as external files. The binary format is a more compact representation of the same data, which appends binary blobs of data to the end of the JSON.
+There is no such thing as a `.g4mf` file. The name "G4MF" describes the overall specification and contents, not a specific storage layout. G4MF files can be stored either in the JSON-based text format with the `.g4tf` extension, or in the binary format with the `.g4b` extension.
 
-For convenience, the details of how the binary format works are described in a separate file: [G4MF Binary File Format](parts/binary_file_format.md).
+For convenience, the details of how the file formats work are described in a separate file: [G4MF File Format](parts/file_format.md).
 
 ## Coordinate System
 
@@ -131,4 +131,4 @@ For convenience, the details of how the coordinate system works are described in
 
 ## JSON Schema
 
-See [g4mf.schema.json](schema/g4mf.schema.json) for the G4MF main document JSON schema, and other files for all the other JSON schemas.
+See [g4mf.schema.json](schema/g4mf.schema.json) for the G4MF main document JSON schema, and other files in the `schema/` directory for all the other JSON schemas.
