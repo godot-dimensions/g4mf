@@ -39,7 +39,7 @@ The `"simplexes"` property is an integer index that references an accessor conta
 
 The accessor MAY contain less data than the total number of simplex corners, in which case the binding does not provide values for the missing simplex corners, and those missing simplex corners MAY be considered to have default values.
 
-The accessor MUST have its `"vectorSize"` set to the number of corners per simplex, which is the same as the dimension of the mesh, which implies that the amount of numbers in the accessor MUST be a multiple of the number of corners per simplex.
+The accessor MUST have its `"vectorSize"` set to the number of corners per simplex, which is the same as the dimension of the mesh. Therefore, the number of numbers in the accessor MUST be a multiple of the number of corners per simplex.
 
 ### Values
 
@@ -49,7 +49,7 @@ The type and structure of the values depend on the specific use case of the bind
 
 ## Geometry Binding Properties
 
-The geometry bindings objects in the `"geometry"` property define how binding values are associated with specific geometry's polytope elements, decomposed into specific levels.
+The geometry binding objects in the `"geometry"` property define how binding values are associated with specific geometry's polytope elements, decomposed into specific levels.
 
 | Property               | Type      | Description                                                                          | Default               |
 | ---------------------- | --------- | ------------------------------------------------------------------------------------ | --------------------- |
@@ -63,11 +63,11 @@ The `"accessor"` property is an integer index that references an accessor contai
 
 The data in this accessor is structured in the following ways:
 
-- Geometry bindings that are not decomposed, meaning `"decomposeDimension"` is equal to `geometryDimension`, are stored as a dense array of indices, where each index corresponds to a geometry item of the specified geometry dimension. There is no need to store an amount of members, because it is always 1.
+- Geometry bindings that are not decomposed, meaning `"decomposeDimension"` is equal to `geometryDimension`, are stored as a dense array of indices, where each index corresponds to a geometry item of the specified geometry dimension. There is no need to store the number of members, because it is always 1.
   - In this case, the accessor MUST have its `"vectorSize"` either not defined or set to 1.
-- Geometry bindings referring to vertices of edges, meaning `"decomposeDimension"` is 0 and `"geometryDimension"` is 1, are stored as a dense array of indices, where every 2 indices correspond to the 2 vertices of each edge geometry item. There is no need to store an amount of members, because it is always 2.
+- Geometry bindings referring to vertices of edges, meaning `"decomposeDimension"` is 0 and `"geometryDimension"` is 1, are stored as a dense array of indices, where every 2 indices correspond to the 2 vertices of each edge geometry item. There is no need to store the number of members, because it is always 2.
   - In this case, the accessor MUST have its `"vectorSize"` set to 2.
-- In all other cases, geometry binding accessor indices behave the same as the mesh surface's geometry items. Meaning, the first number is the amount of members in the first cell, followed by those members, then the amount of members in the second cell, followed by those members, and so on.
+- In all other cases, geometry binding accessor indices behave the same as the mesh surface's geometry items. The first number is the number of members in the first cell, followed by those members, then the number of members in the second cell, followed by those members, and so on.
   - The amounts are technically redundant in that they can be reproduced from the geometry items, but this structure allows for much more efficient loading, and guards against malformed data.
   - In this case, the accessor MUST have its `"vectorSize"` either not defined or set to 1.
 
@@ -95,7 +95,7 @@ For example, if binding data to polygons, such as the boundary of a 3D mesh surf
 
 ### Geometry Decomposition Examples
 
-The combination of the `"geometryDimension"` and `"decomposeDimension"` properties define the specific geometry elements that the binding values are associated with. The `"decomposeDimension"` property MUST be less than or equal to the `"geometryDimension"` property, because you cannot decompose into elements of higher dimension than the geometry items themselves. For example:
+The combination of the `"geometryDimension"` and `"decomposeDimension"` properties defines the specific geometry elements that the binding values are associated with. The `"decomposeDimension"` property MUST be less than or equal to the `"geometryDimension"` property, because you cannot decompose into elements of higher dimension than the geometry items themselves. For example:
 
 - When `"geometryDimension"` is 0, the binding is based on 0D vertices.
   - The `"decomposeDimension"` property can only be 0, meaning the binding is per vertex.

@@ -12,7 +12,7 @@
 		},
 		"factor": {
 			"type": "array",
-			"description": "The modulate factor, also known as the value or single base color. For `baseColor`, this is the RGB(A) color value for the channel in linear color space. If used together with other properties, this acts as a modulate which is per-component multiplied with the other properties. The color is represented as an array of usually three or four numbers, each usually in the range 0.0 to 1.0, but may go above 1.0 for overbright colors.",
+			"description": "The modulate factor, also known as the value or single base color. For `baseColor`, this is the RGB(A) color value for the channel in linear color space. If used together with other properties, this factor is multiplied component-wise by them, acting as a modulate. The color is represented as an array of usually three or four numbers, each usually in the range of 0.0 to 1.0, but may go above 1.0 for overbright colors.",
 			"items": {
 				"type": "number"
 			}
@@ -23,7 +23,7 @@
 		},
 		"textureMap": {
 			"$ref": "g4mf.mesh.surface.binding.schema.json",
-			"description": "The texture map data of this material channel, overriding the mesh surface. A texture map, also known as a UV map or UVW map, contains texture coordinates, and information on how those coordinates bind to domains. The `values` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually on a range of 0.0 to 1.0."
+			"description": "The texture map data of this material channel, overriding the mesh surface. A texture map, also known as a UV map or UVW map, contains texture coordinates and information on how those coordinates bind to domains. The `values` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually in the range of 0.0 to 1.0."
 		}
 	}
 }

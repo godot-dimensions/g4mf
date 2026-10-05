@@ -8,7 +8,7 @@
 	"properties": {
 		"edges": {
 			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
-			"description": "The index of the accessor that contains the edge indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. The `vectorSize` of the edges accessor MUST be set to 2 (the amount of vertices per edge). If not defined, the surface does not have explicit edges, but edges may be calculated from the simplex cells if needed. If defined, may be used as the foundation of the data in `topology`."
+			"description": "The index of the accessor that contains the edge indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. The `vectorSize` of the edges accessor MUST be set to 2 (the number of vertices per edge). If not defined, the surface does not have explicit edges, but edges may be calculated from the simplex cells if needed. If defined, may be used as the foundation of the data in `topology`."
 		},
 		"geometry": {
 			"type": "array",
@@ -38,11 +38,11 @@
 		},
 		"simplexes": {
 			"allOf": [{ "$ref": "../g4mf_index.schema.json" }],
-			"description": "The index of the accessor that contains the simplex cell indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. The `vectorSize` of the simplexes accessor MUST be set to the amount of vertices per simplex cell (3 for triangles of 3D meshes, 4 for tetrahedra of 3D meshes, and so on). If not defined, the surface does not have explicit simplex cells, and may be a wireframe-only surface, or may be calculated from the geometry data if needed."
+			"description": "The index of the accessor that contains the simplex cell indices for this surface. Each component in the accessor is an index of a vertex in the mesh's vertices accessor, and MUST NOT exceed the bounds of the mesh's vertices accessor. The `vectorSize` of the simplexes accessor MUST be set to the number of vertices per simplex cell (3 for triangles of 3D meshes, 4 for tetrahedra of 3D meshes, and so on). If not defined, the surface does not have explicit simplex cells, and may be a wireframe-only surface, or may be calculated from the geometry data if needed."
 		},
 		"textureMap": {
 			"$ref": "g4mf.mesh.surface.binding.schema.json",
-			"description": "The texture map data of this mesh surface. A texture map, also known as a UV map or UVW map, contains texture coordinates, and information on how those coordinates bind to domains. The `values` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually on a range of 0.0 to 1.0."
+			"description": "The texture map data of this mesh surface. A texture map, also known as a UV map or UVW map, contains texture coordinates and information on how those coordinates bind to domains. The `values` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually in the range of 0.0 to 1.0."
 		}
 	},
 	"dependentRequired": {

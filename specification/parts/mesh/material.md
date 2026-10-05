@@ -54,7 +54,7 @@ The occlusion, roughness, and metallic values are all packed together. In the fo
 
 Alternatively, if the texture refers to a format with dedicated occlusion, roughness, and metallic channels, such as OpenEXR, use those channels instead of red, green, and blue. This allows for a single OpenEXR texture to encode potentially dozens of channels, including dedicated channels for occlusion, roughness, and metallic.
 
-The default is a rough material with no texture, which means the surface has an occlusion value of `0.0`, a roughness value of `1.0`, and a metallic value of `0.0`. The ORM values should be on a range of `0.0` to `1.0`.
+The default is a rough material with no texture, which means the surface has an occlusion value of `0.0`, a roughness value of `1.0`, and a metallic value of `0.0`. The ORM values should be in the range of `0.0` to `1.0`.
 
 ## Material Channel Properties
 
@@ -77,7 +77,7 @@ See [G4MF Mesh Surface Bindings](bindings.md) for more information on how bindin
 
 The `"factor"` property is an array of numbers that defines the modulate factor, also known as value or single color, for the channel. For `"baseColor"`, this is the RGB(A) color value in linear space. If not defined, the default depends on the channel (white for base color, black for emissive, etc).
 
-If used together with other properties, this acts as a modulate which is per-component multiplied with the other properties. The color is represented as an array of usually three or four numbers, each usually in the range 0.0 to 1.0, but may go above 1.0 for overbright colors. A plain white color of `[1.0, 1.0, 1.0]` produces no modulation.
+If used together with other properties, this factor is multiplied component-wise by them, acting as a modulate. The color is represented as an array of usually three or four numbers, each usually in the range of 0.0 to 1.0, but may go above 1.0 for overbright colors. A plain white color of `[1.0, 1.0, 1.0]` produces no modulation.
 
 ### Texture
 
@@ -93,7 +93,7 @@ This is a reference to a texture defined in the G4MF document-level `"textures"`
 
 The `"textureMap"` property is a binding object that overrides the mesh surface's texture map for this channel. If not defined, the mesh surface's texture map is used instead.
 
-A texture map, also known as a UV map, UVW map, or texture coordinate map, contains texture coordinates, and information on how those coordinates bind to domains. The `"values"` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually on a range of 0.0 to 1.0.
+A texture map, also known as a UV map, UVW map, or texture coordinate map, contains texture coordinates and information on how those coordinates bind to domains. The `"values"` accessor within the texture map MUST have its vector size set to the dimension of the texture space, MUST have a floating-point `componentType`, and the numbers within are usually in the range of 0.0 to 1.0.
 
 The binding's index properties (such as `"simplexes"`, `"perSimplex"`, or `"geometry"` decompositions) control how the texture coordinate values are associated with mesh elements. See [G4MF Mesh Surface Bindings](bindings.md) for more information.
 

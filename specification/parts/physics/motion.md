@@ -26,15 +26,15 @@ This example defines a single G4MF node with a `"motion"` property defining `"dy
 
 ## Motion Properties
 
-|                        | Type       | Description                                                                     | Default value        |
-| ---------------------- | ---------- | ------------------------------------------------------------------------------- | -------------------- |
-| **type**               | `string`   | The type of the physics body as a string.                                       | Required, no default |
-| **mass**               | `number`   | The mass of the physics body in kilograms.                                      | `1.0`                |
-| **inertiaDiagonal**    | `number[]` | The inertia in the principle rotation planes in kilogram meter squared (kg⋅m²). | Zero bivector        |
-| **inertiaOrientation** | `number[]` | The inertia orientation as a rotor.                                             | Identity rotor       |
-| **linearVelocity**     | `number[]` | The initial linear velocity of the body in meters per second.                   | Zero vector          |
-| **angularVelocity**    | `number[]` | The initial angular velocity of the body in radians per second.                 | Zero bivector        |
-| **gravityFactor**      | `number`   | A multiplier applied to the acceleration due to gravity.                        | `1.0`                |
+|                        | Type       | Description                                                                      | Default value        |
+| ---------------------- | ---------- | -------------------------------------------------------------------------------- | -------------------- |
+| **type**               | `string`   | The type of the physics body as a string.                                        | Required, no default |
+| **mass**               | `number`   | The mass of the physics body in kilograms.                                       | `1.0`                |
+| **inertiaDiagonal**    | `number[]` | The inertia in the principal rotation planes in kilogram meters squared (kg⋅m²). | Zero bivector        |
+| **inertiaOrientation** | `number[]` | The inertia orientation as a rotor.                                              | Identity rotor       |
+| **linearVelocity**     | `number[]` | The initial linear velocity of the body in meters per second.                    | Zero vector          |
+| **angularVelocity**    | `number[]` | The initial angular velocity of the body in radians per second.                  | Zero bivector        |
+| **gravityFactor**      | `number`   | A multiplier applied to the acceleration due to gravity.                         | `1.0`                |
 
 ### Motion Types
 
@@ -44,7 +44,7 @@ The motion type may be one of these three values: `"static"`, `"kinematic"`, or 
 
 #### Static
 
-Static bodies can be collided with, but do not have simulated movement. They are usually used for level geometry. Specifying a static body is optional, as nodes with collider properties are assumed to be static without itself or an ancestor node having the motion property.
+Static bodies can be collided with, but do not have simulated movement. They are usually used for level geometry. Specifying a static body is optional, as nodes with collider properties are assumed to be static unless the node itself or an ancestor has the `"motion"` property.
 
 #### Kinematic
 
@@ -62,13 +62,13 @@ Not all body types can make use of mass, such as triggers or non-moving bodies, 
 
 ### Inertia Diagonal
 
-The `"inertiaDiagonal"` property is an array of numbers that defines the inertia in the principle rotation planes in kilogram meter squared (kg⋅m²). If zero or not specified, the inertia should be automatically calculated by the physics engine.
+The `"inertiaDiagonal"` property is an array of numbers that defines the inertia in the principal rotation planes in kilogram meters squared (kg⋅m²). If this property is zero or unspecified, the inertia should be automatically calculated by the physics engine.
 
 This value is a bivector, meaning that in 4D, it has 6 numbers for the XY, XZ, YZ, XW, YW, and ZW rotation planes, in that order (dimensionally-increasing order). Only the "dynamic" motion type can make use of inertia.
 
 ### Inertia Orientation
 
-The `"inertiaOrientation"` property is an array of numbers that defines a rotor for the orientation of the inertia's principle axes relative to the body's local space. If not specified or set to the default value of the identity rotor, the inertia's principle axes are aligned with the body's local space axes.
+The `"inertiaOrientation"` property is an array of numbers that defines a rotor for the orientation of the inertia's principal axes relative to the body's local space. If not specified or set to the default value of the identity rotor, the inertia's principal axes are aligned with the body's local space axes.
 
 ### Linear Velocity
 

@@ -35,7 +35,7 @@ The top-level G4MF document defines the following properties:
 | **shapes**      | `object[]` | An array of shapes, which define mathematical shapes used for physics.          | `[]` (empty array)    |
 | **textures**    | `object[]` | An array of textures, which provide visual data for materials.                  | `[]` (empty array)    |
 
-The details of how these properties work are described in the below sections.
+The details of how these properties work are described in the sections below.
 
 In addition to these properties, all G4MF objects, including the top-level G4MF document, MAY contain `"extensions"`, `"extras"`, and `"name"` properties.
 

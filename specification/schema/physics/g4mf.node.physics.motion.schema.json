@@ -18,11 +18,11 @@
 		},
 		"inertiaDiagonal": {
 			"type": "array",
-			"description": "The inertia in the principle rotation planes in kilogram meter squared. This value is a bivector, meaning that in 4D, it has 6 numbers for the XY, XZ, YZ, XW, YW, and ZW rotation planes, in that order (dimensionally-increasing order). If zero or not specified, the inertia should be calculated automatically."
+			"description": "The inertia in the principal rotation planes in kilogram meter squared. This value is a bivector, meaning that in 4D, it has 6 numbers for the XY, XZ, YZ, XW, YW, and ZW rotation planes, in that order (dimensionally-increasing order). If zero or not specified, the inertia should be calculated automatically."
 		},
 		"inertiaOrientation": {
 			"type": "array",
-			"description": "The inertia principle rotation plane orientation relative to the node's local coordinate system. A rotor starts with a scalar part, a bivector part, and may optionally be followed by the rest of the even subalgebra. The scalar part is the first element at index 0, and the bivector parts come next. If not specified, the inertia principle rotation planes are not rotated relative to the node's local coordinate system.",
+			"description": "The orientation of the inertia's principal rotation planes relative to the node's local coordinate system. A rotor starts with a scalar part, a bivector part, and may optionally be followed by the rest of the even subalgebra. The scalar part is the first element at index 0, and the bivector parts come next. If not specified, the inertia's principal rotation planes are not rotated relative to the node's local coordinate system.",
 			"items": {
 				"type": "number",
 				"minimum": -1.0,

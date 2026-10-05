@@ -8,11 +8,11 @@
 	"properties": {
 		"clipFar": {
 			"type": "number",
-			"description": "The distance to the far clipping plane. If not defined, the camera does not have an explictly defined far clipping plane."
+			"description": "The distance to the far clipping plane. If not defined, the camera does not have an explicitly defined far clipping plane."
 		},
 		"clipNear": {
 			"type": "number",
-			"description": "The distance to the near clipping plane. If not defined, the camera does not have an explictly defined near clipping plane."
+			"description": "The distance to the near clipping plane. If not defined, the camera does not have an explicitly defined near clipping plane."
 		},
 		"fov": {
 			"type": "number",

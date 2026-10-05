@@ -2,7 +2,7 @@
 
 ## Overview
 
-G4MF allows meshes to be deformed using blend shapes, also known as shape keys or morph targets. This feature enables the creation of complex animations and transformations by defining how a mesh can be altered by displacing its vertex positions and other attributes. For example, blend shapes are often used for facial animations, where the mouth, eyes, and other features can be morphed into different expressions or lip synced to match audio.
+G4MF allows meshes to be deformed using blend shapes, also known as shape keys or morph targets. This feature enables the creation of complex animations and transformations by defining how a mesh can be altered by displacing its vertex positions and other attributes. For example, blend shapes are often used for facial animations, where the mouth, eyes, and other features can be morphed into different expressions or lip-synced to match audio.
 
 ## Example
 
@@ -70,7 +70,7 @@ Blend amounts are also known as weights or activations. Each value typically ran
 
 The `"shapes"` property is an array of objects that define the blend shapes, also known as morph targets. This property is required and does not have a default value.
 
-Each blend shape may contain any of the below properties, including none or multiple at once, to define how the various attributes of the mesh are deformed by the blend shape. Additional properties may be added by extensions to allow for more complex deformations.
+Each blend shape may contain any of the properties below, including none, one, or several, to define how the various attributes of the mesh are deformed by the blend shape. Additional properties may be added by extensions to allow for more complex deformations.
 
 ## Blend Shape Properties
 
@@ -89,7 +89,7 @@ This property uses the [Blend Shape Target](#blend-shape-target-properties) sche
 
 The `"surfaces"` property is an array of objects that define the offset or displacement of any per-surface data for the blend shape. This property is optional and defaults to no displacement.
 
-Surface data includes normals, texture maps, and any other per-surface attributes that may be defined in the mesh, either by future spec versions or by extensions. The amount of items in the blend shape's surfaces array may be less than the number of surfaces in the mesh, but MUST NOT exceed the number of surfaces in the mesh. Each surface object in the `"surfaces"` array explicitly points to a surface in the mesh using the `"surface"` property, which is an integer index into the mesh's `"surfaces"` array.
+Surface data includes normals, texture maps, and any other per-surface attributes that may be defined in the mesh, either by future spec versions or by extensions. The number of items in the blend shape's surfaces array may be less than the number of surfaces in the mesh, but MUST NOT exceed the number of surfaces in the mesh. Each surface object in the `"surfaces"` array explicitly points to a surface in the mesh using the `"surface"` property, which is an integer index into the mesh's `"surfaces"` array.
 
 If a given blend shape surface object has no properties other than `"surface"`, it MUST be omitted entirely rather than set to an object with only a `"surface"` index. Furthermore, if there is no per-surface data for this blend shape, the `"surfaces"` property MUST be omitted entirely rather than set to an empty array.
 

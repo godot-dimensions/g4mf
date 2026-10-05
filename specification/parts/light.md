@@ -32,7 +32,7 @@ This example defines a red spot light with a range of 10 meters used on a node. 
 | Property           | Type        | Description                                                            | Default              |
 | ------------------ | ----------- | ---------------------------------------------------------------------- | -------------------- |
 | **type**           | `string`    | The type of light, as a string-based enum.                             | `"omni"`             |
-| **color**          | `number[3]` | The RGB color value for the light, usually on the range 0.0 to 1.0.    | `[1.0, 1.0, 1.0]`    |
+| **color**          | `number[3]` | The RGB color value for the light, usually in the range of 0.0 to 1.0. | `[1.0, 1.0, 1.0]`    |
 | **coneInnerAngle** | `number`    | The inner angle radius of the light cone in radians.                   | `0.0`                |
 | **coneOuterAngle** | `number`    | The outer angle radius of the light cone in radians.                   | `0.7853981633974483` |
 | **intensity**      | `number`    | The intensity of the light, in lumens per radial unit or surface unit. | `1000.0`             |

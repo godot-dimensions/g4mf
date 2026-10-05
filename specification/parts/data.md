@@ -10,7 +10,7 @@ The following example defines.
 
 ## Buffers
 
-Buffers are the top-level data storage unit in G4MF. They are used to store many binary blobs of data together in a single file. For example, a buffer may contain vertices for several meshes, edge or simplex indices for several meshes, normal vectors for several meshes, the bytes of an image, or all at once. The `"byteLength"` property is required for all buffers, and contains the decoded size of the data in bytes.
+Buffers are the top-level data storage unit in G4MF. They are used to store many binary blobs of data together in a single file. For example, a buffer may contain vertices for several meshes, edge or simplex indices for several meshes, normal vectors for several meshes, the bytes of an image, or all of these at once. The `"byteLength"` property is required for all buffers, and contains the decoded size of the data in bytes.
 
 For text-based G4MF (`.g4tf`), these often take the form of `.bin` files pointed to by `"uri"` from the `.g4tf` file, or may be embedded base64-encoded data in the `"uri"` property. In text-based G4MF files, the `"chunk"` property MUST NOT be defined for any buffers, and the `"uri"` property MUST be defined for each buffer. A buffer in a text-based G4MF file is invalid if the `"uri"` property is not defined.
 
@@ -22,12 +22,12 @@ Non-normative implementation note: Some languages, such as C#, JavaScript, and o
 
 ### Properties
 
-| Property        | Type      | Description                                                       | Default                                              |
-| --------------- | --------- | ----------------------------------------------------------------- | ---------------------------------------------------- |
-| **byteLength**  | `integer` | The decoded length of the buffer in bytes.                        | Required, no default.                                |
-| **chunk**       | `integer` | The index of the chunk containing the buffer data.                | Required for G4B buffers with data in chunks.        |
-| **encoding**    | `string`  | The encoding used for the buffer data.                            | Plainly encoded if not specified.                    |
-| **uri**         | `string`  | The relative URI to an external file, or a base64-encoded string. | Required except for G4B buffers with data in chunks. |
+| Property       | Type      | Description                                                       | Default                                              |
+| -------------- | --------- | ----------------------------------------------------------------- | ---------------------------------------------------- |
+| **byteLength** | `integer` | The decoded length of the buffer in bytes.                        | Required, no default.                                |
+| **chunk**      | `integer` | The index of the chunk containing the buffer data.                | Required for G4B buffers with data in chunks.        |
+| **encoding**   | `string`  | The encoding used for the buffer data.                            | Plainly encoded if not specified.                    |
+| **uri**        | `string`  | The relative URI to an external file, or a base64-encoded string. | Required except for G4B buffers with data in chunks. |
 
 #### Byte Length
 
@@ -81,7 +81,7 @@ Buffer views define a subset of a buffer as a slice or view. They are the intend
 
 #### Buffer
 
-The `"buffer"` property is an integer index that references a buffer in the G4MF file's document-level buffers array which contains the data for this buffer view. This property is optional, if not specified, the buffer view refers to buffer index 0.
+The `"buffer"` property is an integer index that references a buffer in the G4MF file's document-level buffers array, which contains the data for this buffer view. This property is optional; if not specified, the buffer view refers to buffer index 0.
 
 #### Byte Length
 
@@ -99,17 +99,17 @@ Accessors provide a typed interpretation of the data in a buffer view. Accessors
 
 ### Properties
 
-| Property          | Type      | Description                                                                | Default               |
-| ----------------- | --------- | -------------------------------------------------------------------------- | --------------------- |
-| **bufferView**    | `integer` | The index of the buffer view that contains the data for this accessor.     | Required, no default. |
-| **componentType** | `string`  | The component data type used for each component component in the accessor. | Required, no default. |
-| **vectorSize**    | `integer` | The number of components in each element of the accessor.                  | `1`                   |
+| Property          | Type      | Description                                                            | Default               |
+| ----------------- | --------- | ---------------------------------------------------------------------- | --------------------- |
+| **bufferView**    | `integer` | The index of the buffer view that contains the data for this accessor. | Required, no default. |
+| **componentType** | `string`  | The component data type used for each component in the accessor.       | Required, no default. |
+| **vectorSize**    | `integer` | The number of components in each element of the accessor.              | `1`                   |
 
 #### Buffer View
 
 The `"bufferView"` property is an integer index that references a buffer view in the G4MF file that contains the data for this accessor. This property is required.
 
-The buffer view's `"byteLength"` MUST be a multiple of the size of each element, which is the size of the component type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element. Additionally, the buffer view's `"byteOffset"` MUST be a multiple of the size of the component type, to ensure that the start of the data is aligned correctly.
+The buffer view's `"byteLength"` MUST be a multiple of the size of each element, which is the size of the component type multiplied by the vector size. The number of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element. Additionally, the buffer view's `"byteOffset"` MUST be a multiple of the size of the component type, to ensure that the start of the data is aligned correctly.
 
 #### Component Type
 
@@ -139,7 +139,7 @@ Implementations MAY truncate or round types to fit into a supported type. For ex
 
 If the data in the accessor is always of type `"uint8"` with a vector size always set to 1, consider using a buffer view directly instead of an accessor, since the accessor is not providing any additional information beyond the slice of the buffer already provided by the buffer view. For example, do not use `"uint8"` to store the data of a PNG image, or any accessor type at all for that matter. The `"uint8"` type is intended to be used when users of this accessor need to interpret the data as numbers, and other accessor types are also allowed, simplifying usages, which can always point to an accessor instead of conditionally pointing to an accessor or a buffer view.
 
-Inside of the buffer view the accessor refers to, the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of the size of the component type, to ensure that the start of the data is aligned correctly, and ensure there are a whole number of components available in the accessor. For example, if the component type is `"float32"`, which requires 4 bytes each, then the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of 4, and the number of components in the accessor is equal to the buffer view's `"byteLength"` divided by 4. For accessors with a `"vectorSize"` greater than 1, there are additional requirements for `"byteLength"` aligning to a whole number of elements, which is a superset of this requirement.
+Inside the buffer view the accessor refers to, the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of the size of the component type, to ensure that the start of the data is aligned correctly and that there are a whole number of components available in the accessor. For example, if the component type is `"float32"`, which requires 4 bytes each, then the `"byteOffset"` and `"byteLength"` properties MUST be a multiple of 4, and the number of components in the accessor is equal to the buffer view's `"byteLength"` divided by 4. For accessors with a `"vectorSize"` greater than 1, there are additional requirements for `"byteLength"` aligning to a whole number of elements, which is a superset of this requirement.
 
 #### Vector Size
 
@@ -147,7 +147,7 @@ The `"vectorSize"` property is a positive integer number defining the number of 
 
 For scalars this is 1, for 2D vectors this is 2, for 3D vectors this is 3, for 4D vectors this is 4, and so on. Matrices can be encoded as many-dimensional vectors, such as a 4x4 matrix with this property set to 16. Note that this is the number of components, not the number of bytes. This number MUST be a positive integer. If not specified, the vector size is 1, meaning each component is its own scalar element.
 
-Inside of the buffer view the accessor refers to, the `"byteLength"` property MUST be a multiple of the size of each element, which is the size of the component type multiplied by the vector size. The amount of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element.
+Inside the buffer view the accessor refers to, the `"byteLength"` property MUST be a multiple of the size of each element, which is the size of the component type multiplied by the vector size. The number of elements in the accessor is equal to the buffer view's `"byteLength"` divided by the size of each element.
 
 For example, if encoding an array of Vector3 structs made of 32-bit floating-point numbers, the component type would be `"float32"` and the vector size would be `3`. Each of those accessor elements then takes up 12 bytes. The buffer view's `"byteLength"` then MUST be a multiple of 12, such as 120 bytes encoding 10 elements. Additionally, the buffer view's `"byteOffset"` MUST be a multiple of 4, since the component type has a size of 4 bytes, as described above.
 

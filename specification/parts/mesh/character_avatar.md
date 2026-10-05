@@ -4,7 +4,7 @@
 
 G4MF is a general-purpose model format, which includes the ability to be used as a character or avatar. When used in this way, there are standards that should be followed to ensure it can be used correctly by runtimes without needing to be configured after import.
 
-For example, a character animation needs to know which bones are used for the arms, legs, and head. For example, lip syncing needs to know which visemes are available. This information is specified by using specific naming conventions.
+For example, a character animation needs to know which bones are used for the arms, legs, and head. Lip syncing, for example, needs to know which visemes are available. This information is specified using specific naming conventions.
 
 A complete character/avatar standard would include more than what is defined here, such as eye look angle limits, cartoony facial expressions, node constraints, spring bones, and more. However, those features are intentionally excluded from the base G4MF specification, and instead may be introduced as extensions. The base G4MF specification's definition of characters/avatars ends at providing guidance on how to use its general non-character-specific G4MF features to represent characters/avatars in a way that is interoperable, including G4MF meshes, nodes, skeletons, and blend shapes.
 
@@ -70,9 +70,9 @@ Usage rules:
 
 - If a skeleton bone exists for one of these listed bones, it MUST have its name set to the corresponding name from the tree above (or that name with a prefix) in order to be used as that bone in an application's skeletal animations. The names are case-sensitive. This ensures that applications can reliably identify and use the bones by their names.
 
-- If a skeleton bone is needed that is not defined here, they may still be added to the hierarchy, however, not all runtime applications will recognize or use them. This standard is not intended to limit future expansion with new skeleton bones for advanced character rigs, but rather to ensure a common baseline for compatibility.
+- If a skeleton bone is needed that is not defined here, it may still be added to the hierarchy. However, not all runtime applications will recognize or use it. This standard is not intended to limit future expansion with new skeleton bones for advanced character rigs, but rather to ensure a common baseline for compatibility.
 
-- The camera position is defined as the midpoint of the `LeftEye` and `RightEye` bones, if they exist. If they do not exist, it is assumed to be at nearest ancestor, meaning: the `Head` bone position if `Head` exists (or checking for numbered variants), else the `Neck` bone position if `Neck` exists (or checking for numbered variants), and so on. This applies both to first-person cameras, and the orbited point of third-person cameras. To avoid undesired camera shake, for third-person cameras, this position is RECOMMENDED to be determined once when the character/avatar is loaded, and kept at that same position relative to the character/avatar, ignoring any subsequent animation of the hips/spine/chest/neck/head/eye bones.
+- The camera position is defined as the midpoint of the `LeftEye` and `RightEye` bones, if they exist. If they do not exist, it is assumed to be at the nearest ancestor, meaning: the `Head` bone position if `Head` exists (or checking for numbered variants), else the `Neck` bone position if `Neck` exists (or checking for numbered variants), and so on. This applies both to first-person cameras and to the orbited point of third-person cameras. To avoid undesired camera shake, for third-person cameras, this position is RECOMMENDED to be determined once when the character/avatar is loaded, and kept at that same position relative to the character/avatar, ignoring any subsequent animation of the hips/spine/chest/neck/head/eye bones.
 
 - The `Jaw` bone is unused if the avatar includes viseme blend shapes, AND the application supports visemes. A character/avatar may include both a `Jaw` bone and viseme blend shapes to support applications that only support one or the other, but runtime applications MUST pick one or the other, not both.
 
@@ -82,7 +82,7 @@ Usage rules:
 
 - When a bone has no siblings, it SHOULD have its local position set to a vector with its Y component equal to the length of the parent bone, and all other axes set to `0.0`, when possible, or close to that value. This ensures that the start of each bone is at the end of its parent bone, since all bones point in their local +Y direction with the specified bone length.
   - For example, if `RightUpperArm` has a length of `0.3`, the local position of `RightLowerArm` is RECOMMENDED to have its Y component set to `0.3`, and other components set to 0. However, this is NOT required; bones may be positioned arbitrarily. This recommendation does not apply to bones with siblings, since the upper leg bones, shoulder bones, and finger bones are often not connected to the end of their parents.
-  - Remember that, like all G4MF nodes, bone transforms are defined relative to their parent's transform, not relative to the end of the parent bone, therefore changing the length of a bone does not affect the position of its children.
+  - Remember that, like all G4MF nodes, bone transforms are defined relative to their parent's transform, not relative to the end of the parent bone; therefore, changing the length of a bone does not affect the position of its children.
 
 - The metacarpal finger bones are used to connect the hand to the fingers, and are optional for the non-thumb fingers. They may be rotated slightly in detailed realistic hand simulations, but in most applications, they SHOULD usually be left alone.
   - For example, in a VR game with finger tracking, `LeftIndexProximal` SHOULD be animated, but `LeftIndexMetacarpal` SHOULD NOT be animated. For the thumb, the metacarpal bone is important, it SHOULD be included in the hands of realistic characters, and SHOULD be animated in all applications with finger tracking and/or finger animations.
@@ -96,13 +96,13 @@ Usage rules:
 
 - The inverse bind matrix of each bone is defined by the bone's position when the character/avatar is loaded. Therefore, the pose of the bone nodes saved in the file MUST match the pose of the mesh, such as T-pose bones on a T-pose mesh, or A-pose bones on an A-pose mesh. Non-baked poses are not supported by the base G4MF specification, but may be defined in extensions by overriding the transforms of the bones _after_ the character/avatar is loaded and the inverse bind matrices are calculated, so long as the transforms of the bones in the file are in a rest pose matching the mesh, to ensure that the calculated inverse bind matrices are correct.
 
-The G4MF bipedal humanoid skeleton is designed to be minimally different from other existing standards, however since the existing standards differ from each other, some differences are unavoidable. For convenience, here are some other standards and how to convert them to G4MF, with names from those standards quoted in `"`, and the names from G4MF in backticks:
+The G4MF bipedal humanoid skeleton is designed to be minimally different from other existing standards. However, since the existing standards differ from each other, some differences are unavoidable. For convenience, here are some other standards and how to convert them to G4MF, with names from those standards quoted in `"`, and the names from G4MF in backticks:
 
 - To convert from a VRM humanoid rig: Replace "upperChest" with `Chest1` if present. Replace "Little" with "Pinky". The rest of the bones have the same names, but you must capitalize the first letter of each bone name to use PascalCase instead of camelCase, so "leftUpperLeg" becomes `LeftUpperLeg`, and so on.
 
 - To convert from a Godot humanoid skeleton: Replace "UpperChest" with `Chest1` if present. Replace "Little" with "Pinky". The rest of the bones have the same names, with the same capitalization.
 
-- To convert from a Unity humanoid rig: Replace the "Proximal" and "Intermediate" thumb bones with "Metacarpal" and "Proximal" respectively. Replace "Little" with "Pinky". Replace "Upper Chest" with `Chest1` if present. The rest of the bones have the same names, but you must removes spaces from the names.
+- To convert from a Unity humanoid rig: Replace the "Proximal" and "Intermediate" thumb bones with "Metacarpal" and "Proximal" respectively. Replace "Little" with "Pinky". Replace "Upper Chest" with `Chest1` if present. The rest of the bones have the same names, but you must remove spaces from them.
 
 - To convert from a Mixamo rig: Replace "Spine1" with `Chest`, replace "Spine2" with `Chest1` if present, replace "LeftUpLeg" with `LeftUpperLeg`, replace "LeftLeg" with `LeftLowerLeg`, replace "LeftArm" with `LeftUpperArm`, replace "LeftForeArm" with `LeftLowerArm`, and the same for the right side. Replace the numbered finger bones with the explicit names defined above. Replace "Little" with "Pinky". The rest of the bones have the same names, with the same capitalization.
 
@@ -146,13 +146,13 @@ The following viseme names are defined by G4MF, as a superset of common viseme s
 | `VisemeOU`  | u, ʊ            | b**oo**t, b**oo**k                                         | Lips rounded, slightly forward      |
 | `VisemeUH`  | ə, ɜ, ʌ, ɐ      | **a**bout, b**i**rd, b**u**t, n**u**t (varies by accent)   | Mostly neutral, lips open slightly  |
 
-Each example word corresponds to the listed phonemes in order. Some sounds may be merged in common English accents, in which cases a language or accent is specified in the table, otherwise the examples are based on General American English as spoken in the 21st century. For RR, those sounds are allophonic in English and most languages, therefore only one example word is provided, but the specific choice may vary by accent. For a reference on what each phoneme sounds like, see the "IPA Chart" link in the "Viseme References" section below.[^1]
+Each example word corresponds to the listed phonemes in order. Some sounds may be merged in common English accents. In such cases, a language or accent is specified in the table; otherwise, the examples are based on General American English as spoken in the 21st century. For RR, those sounds are allophonic in English and most languages, so only one example word is provided, but the specific choice may vary by accent. For a reference on what each phoneme sounds like, see the "IPA Chart" link in the "Viseme References" section below.[^1]
 
 ### Viseme Blend Shape Usage Rules
 
 - If a blend shape (morph target) exists for one of these listed visemes, it MUST have its name set to the corresponding name from the table above in order to be used as that viseme in an application's lip syncing. The names are case-sensitive. This ensures that applications can reliably identify and use the visemes by their names.
 
-- If a viseme is needed that is not defined here, they may still be added as blend shapes, however, not all runtime applications will recognize or use them. This standard is not intended to limit future expansion with new visemes for new mouth shapes, but rather to ensure a common baseline for compatibility.
+- If a viseme is needed that is not defined here, it may still be added as a blend shape. However, not all runtime applications will recognize or use it. This standard is not intended to limit future expansion with new visemes for new mouth shapes, but rather to ensure a common baseline for compatibility.
 
 - If a runtime needs a viseme that is unavailable or missing, it may fall back to another viseme, or blend existing visemes, at the application's discretion. This includes the possibility of applications supporting custom visemes, with a fallback to this base definition to support characters/avatars without that custom viseme, and also allows applications to handle cases of missing visemes gracefully.
 
@@ -284,7 +284,7 @@ This table lacks some of the nuances described in the Unified Expressions docume
 
 - If a blend shape (morph target) exists for one of these listed face tracking shapes, it MUST have its name set to the corresponding name from the table above in order to be used as that shape in an application's face tracking. The names are case-sensitive. This ensures that applications can reliably identify and use the face tracking shapes by their names.
 
-- If a face tracking shape is needed that is not defined here, they may still be added as blend shapes, however, not all runtime applications will recognize or use them. This standard is not intended to limit future expansion with new face tracking shapes for new facial expressions, but rather to ensure a common baseline for compatibility.
+- If a face tracking shape is needed that is not defined here, it may still be added as a blend shape. However, not all runtime applications will recognize or use it. This standard is not intended to limit future expansion with new face tracking shapes for new facial expressions, but rather to ensure a common baseline for compatibility.
 
 - If a runtime needs a face tracking shape that is unavailable or missing, it may fall back to another shape, or blend existing shapes, at the application's discretion. This includes the possibility of applications supporting custom face tracking shapes, with a fallback to this base definition to support characters/avatars without that custom shape, and also allows applications to handle cases of missing shapes gracefully.
 

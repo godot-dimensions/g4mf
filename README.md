@@ -50,7 +50,7 @@ Additionally, there are many fine-detail differences between G4MF and glTF™:
 - G4MF physics shapes provide a more general and expanded list of shapes when compared to glTF™.
 - G4MF accessors have a `"componentType"` string that holds values like `"uint8"`, `"int16"`, `"float32"`, etc. glTF™ accessors have a `"componentType"` property whose values are OpenGL™-specific enumerations like `5121`, `5122`, `5126`, etc. G4MF's approach is more human-readable and extensible, while glTF™'s approach requires humans to reference a table of enumerations to understand the values.
 - G4MF accessors have a `"vectorSize"` integer, generalizing the glTF™ accessor concept of `"SCALAR"`, `"VEC2"`, `"VEC3"`, and `"VEC4"` to any size.
-- G4MF accessors do not have `"count"` like glTF™ accessors, instead the count is determined by the size of the buffer view.
+- G4MF accessors do not have `"count"` like glTF™ accessors; instead, the count is determined by the size of the buffer view.
 - G4MF accessors do not have `"normalized"`, `"max"`, or `"min"` properties, since these are not useful for interchange.
 - G4MF accessors are contiguous and do not support being sparse, while glTF™ accessors can be sparse. This is useful for GPU-ready performance optimizations, but is not useful for interchange.
 - G4MF buffer views do not have `"byteStride"` or `"target"` properties, meaning G4MF does not support interleaved data. This is useful in glTF™ for GPU-ready performance optimizations, but is not useful for interchange.

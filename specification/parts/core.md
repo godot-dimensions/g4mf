@@ -4,15 +4,15 @@
 
 This file describes the core foundational data schemas underlying the Good 4D Model Format (G4MF). These structures are used generally everywhere in G4MF files, not just in specific parts.
 
-All schemas that start with `g4mf_` (underscore) are the basic core foundational data schemas, while `g4mf.` (dot) built on top of these to define more complex structures. All of these are part of the core G4MF specification, but the `g4mf_` schemas described here are the core of the core. See also the separate [G4MF Transform](transform.md) file for the core transform properties, primarily used for nodes.
+Schemas whose names start with `g4mf_` (underscore) are the basic core schemas, while schemas whose names start with `g4mf.` (dot) build on them to define more complex structures. All are part of the core G4MF specification, but the `g4mf_` schemas described here are the core of the core. See also the separate [G4MF Transform](transform.md) file for the core transform properties, primarily used for nodes.
 
 ## Integer Index Identifiers
 
 The G4MF Integer Index Identifier schema (`g4mf_index`), or Index for short, defines an integer used to refer to other items in the G4MF file by index in an array. Which array is being referenced is defined by the context in which the Index is used. For example, a node's `"mesh"` property is defined as referring to a mesh in the G4MF file's `"meshes"` array, so the G4MF Integer Index Identifier is an index into that array.
 
-If defined, the Index MUST be a valid index in the array it is referencing. The Index MUST NOT be out of bounds of the target array. The Index MUST be an integer, with no fractional part; values such as `1.5` are not valid indices. The Index of `-1` is reserved as a placeholder value when the relevant field not defined, indicating the lack of pointing to anything, and may be thought of as equivalent to a `null` or `undefined` value.
+If defined, the Index MUST be a valid index in the array it is referencing. The Index MUST NOT be out of bounds of the target array. The Index MUST be an integer, with no fractional part; values such as `1.5` are not valid indices. The Index of `-1` is reserved as a placeholder value when the relevant field is not defined, indicating that it does not point to anything, and may be thought of as equivalent to a `null` or `undefined` value.
 
-If an array of indices is defined, sensitive to what slot the Index is in, and the schema allows it, the value `-1` MAY be used as a placeholder for that slot, indicating that the slot does not point to anything. For example, in a skeleton's `"joints"` array, `-1` may be used to indicate that there is no bone controlling that joint. However, in other cases, such as for standalone properties like `"mesh"`, negative indices MUST NOT be written to G4MF files. Valid indices written into standalone properties in G4MF files MUST be integers greater than or equal to `0` and less than the length of the array they are referencing.
+If an array of indices is defined, the value `-1` MAY be used as a placeholder for a slot if the schema allows it and depending on the slot's meaning. For example, in a skeleton's `"joints"` array, `-1` may be used to indicate that there is no bone controlling that joint. However, in other cases, such as for standalone properties like `"mesh"`, negative indices MUST NOT be written to G4MF files. Valid indices written into standalone properties in G4MF files MUST be integers greater than or equal to `0` and less than the length of the array they are referencing.
 
 ## Items
 
@@ -31,13 +31,13 @@ The G4MF Item schema (`g4mf_item`) is the base schema for all JSON objects in G4
 
 The `"comment"` property is a string that allows for human-readable comments or descriptions of the item.
 
-This property MUST NOT be used for any functional purpose software that processes G4MF files, and is only allowed to be used for the purpose of annotating an example G4MF file with additional information when reading the raw text of the file manually, like a comment in a programming language.
+This property MUST NOT be used for any functional purpose by software that processes G4MF files. It is only allowed to be used to annotate an example G4MF file with additional information when someone manually reads the raw text of the file, like a comment in a programming language.
 
 #### Extensions
 
 The `"extensions"` property is an object that allows for defining extensions to the G4MF format.
 
-Each key is the name of the extension, in the format of `"PREFIX_extension_name"`, where `PREFIX` is a reserved prefix registered with G4MF, and `extension_name` is the snake_case name of the extension. Extension names SHOULD further comply to `"PREFIX_subject_name"`, where `subject` is a category, often the name of an existing G4MF data structure being extended, or may be more general like `"audio"`, but may use any name followed by the prefix and an underscore.
+Each key is the name of the extension, in the format of `"PREFIX_extension_name"`, where `PREFIX` is a reserved prefix registered with G4MF, and `extension_name` is the snake_case name of the extension. Extension names SHOULD further comply with `"PREFIX_subject_name"`, where `subject` is a category, often the name of an existing G4MF data structure being extended, or a more general category like `"audio"`. However, any name after the prefix and underscore is allowed.
 
 Each value is the extension data, which is a JSON object that conforms to the schema defined by the extension. Valid G4MF extensions MUST have schemas defined for any data they define, and those schemas MUST extend the G4MF Item schema or a descendant schema whenever they are of type `object`. Note that, in niche use cases, it is possible for a G4MF extension to define no data and be used nowhere in any `"extensions"` property, in which case the extension's only behavior is a boolean flag that may or may not exist in `"extensionsUsed"`.
 
@@ -53,7 +53,7 @@ The `"name"` property is a string that defines the file-unique name of the item.
 
 If defined, this MUST be unique within the G4MF file, across all items, including all nodes, meshes, materials, textures, and other items. For example, if a G4MF node is named `"Crate"`, then the mesh data cannot also be named `"Crate"`, it must be named something else, such as `"CrateMesh"`, or be left unnamed by not defining the `"name"` property. If two or more items in the same G4MF file have the same name, the G4MF file is invalid. If the `"name"` property is not defined, it is considered equivalent to an empty string. Empty or non-existent names are the only cases where more than one item may have that name, since it is not always useful for every item to have a name.
 
-The name uniqueness requirement exists for all items within a file, but does not apply for names between files. Two G4MF files may have up to two nodes with the same name between them, such as a each having a node named `"Crate"`. If a G4MF file uses another G4MF file as a model (see [G4MF Model](model/model_file_ref.md)), this means that there may be multiple nodes or other items with the same name in the overall scene hierarchy. Therefore, names are not guaranteed to be globally unique across the entire scene hierarchy, but they are guaranteed to be unique within a single G4MF file.
+The name uniqueness requirement exists for all items within a file, but does not apply for names between files. Two G4MF files may have nodes with the same name, such as each having a node named `"Crate"`. If a G4MF file uses another G4MF file as a model (see [G4MF Model](model/model_file_ref.md)), there may be multiple nodes or other items with the same name in the overall scene hierarchy. Therefore, names are not guaranteed to be globally unique across the entire scene hierarchy, but they are guaranteed to be unique within a single G4MF file.
 
 Names in G4MF may be thought of as serving the same purpose as `"id"` values in other formats. They serve as unique identifiers for items within a file, allowing for external systems to unambiguously refer to specific items by name. However, this property is named `"name"` rather than `"id"` to avoid confusion with other schemes, such as numeric IDs, numeric indices, UUIDs, URIs, or other ways to specify identifiers. The `"name"` property is intended to be a human-readable and meaningful unique identifier, meant for display in user interfaces, referencing externally, and conveying semantic meaning about the item it names, such as G4MF nodes named after bones in a character skeleton rig (see [G4MF Characters/Avatars](mesh/character_avatar.md)).
 
@@ -67,15 +67,15 @@ All names in a G4MF file MUST NOT contain the following characters: `"`, `#`, `*
 - The characters `{}[]/` are reserved for use in JSON pointer paths, and are therefore disallowed in G4MF names.
 - The characters `"#.:@` are reserved for use in runtime-determined path syntaxes and selectors across many programming languages and contexts, and are therefore disallowed in G4MF names.
 - The characters `"*:|?<>/` and literal backslashes are forbidden due to restrictions in file systems and shells, which would otherwise be problematic when attempting to extract the contents of a G4MF file into separate files, and are therefore disallowed in G4MF names.
-- These characters are forbidden in ALL names to avoid ambiguity and potential parsing issues when names are used in any these contexts.
+- These characters are forbidden in ALL names to avoid ambiguity and potential parsing issues when names are used in any of these contexts.
 
-Furthermore, names MUST NOT contain any control characters, even escaped control characters, including both ASCII control characters and the extended Unicode control characters, as is already required for the entire G4MF JSON structure, except that while the G4MF JSON allows newline and tab characters, names additionally MUST NOT contain newline or tab characters. Names are RECOMMENDED to not contain spaces and not contain other punctuation characters that can be interpreted as special characters in certain contexts, however, all other characters not explicitly forbidden are allowed.
+Furthermore, names MUST NOT contain any control characters, even escaped control characters, including both ASCII control characters and the extended Unicode control characters, as is already required for the entire G4MF JSON structure, except that while the G4MF JSON allows newline and tab characters, names additionally MUST NOT contain newline or tab characters. Names are RECOMMENDED not to contain spaces or other punctuation characters that can be interpreted as special characters in certain contexts; however, all other characters not explicitly forbidden are allowed.
 
 ## File References
 
 When G4MF files need to reference data that could be found in an external file, such as an image file, model file, audio file, or any other file, they use a G4MF File Reference (`g4mf_file_ref`). All file references are required to define the file's MIME type, and may refer to stored data either in a buffer view or an external file URI.
 
-The only case where a G4MF File Reference is not used for referencing external data is in [G4MF Buffers](data.md#buffers) themselves. All G4MF File References are allowed to store data in buffer views, but buffer views reference data stored in buffers, therefore it would be a circular reference. Additionally, the `"mimeType"` property is not useful for buffers, since they are by definition unstructured blobs of binary data, which only have structure defined by the buffer views and accessors using them.
+The only case where a G4MF File Reference is not used for referencing external data is in [G4MF Buffers](data.md#buffers) themselves. All G4MF File References are allowed to store data in buffer views, but buffer views reference data stored in buffers; allowing this would create a circular reference. Additionally, the `"mimeType"` property is not useful for buffers, since they are by definition unstructured blobs of binary data, whose structure is defined only by the buffer views and accessors that use them.
 
 ### Properties
 

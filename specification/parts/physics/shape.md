@@ -82,9 +82,9 @@ If a given shape `"type"` is unrecognized, implementations SHOULD load the shape
 
 The `"radii"` property is an array of numbers that defines the radii of the curve in meters. The length of the array MUST match the dimension of the shape, which is the same as the dimension of the G4MF document. If not defined, the default value is a zero vector.
 
-The radii property is used to define the radii of the curve in each axis. The numbers in the array MUST NOT be negative, only zero or finite positive numbers are allowed. If a curve is not on an axis, this is indicated by a zero value in the radii array on that axis. All curves SHOULD have at least two non-zero positive radius values, otherwise the curve is undefined, but different types of curves may be defined by an extension. Multiple entries in the `"curves"` array usually do not have overlapping axes, meaning that if one of the curves has a non-zero radius in an axis, no other curve should have a non-zero radius in that axis. If multiple curves have overlapping axes, the resulting shape is a Steinmetz solid, or multicylinder, which is not a common shape.
+The radii property is used to define the radii of the curve in each axis. The numbers in the array MUST NOT be negative; only zero or finite positive numbers are allowed. If a curve is not on an axis, this is indicated by a zero value in the radii array on that axis. All curves SHOULD have at least two non-zero positive radius values; otherwise, the curve is undefined, but different types of curves may be defined by an extension. Multiple entries in the `"curves"` array usually do not have overlapping axes, meaning that if one of the curves has a non-zero radius in an axis, no other curve should have a non-zero radius in that axis. If multiple curves have overlapping axes, the resulting shape is a Steinmetz solid, or multicylinder, which is not a common shape.
 
-See the below examples for how to define many types of general shapes with curves and the `"radii"` property.
+See the examples below for how to define many types of general shapes with curves and the `"radii"` property.
 
 ### Exponent
 
@@ -96,11 +96,11 @@ The exponent property defines a unitless value for the exponent of the curve. Va
 
 The `"taper"` property is an array of objects, each of which defines a position to taper, and properties for the taper at that position. If not defined, the default value is an empty array, meaning the curve does not have any tapering.
 
-The allowed properties in a curve taper object are the same as the properties of a curve, but with the addition of a `"position"` property, and the lack of nested `"taper"` properties. As such, the `"radii"` and `"exponent"` properties are allowed on taper objects, and behave the same as on curves. G4MF extensions that apply to curve objects are automatically allowed on curve taper objects as well, however, extensions may also be defined for curve taper objects directly.
+The allowed properties in a curve taper object are the same as the properties of a curve, but with the addition of a `"position"` property and without nested `"taper"` properties. As such, the `"radii"` and `"exponent"` properties are allowed on taper objects, and behave the same as on curves. G4MF extensions that apply to curve objects are automatically allowed on curve taper objects as well; however, extensions may also be defined for curve taper objects directly.
 
 ## Common General Shapes
 
-Dimension-specific physics systems usually feature different shape types for boxes, spheres, capsules, cylinders, and so on. These have different combinations of sizes and curves, but the available combinations greatly expand when considering higher dimensions. To capture this concept for all dimensions at once, G4MF's default `"general"` shape type has a size and allows any number of curves to be defined in addition to the size. The arrays in the below examples can be used with any other dimension by resizing the arrays to the appropriate length.
+Dimension-specific physics systems usually feature different shape types for boxes, spheres, capsules, cylinders, and so on. These have different combinations of sizes and curves, but the available combinations greatly expand when considering higher dimensions. To capture this concept for all dimensions at once, G4MF's default `"general"` shape type has a size and allows any number of curves to be defined in addition to the size. The arrays in the examples below can be used with any other dimension by resizing them to the appropriate length.
 
 A 4D box is defined by only a size property, with no curves:
 
@@ -135,7 +135,7 @@ A 4D capsule, like a 3D capsule, can be thought of as a line segment and a radiu
 }
 ```
 
-A 4D cylinder, like a 3D cylinder, can be thought of as a line segment and a radius, but without any capping spheres, instead being flat in the vertical axis beyond the size. This is represented by the curve having the radius for that axis set to zero, indicating the curve does not apply in that axis. This example defines a 4D cylinder with a height of `2.0` meters and a radius of `0.5` meters in all axes except the vertical axis:
+A 4D cylinder, like a 3D cylinder, can be thought of as a line segment and a radius, but its ends are flat instead of being capped by spheres. This is represented by setting the curve's radius for that axis to zero, indicating that the curve does not apply along that axis. This example defines a 4D cylinder with a height of `2.0` meters and a radius of `0.5` meters in all axes except the vertical axis:
 
 ```json
 {
@@ -163,7 +163,7 @@ A 4D cubinder is an extruded version of a 3D cylinder, in a similar way to how a
 }
 ```
 
-A 4D duocylinder is a shape with no equivalent in 3D. It is the cartesian product of two circles, and can be thought of as a cylinder with two curves and two radiuses, but no "tall" part. This example defines a 4D duocylinder with a radius of `0.5` meters in the XY plane and a radius of `1.0` meter in the ZW plane:
+A 4D duocylinder is a shape with no equivalent in 3D. It is the Cartesian product of two circles, and can be thought of as a cylinder with two curves and two radii, but no "tall" part. This example defines a 4D duocylinder with a radius of `0.5` meters in the XY plane and a radius of `1.0` meter in the ZW plane:
 
 ```json
 {
@@ -184,9 +184,9 @@ Multiple entries in the `"curves"` array usually do not have overlapping axes, m
 
 The above describes examples of how to define common general shapes in G4MF. It is recommended that implementations support all of the above cases, and asset authors are recommended to use those simple common shapes for wider compatibility. However, this shape definition is highly flexible and can be used to define many advanced shapes in any dimension, which are optional for implementations to support.
 
-A somewhat common shape is a tapered cylinder or tapered capsule. These have a radius that varies along the length of the shape. A cone shape has a tapering radius of zero at one end. To define this, another array inside of a curve may be specified, called `"taper"`. Each item in this array defines a new value for the radii at a specific point on the shape, which is usually on the range of plus or minus half the base `"size"`, but may be beyond it, which is useful for Steinmetz solids.
+A somewhat common shape is a tapered cylinder or tapered capsule. These have a radius that varies along the length of the shape. A cone shape has a tapering radius of zero at one end. To define this, another array inside a curve may be specified, called `"taper"`. Each item in this array defines a new value for the radii at a specific point on the shape, which is usually in the range from plus or minus half the base `"size"`, but may be beyond it, which is useful for Steinmetz solids.
 
-This example defines a cone that points straight up, with a height of `2.0` meters and a radius of `0.5` meters at the base. The radius outside of `"taper"` is provided as a fallback for implementations that do not support the `"taper"` property, and may be set to any value regardless of the `"taper"` values.
+This example defines a cone that points straight up, with a height of `2.0` meters and a radius of `0.5` meters at the base. The radius outside `"taper"` is provided as a fallback for implementations that do not support the `"taper"` property, and may be set to any value regardless of the `"taper"` values.
 
 ```json
 {
@@ -209,7 +209,7 @@ This example defines a cone that points straight up, with a height of `2.0` mete
 }
 ```
 
-If a non-zero size and a curve exist on the same dimension, the curve is always added on top of the size, in the form of a Minkowski sum. This definition allows for a wide variety of shapes to be defined as a combination of size and curves. For example, a rounded or tapered box can be defined with a size and curve on all axes. The below example defines a 4D rounded box with a size of `1.0` meter and a radius of `0.25` meters on all axes, resulting in a maximum axis-aligned diameter of `1.5` meters in all axes.
+If a non-zero size and a curve exist on the same dimension, the curve is always added on top of the size, in the form of a Minkowski sum. This definition allows for a wide variety of shapes to be defined as a combination of size and curves. For example, a rounded or tapered box can be defined with a size and curve on all axes. The example below defines a 4D rounded box with a size of `1.0` meter and a radius of `0.25` meters on all axes, resulting in a maximum axis-aligned diameter of `1.5` meters in all axes.
 
 ```json
 {
@@ -262,7 +262,7 @@ Values greater than `2.0` create a superellipse or squircle shape which is point
 }
 ```
 
-Multiple entries in the `"curves"` array usually SHOULD NOT have overlapping axes. If multiple curves have overlapping axes, the resulting shape is a [Steinmetz solid](https://en.wikipedia.org/wiki/Steinmetz_solid), or multicylinder. This example defines a byclinder on the XY and XZ planes with a radius of `1.0` meter extruded into 4 dimensions along the W axis by `2.0` meters:
+Multiple entries in the `"curves"` array usually SHOULD NOT have overlapping axes. If multiple curves have overlapping axes, the resulting shape is a [Steinmetz solid](https://en.wikipedia.org/wiki/Steinmetz_solid), or multicylinder. This example defines a bicylinder on the XY and XZ planes with a radius of `1.0` meter extruded into 4 dimensions along the W axis by `2.0` meters:
 
 ```json
 {
